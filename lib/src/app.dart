@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,8 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_bi_flutter/src/packages/authentication_repository/lib/src/authentication_repository.dart';
 import 'package:sonat_bi_flutter/src/screens/error/error_screen.dart';
-import 'package:sonat_bi_flutter/src/screens/home/home_screen.dart';
-import 'package:sonat_bi_flutter/src/screens/login/login_screen.dart';
+import 'package:sonat_bi_flutter/src/screens/notifications/notifications_screen.dart';
+import 'package:sonat_bi_flutter/src/screens/tabs/tabs_screen.dart';
 import 'package:sonat_bi_flutter/src/screens/settings/settings_screen.dart';
 import 'package:sonat_bi_flutter/src/theme/bloc/theme_bloc.dart';
 import 'package:sonat_bi_flutter/src/theme/theme.dart';
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
 
   final GoRouter router = GoRouter(
-    initialLocation: HomeScreen.routeName,
+    initialLocation: TabsScreen.routeName,
     // redirect: (context, state) {
     //   if (FirebaseAuth.instance.currentUser == null) {
     //     return LoginScreen.routeName;
@@ -35,11 +34,17 @@ class MyApp extends StatelessWidget {
     errorBuilder: (context, state) => const ErrorScreen(),
     routes: [
       GoRoute(
-          path: HomeScreen.routeName,
-          builder: (context, state) => const HomeScreen()),
+        path: TabsScreen.routeName,
+        builder: (context, state) => const TabsScreen(),
+      ),
       GoRoute(
-          path: SettingsScreen.routeName,
-          builder: (context, state) => const SettingsScreen()),
+        path: SettingsScreen.routeName,
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: NotificationsScreen.routeName,
+        builder: (context, state) => const NotificationsScreen(),
+      )
     ],
   );
 
@@ -83,12 +88,10 @@ class MyApp extends StatelessWidget {
               // directory.
               onGenerateTitle: (BuildContext context) =>
                   AppLocalizations.of(context)!.appTitle,
-
               theme: CustomAppTheme.getLightTheme(themeState.color),
               darkTheme: CustomAppTheme.getDarkTheme(themeState.color),
               themeMode:
                   themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-
               routerConfig: router,
               builder: (context, child) {
                 final MediaQueryData data = MediaQuery.of(context);

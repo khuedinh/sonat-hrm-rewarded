@@ -41,7 +41,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             centerTitle: true,
             backgroundColor: colorScheme.primary,
             foregroundColor: colorScheme.onPrimary,
-            titleTextStyle: const TextStyle(fontSize: 18),
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back),

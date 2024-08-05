@@ -17,7 +17,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       final color = prefs.getInt(kThemeColorKey);
       emit(ThemeState(
           isDarkMode: isDarkMode ?? false,
-          color: color != null ? Color(color) : Colors.blue,
+          color: color != null ? Color(color) : Colors.orange,
           colorHistory: []));
     });
 

@@ -22,7 +22,10 @@ class _BlockColorPickerState extends State<BlockColorPicker> {
   final double _iconSize = 24;
 
   Widget pickerLayoutBuilder(
-      BuildContext context, List<Color> colors, PickerItem child) {
+    BuildContext context,
+    List<Color> colors,
+    PickerItem child,
+  ) {
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -34,7 +37,10 @@ class _BlockColorPickerState extends State<BlockColorPicker> {
   }
 
   Widget pickerItemBuilder(
-      Color color, bool isCurrentColor, void Function() changeColor) {
+    Color color,
+    bool isCurrentColor,
+    void Function() changeColor,
+  ) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(_borderRadius),
