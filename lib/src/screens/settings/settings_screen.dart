@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonat_bi_flutter/src/screens/settings/widgets/block_picker.dart';
-import 'package:sonat_bi_flutter/src/theme/bloc/theme_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/settings/widgets/block_picker.dart';
+import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

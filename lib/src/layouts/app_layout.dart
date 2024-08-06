@@ -6,7 +6,7 @@
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:package_info_plus/package_info_plus.dart';
-// import 'package:sonat_bi_flutter/src/screens/settings/settings_screen.dart';
+// import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
 
 // class AppLayout extends StatefulWidget {
 //   const AppLayout(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sonat_hrm_rewarded/src/models/user.dart';
 
 class LeaderboardItem extends StatelessWidget {
   const LeaderboardItem({super.key, required this.index, required this.item});
 
-  final dynamic item;
+  final User item;
   final int index;
 
   @override
@@ -39,14 +40,14 @@ class LeaderboardItem extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          item["name"],
+          item.name,
           style: theme.textTheme.titleMedium!.copyWith(
             color: theme.colorScheme.onSurface,
           ),
         ),
         const Spacer(),
         Text(
-          "${item["coins"]} coins",
+          "${item.coin} coins",
           style: theme.textTheme.titleMedium!.copyWith(
             color: theme.colorScheme.onSurface,
           ),

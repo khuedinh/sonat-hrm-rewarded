@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sonat_bi_flutter/src/screens/settings/settings_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});

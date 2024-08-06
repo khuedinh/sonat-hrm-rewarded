@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_bi_flutter/src/screens/tabs/account/account_screen.dart';
-import 'package:sonat_bi_flutter/src/screens/tabs/benefits/benefits_screen.dart';
-import 'package:sonat_bi_flutter/src/screens/tabs/home/home_screen.dart';
-import 'package:sonat_bi_flutter/src/screens/tabs/recognition/recognition_screen.dart';
+import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/account/account_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/benefits_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/home_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/recognition_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
 
-  static const routeName = '/tab';
+  static const routeName = '/tabs';
 
   @override
   State<TabsScreen> createState() => _TabsScreenState();
@@ -27,37 +28,21 @@ class _TabsScreenState extends State<TabsScreen> {
       AccountScreen.screenTitle,
     ][currentPageIndex];
 
-    final hasCustomAppBar = currentPageIndex == 0;
+    final hasCustomAppBar = [0, 2].contains(currentPageIndex);
 
     return Scaffold(
       appBar: hasCustomAppBar
           ? null
-          : PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      theme.colorScheme.primary.withOpacity(0.8),
-                      theme.colorScheme.primary,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+          : AppBar(
+              title: ScreenTitle(title: screenTitle),
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_outlined),
+                  onPressed: () {},
                 ),
-                child: AppBar(
-                  title: Text(screenTitle),
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.notifications_outlined),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {

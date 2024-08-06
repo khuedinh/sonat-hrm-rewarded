@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 
 class DisplayAmount extends StatelessWidget {
-  const DisplayAmount(
-      {super.key,
-      required this.amount,
-      required this.icon,
-      this.suffix,
-      this.iconSize});
+  const DisplayAmount({
+    super.key,
+    required this.amount,
+    required this.icon,
+    this.suffix,
+    this.iconSize,
+    this.textColor,
+    this.spacing,
+  });
 
   final IconData icon;
   final int amount;
   final double? iconSize;
   final String? suffix;
+  final Color? textColor;
+  final double? spacing;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    final String amountText = suffix != null ? '$amount $suffix' : '$amount';
 
     return Row(
       children: [
@@ -31,12 +38,12 @@ class DisplayAmount extends StatelessWidget {
             size: iconSize ?? 16,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: spacing ?? 8),
         Text(
-          '$amount $suffix',
+          amountText,
           style: theme.textTheme.titleSmall!.copyWith(
             fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
+            color: textColor ?? theme.colorScheme.onSurface,
           ),
         )
       ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sonat_bi_flutter/src/screens/login/login_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/login/login_screen.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key});
