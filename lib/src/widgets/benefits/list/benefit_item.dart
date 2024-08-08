@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
+import 'package:sonat_hrm_rewarded/src/screens/benefit_detail/benefit_detail_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
 
 class BenefitItem extends StatelessWidget {
@@ -18,7 +20,9 @@ class BenefitItem extends StatelessWidget {
       margin: EdgeInsets.zero,
       elevation: 2,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          context.push(BenefitDetailScreen.routeName, extra: benefit);
+        },
         child: SizedBox(
           width: 160,
           child: Stack(

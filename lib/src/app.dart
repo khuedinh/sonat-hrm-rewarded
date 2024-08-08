@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
+import 'package:sonat_hrm_rewarded/src/screens/benefit_archived_box/benefit_archived_box_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/benefit_detail/benefit_detail_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/error/error_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';
@@ -44,7 +47,18 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: NotificationsScreen.routeName,
         builder: (context, state) => const NotificationsScreen(),
-      )
+      ),
+      GoRoute(
+        path: BenefitDetailScreen.routeName,
+        builder: (context, state) {
+          Benefit benefit = state.extra as Benefit;
+          return BenefitDetailScreen(benefit: benefit);
+        },
+      ),
+      GoRoute(
+        path: BenefitArchivedBoxScreen.routeName,
+        builder: (context, state) => const BenefitArchivedBoxScreen(),
+      ),
     ],
   );
 

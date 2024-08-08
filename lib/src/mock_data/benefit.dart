@@ -11,6 +11,8 @@ const listBenefits = [
     type: BenefitType.gift,
     stock: 38,
     exchanged: 12,
+    isClaimed: true,
+    isUsed: true,
   ),
   Benefit(
     id: 'b2',
@@ -58,6 +60,8 @@ const listBenefits = [
     isFeatured: true,
     stock: 2,
     exchanged: 0,
+    isClaimed: true,
+    isUsed: true,
   ),
   Benefit(
     id: 'b6',
@@ -168,6 +172,8 @@ const listBenefits = [
     type: BenefitType.card,
     stock: 24,
     exchanged: 43,
+    isUsed: false,
+    isClaimed: true,
   ),
   Benefit(
     id: 'b16',
@@ -190,6 +196,8 @@ const listBenefits = [
     type: BenefitType.card,
     stock: 24,
     exchanged: 43,
+    isClaimed: true,
+    isUsed: false,
   ),
   Benefit(
     id: 'b18',
