@@ -16,6 +16,14 @@ class _BenefitFiltersState extends State<BenefitFilters> {
   PriceFilter? _priceFilter;
   NameFilter? _nameFilter;
 
+  void _handleResetFilters() {
+    setState(() {
+      _priceRange = const RangeValues(0, 15000);
+      _priceFilter = null;
+      _nameFilter = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -26,12 +34,25 @@ class _BenefitFiltersState extends State<BenefitFilters> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "Filters",
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleLarge!.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Filters",
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextButton.icon(
+                onPressed: _handleResetFilters,
+                style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                label: const Text("Reset"),
+                icon: const Icon(
+                  Icons.restore_rounded,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Column(

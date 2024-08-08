@@ -46,6 +46,7 @@ dependencies:
   meta: ^1.11.0
   package_info_plus: ^8.0.0
   path_provider: ^2.1.3
+  qr_flutter: ^4.1.0
   shared_preferences: ^2.2.2
   substring_highlight: ^1.0.33
   webview_flutter: ^4.8.0
