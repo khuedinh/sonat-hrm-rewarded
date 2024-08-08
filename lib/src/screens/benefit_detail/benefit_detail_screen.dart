@@ -87,7 +87,8 @@ class BenefitDetailScreen extends StatelessWidget {
                           children: [
                             Text(
                               benefit.name,
-                              style: theme.textTheme.titleMedium!.copyWith(
+                              style: theme.textTheme.titleLarge!.copyWith(
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
