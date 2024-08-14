@@ -50,7 +50,7 @@ class _BenefitScreenState extends State<BenefitsScreen> {
             ]),
             actions: [
               IconButton(
-                icon: const Icon(Icons.filter_alt_outlined),
+                icon: const Icon(Icons.filter_alt),
                 onPressed: _handleOpenFilter,
               ),
             ],

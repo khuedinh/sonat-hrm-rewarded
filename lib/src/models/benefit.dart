@@ -10,6 +10,8 @@ class Benefit {
   final bool? isFeatured;
   final int stock;
   final int exchanged;
+  final bool? isClaimed;
+  final bool? isUsed;
 
   const Benefit({
     required this.id,
@@ -21,5 +23,7 @@ class Benefit {
     required this.exchanged,
     this.isFeatured = false,
     this.type = BenefitType.gift,
+    this.isClaimed = false,
+    this.isUsed = false,
   });
 }

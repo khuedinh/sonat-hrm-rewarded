@@ -39,37 +39,55 @@ class _TabsScreenState extends State<TabsScreen> {
               foregroundColor: theme.colorScheme.onPrimary,
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.notifications_outlined),
+                  icon: Badge.count(
+                    count: 2,
+                    child: const Icon(Icons.notifications),
+                  ),
+                  color: theme.colorScheme.onPrimary,
                   onPressed: () {},
                 ),
               ],
             ),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: theme.colorScheme.primary,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          labelTextStyle: WidgetStateProperty.all(
+            const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.workspace_premium_outlined),
-            label: 'Recognition',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.card_giftcard_outlined),
-            label: 'Benefits',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            label: 'Account',
-          ),
-        ],
+        ),
+        child: NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          indicatorColor: theme.colorScheme.primary,
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              selectedIcon: Icon(Icons.home),
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.workspace_premium),
+              icon: Icon(Icons.workspace_premium_outlined),
+              label: 'Recognition',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.card_giftcard),
+              icon: Icon(Icons.card_giftcard_outlined),
+              label: 'Benefits',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.person),
+              icon: Icon(Icons.person_outline),
+              label: 'Account',
+            ),
+          ],
+        ),
       ),
       body: <Widget>[
         const HomeScreen(), // Home page

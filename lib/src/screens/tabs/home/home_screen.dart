@@ -83,22 +83,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.attach_money_rounded,
                   suffix: "Points",
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 DisplayAmount(
                   amount: currentUser.coin,
                   icon: Icons.currency_bitcoin_rounded,
                   suffix: "Coins",
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 SizedBox(
-                  height: 32,
+                  height: 28,
                   child: FilledButton.icon(
                     onPressed: () {},
                     style: ButtonStyle(
                       iconSize: WidgetStateProperty.all<double>(20),
                       padding: WidgetStateProperty.all<EdgeInsets>(
                         const EdgeInsets.symmetric(
-                          horizontal: 12,
+                          horizontal: 8,
                         ),
                       ),
                     ),
@@ -119,7 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
             title: const ScreenTitle(title: HomeScreen.screenTitle),
             actions: [
               IconButton(
-                icon: const Icon(Icons.notifications_outlined),
+                icon: Badge.count(
+                  count: 2,
+                  child: const Icon(Icons.notifications),
+                ),
                 color: theme.colorScheme.onPrimary,
                 onPressed: _handleOpenNotifications,
               ),
