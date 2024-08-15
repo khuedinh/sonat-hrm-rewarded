@@ -28,6 +28,6 @@ class ThemeState {
 class ThemeInitial extends ThemeState {
   ThemeInitial(
       {super.isDarkMode = false,
-      super.color = Colors.blue,
+      super.color = Colors.orange,
       super.colorHistory = const []});
 }

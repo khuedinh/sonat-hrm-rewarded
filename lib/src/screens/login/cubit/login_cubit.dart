@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:formz/formz.dart';
-import 'package:sonat_bi_flutter/src/packages/authentication_repository/lib/src/authentication_repository.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
 
 part 'login_state.dart';
 

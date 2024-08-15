@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sonat_bi_flutter/src/packages/authentication_repository/lib/src/models/user.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/models/user.dart';
 
 class LogInWithEmailAndPasswordFailure implements Exception {
   const LogInWithEmailAndPasswordFailure([

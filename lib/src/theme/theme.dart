@@ -5,16 +5,26 @@ class CustomAppTheme {
 
   static ThemeData getLightTheme(Color color) {
     return ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)
-            .copyWith(primary: color, onPrimary: Colors.white));
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.orange,
+      ).copyWith(
+        primary: color,
+        onPrimary: Colors.white,
+      ),
+    );
   }
 
   static ThemeData getDarkTheme(Color color) {
     return ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blue, brightness: Brightness.dark)
-            .copyWith(primary: color, onPrimary: Colors.white));
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.orange,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: color,
+        onPrimary: Colors.white,
+      ),
+    );
   }
 }
