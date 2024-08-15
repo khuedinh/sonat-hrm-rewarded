@@ -91,7 +91,7 @@ class ClaimedBenefitItem extends StatelessWidget {
                       ),
                       side: BorderSide(
                         width: 2,
-                        color: theme.colorScheme.primaryContainer,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                     child: const Text('Show code'),

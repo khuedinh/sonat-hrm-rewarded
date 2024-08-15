@@ -97,7 +97,6 @@ class BenefitDetailScreen extends StatelessWidget {
                               amount: benefit.price,
                               icon: Icons.currency_bitcoin_rounded,
                               suffix: "coins",
-                              textColor: theme.colorScheme.primary,
                             ),
                           ],
                         ),
@@ -115,7 +114,7 @@ class BenefitDetailScreen extends StatelessWidget {
                               ),
                               side: BorderSide(
                                 width: 2,
-                                color: theme.colorScheme.primaryContainer,
+                                color: theme.colorScheme.primary,
                               ),
                             ),
                             child: const Text('Show code'),

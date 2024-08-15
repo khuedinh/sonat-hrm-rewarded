@@ -163,7 +163,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                         ),
                         side: BorderSide(
                           width: 2,
-                          color: theme.colorScheme.primaryContainer,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                       child: const Text("Discard"),

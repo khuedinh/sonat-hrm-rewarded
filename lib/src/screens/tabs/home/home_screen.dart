@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ScreenTitle(
                 title: "Leaderboard",
                 color: theme.colorScheme.onSurface,
+                fontSize: 18,
               ),
               Column(
                 children: [

@@ -44,7 +44,7 @@ class CodeDialog extends StatelessWidget {
                 ),
                 side: BorderSide(
                   width: 2,
-                  color: theme.colorScheme.primaryContainer,
+                  color: theme.colorScheme.primary,
                 ),
               ),
               label: const Text('Copy code'),

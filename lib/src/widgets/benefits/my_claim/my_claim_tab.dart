@@ -45,7 +45,7 @@ class _MyClaimTabState extends State<MyClaimTab> {
     listClaimedBenefits.addAll(
       listBenefits
           .where(
-            (benefit) => benefit.isFeatured!,
+            (benefit) => benefit.isClaimed! && !benefit.isUsed!,
           )
           .toList(),
     );

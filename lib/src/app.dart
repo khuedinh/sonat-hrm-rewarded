@@ -11,6 +11,7 @@ import 'package:sonat_hrm_rewarded/src/screens/error/error_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/theme.dart';
 
@@ -59,6 +60,10 @@ class MyApp extends StatelessWidget {
         path: BenefitArchivedBoxScreen.routeName,
         builder: (context, state) => const BenefitArchivedBoxScreen(),
       ),
+      GoRoute(
+        path: TransactionHistoryScreen.routeName,
+        builder: (context, state) => const TransactionHistoryScreen(),
+      )
     ],
   );
 

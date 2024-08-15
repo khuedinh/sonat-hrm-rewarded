@@ -54,6 +54,7 @@ class GiftsTab extends StatelessWidget {
             child: ScreenTitle(
               title: 'Featured',
               color: theme.colorScheme.onSurface,
+              fontSize: 18,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
@@ -64,6 +65,7 @@ class GiftsTab extends StatelessWidget {
             child: ScreenTitle(
               title: 'Exchangeable',
               color: theme.colorScheme.onSurface,
+              fontSize: 18,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
@@ -74,6 +76,7 @@ class GiftsTab extends StatelessWidget {
             child: ScreenTitle(
               title: 'Others',
               color: theme.colorScheme.onSurface,
+              fontSize: 18,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),

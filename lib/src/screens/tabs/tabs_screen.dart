@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/account/account_screen.dart';
