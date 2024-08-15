@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_archived_box/benefit_archived_box_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/benefit_detail/benefit_detail_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/error/error_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';

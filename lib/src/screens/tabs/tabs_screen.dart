@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/account/account_screen.dart';
@@ -48,46 +50,36 @@ class _TabsScreenState extends State<TabsScreen> {
                 ),
               ],
             ),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          labelTextStyle: WidgetStateProperty.all(
-            const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: theme.colorScheme.primary,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            selectedIcon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
           ),
-        ),
-        child: NavigationBar(
-          onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-          indicatorColor: theme.colorScheme.primary,
-          selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.workspace_premium),
-              icon: Icon(Icons.workspace_premium_outlined),
-              label: 'Recognition',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.card_giftcard),
-              icon: Icon(Icons.card_giftcard_outlined),
-              label: 'Benefits',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.person),
-              icon: Icon(Icons.person_outline),
-              label: 'Account',
-            ),
-          ],
-        ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.workspace_premium),
+            icon: Icon(Icons.workspace_premium_outlined),
+            label: 'Recognition',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.card_giftcard),
+            icon: Icon(Icons.card_giftcard_outlined),
+            label: 'Benefits',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline),
+            label: 'Account',
+          ),
+        ],
       ),
       body: <Widget>[
         const HomeScreen(), // Home page
