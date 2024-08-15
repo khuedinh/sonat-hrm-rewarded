@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/history.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/filters/recognition_filters.dart';
-
-import '../../../widgets/benefits/filters/benefit_filters.dart';
+import 'package:sonat_hrm_rewarded/src/widgets/recognition/filters/recognition_filters.dart';
+import 'package:sonat_hrm_rewarded/src/widgets/recognition/p2p/p2p_tab.dart';
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});
@@ -39,7 +38,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                               const P2pTab()), // Replace NewPage with the actual page class
+                      );
+                    },
                     child: const Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -162,6 +168,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                 Tab(text: "Received"),
               ],
             ),
+            const SizedBox(height: 8.0),
             Expanded(
               child: TabBarView(
                 children: [
