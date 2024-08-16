@@ -175,7 +175,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                         ),
                         side: BorderSide(
                           width: 2,
-                          color: theme.colorScheme.primaryContainer,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                       child: const Text("Discard"),

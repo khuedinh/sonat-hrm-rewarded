@@ -7,6 +7,7 @@ class DisplayAmount extends StatelessWidget {
     required this.icon,
     this.suffix,
     this.iconSize,
+    this.iconColor,
     this.textColor,
     this.spacing,
   });
@@ -15,6 +16,7 @@ class DisplayAmount extends StatelessWidget {
   final int amount;
   final double? iconSize;
   final String? suffix;
+  final Color? iconColor;
   final Color? textColor;
   final double? spacing;
 
@@ -29,7 +31,7 @@ class DisplayAmount extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary,
+            color: iconColor ?? const Color.fromARGB(255, 255, 154, 59),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: theme.colorScheme.onSurface),
           ),
