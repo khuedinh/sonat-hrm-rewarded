@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 
 final historyList = [
@@ -40,4 +41,16 @@ final historyList = [
     createdAt: DateTime(2024, 08, 08, 12, 43, 33),
     quantity: 100,
   ),
+];
+
+final recognitionValue = [
+  const RecognitionValue(id: "1", name: "Statistics", icon: Icons.pin_outlined),
+  const RecognitionValue(
+      id: "2", name: "Oneness", icon: Icons.diversity_1_outlined),
+  const RecognitionValue(
+      id: "3", name: "Ardour", icon: Icons.local_fire_department_outlined),
+  const RecognitionValue(
+      id: "4", name: "Transparency", icon: Icons.person_search),
+  const RecognitionValue(
+      id: "5", name: "High Performance", icon: Icons.trending_up),
 ];

@@ -3,20 +3,23 @@ import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.
 import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/widgets/recognition/team/team_filters.dart';
 
-class P2pTab extends StatefulWidget {
-  const P2pTab({super.key});
+class TeamTab extends StatefulWidget {
+  const TeamTab({super.key});
 
   @override
-  State<P2pTab> createState() => _P2pTabState();
+  State<TeamTab> createState() => _TeamTabState();
 }
 
-class _P2pTabState extends State<P2pTab> {
+class _TeamTabState extends State<TeamTab> {
   double _sliderValue = 50;
   int _selectedChipValue = 50;
   dynamic _selectedRecognitionValue = 'Core values';
   dynamic _selectedRecipient;
   dynamic _searchedRecipient;
+  dynamic _isSavePresets = false;
+  dynamic _isAllocateCustom = false;
 
   final TextEditingController _textFieldController = TextEditingController();
 
@@ -52,7 +55,6 @@ class _P2pTabState extends State<P2pTab> {
         spans.add(TextSpan(text: currentLine.toString()));
       }
 
-      // Add ellipsis if text exceeds 2 lines
       if (currentLineCount >= 2) {
         String truncatedText = spans[1].text!.trim();
         if (truncatedText.length > maxLength - 3) {
@@ -66,11 +68,21 @@ class _P2pTabState extends State<P2pTab> {
       return spans;
     }
 
+    void handleOpenFilter() {
+      showModalBottomSheet(
+        useSafeArea: true,
+        context: context,
+        isScrollControlled: true,
+        enableDrag: false,
+        builder: (context) => const TeamFilters(),
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: theme.colorScheme.primary,
           foregroundColor: theme.colorScheme.onPrimary,
-          title: const ScreenTitle(title: "P2P recognition"),
+          title: const ScreenTitle(title: "Team recognition"),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -101,121 +113,49 @@ class _P2pTabState extends State<P2pTab> {
             slivers: [
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter email or name',
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    prefixIcon: Icon(Icons.search, size: 28),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                  child: ScreenTitle(
+                title: "Recipients",
+                color: theme.colorScheme.onSurface,
+              )),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              SliverToBoxAdapter(
+                  child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        // setState(() {
+                        //   // _selectedRecipient = user;
+                        // });
+                        handleOpenFilter();
+                      },
+                      child: Column(
+                        children: [
+                          const CircleAvatar(
+                            radius: 24,
+                            child: Icon(Icons.add),
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              children: splitText("Add recipient", 9),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  onChanged: (text) {
-                    setState(() {
-                      _searchedRecipient = text;
-                    });
-                  },
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              _searchedRecipient == null
-                  ? const SliverToBoxAdapter(
-                      child: Text("Recent recipients",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    )
-                  : const SliverToBoxAdapter(
-                      child: Text("Founded recipients",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              SliverToBoxAdapter(
-                  child: _searchedRecipient == null
-                      ? Row(
-                          children: listLeaderboard.sublist(1, 5).map((user) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedRecipient = user;
-                                  });
-                                },
-                                child: Column(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 24,
-                                      child: Icon(Icons.person),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        children: splitText(user.name, 6),
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        )
-                      : Row(
-                          children: listLeaderboard
-                              .where((user) =>
-                                  user.name.toLowerCase().contains(
-                                      _searchedRecipient.toLowerCase()) ||
-                                  user.email.toLowerCase().contains(
-                                      _searchedRecipient.toLowerCase()))
-                              .map((user) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedRecipient = user;
-                                  });
-                                },
-                                child: Column(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 24,
-                                      child: Icon(Icons.person),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        children: splitText(user.name, 6),
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        )),
-              SliverToBoxAdapter(
-                  child: _selectedRecipient != null
-                      ? const SizedBox(height: 8)
-                      : const SizedBox.shrink()),
-              SliverToBoxAdapter(
-                  child: _selectedRecipient != null
-                      ? ScreenTitle(
-                          title: "Recipient",
-                          color: theme.colorScheme.onSurface,
-                        )
-                      : const SizedBox.shrink()),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              SliverToBoxAdapter(
-                  child: _selectedRecipient == null
-                      ? const SizedBox.shrink()
-                      : Column(
+                  ...listLeaderboard.sublist(1, 3).map((user) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedRecipient = user;
+                          });
+                        },
+                        child: Column(
                           children: [
                             const CircleAvatar(
                               radius: 24,
@@ -223,13 +163,36 @@ class _P2pTabState extends State<P2pTab> {
                             ),
                             Text.rich(
                               TextSpan(
-                                children: splitText(_selectedRecipient.name, 6),
+                                children: splitText(user.name, 6),
                               ),
                               textAlign: TextAlign.center,
                             ),
                           ],
-                        )),
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+                        ),
+                      ),
+                    );
+                  })
+                ],
+              )),
+              SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    const Text("Save this team's recipient preset"),
+                    Transform.scale(
+                      scale: 0.75,
+                      child: Switch(
+                        value: _isSavePresets,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isSavePresets = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,7 +201,23 @@ class _P2pTabState extends State<P2pTab> {
                       title: 'Recognition Points',
                       color: theme.colorScheme.onSurface,
                     ),
-                    const SizedBox(height: 8),
+                    //const SizedBox(height: 8),
+                    Padding(
+                        padding: EdgeInsets.zero,
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              //tristate: true,
+                              value: _isAllocateCustom,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isAllocateCustom = value;
+                                });
+                              },
+                            ),
+                            const Text("Allocate custom for each team member"),
+                          ],
+                        )),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -328,8 +307,51 @@ class _P2pTabState extends State<P2pTab> {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 200, // Set a fixed height for the ListView
+                          child: ListView.builder(
+                            itemCount: historyList.length,
+                            itemBuilder: (context, index) {
+                              final notification = historyList[index];
+                              print(notification);
+                              return ListTile(
+                                titleAlignment: ListTileTitleAlignment.center,
+                                leading: const SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircleAvatar(
+                                    child: Icon(Icons.person),
+                                  ),
+                                ),
+                                title: Text(
+                                  notification.name,
+                                  style: theme.textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "${50} points",
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      iconSize: 16,
+                                      onPressed: () {},
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {},
+                              );
+                            },
+                          ),
+                        ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -368,41 +390,10 @@ class _P2pTabState extends State<P2pTab> {
                                 ],
                               ),
                             );
-                            ;
                           }).toList()),
                     ]),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              const SliverToBoxAdapter(
-                child: Text(
-                  "Recognition Message",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              const SliverToBoxAdapter(
-                child: TextField(
-                  keyboardType: TextInputType.multiline,
-                  minLines: 3,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: 'Type message',
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
             ],
           ),
         ));

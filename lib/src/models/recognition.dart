@@ -17,3 +17,15 @@ class Recognition {
     this.quantity = 0,
   });
 }
+
+class RecognitionValue {
+  final String id;
+  final String name;
+  final dynamic icon;
+
+  const RecognitionValue({
+    required this.id,
+    required this.name,
+    required this.icon,
+  });
+}
