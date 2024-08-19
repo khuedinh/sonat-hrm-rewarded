@@ -14,6 +14,7 @@ class RecognitionScreen extends StatefulWidget {
 }
 
 class _RecognitionScreenState extends State<RecognitionScreen> {
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -23,7 +24,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         context: context,
         isScrollControlled: true,
         enableDrag: false,
-        builder: (context) => const RecognitionFilters(),
+        builder: (context) => const RecognitionFilters(
+          initialSortByFilter: SortByFilter.latest,
+          initialTimeFilter: TimeFilter.last7Days,
+          initialTypeFilter: TypeFilter.all,
+        ),
       );
     }
 
