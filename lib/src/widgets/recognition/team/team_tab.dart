@@ -308,48 +308,49 @@ class _TeamTabState extends State<TeamTab> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        SizedBox(
-                          height: 200, // Set a fixed height for the ListView
-                          child: ListView.builder(
-                            itemCount: historyList.length,
-                            itemBuilder: (context, index) {
-                              final notification = historyList[index];
-                              print(notification);
-                              return ListTile(
-                                titleAlignment: ListTileTitleAlignment.center,
-                                leading: const SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: CircleAvatar(
-                                    child: Icon(Icons.person),
-                                  ),
-                                ),
-                                title: Text(
-                                  notification.name,
-                                  style: theme.textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      "${50} points",
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      iconSize: 16,
-                                      onPressed: () {},
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {},
-                              );
-                            },
-                          ),
-                        ),
+                        // SizedBox(
+                        //   height: 200, // Set a fixed height for the ListView
+                        //   child: ListView.builder(
+                        //     itemCount: historyList.length,
+                        //     itemBuilder: (context, index) {
+                        //       final notification = historyList[index];
+                        //       print(notification);
+                        //       return ListTile(
+                        //         titleAlignment: ListTileTitleAlignment.center,
+                        //         leading: const SizedBox(
+                        //           width: 50,
+                        //           height: 50,
+                        //           child: CircleAvatar(
+                        //             child: Icon(Icons.person),
+                        //           ),
+                        //         ),
+                        //         title: Text(
+                        //           notification.name,
+                        //           style: theme.textTheme.titleMedium!.copyWith(
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //           textAlign: TextAlign.start,
+                        //         ),
+                        //         trailing: Row(
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: [
+                        //             const Text(
+                        //               "${50} points",
+                        //               style: TextStyle(fontSize: 14),
+                        //             ),
+                        //             IconButton(
+                        //               icon: const Icon(Icons.edit),
+                        //               iconSize: 16,
+                        //               onPressed: () {},
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         onTap: () {},
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
+                     
                       ],
                     )
                   ],
