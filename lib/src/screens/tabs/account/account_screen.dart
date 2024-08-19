@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sonat_hrm_rewarded/src/app/bloc/app_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/account/overview_card.dart';
@@ -14,28 +16,38 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final List<Map<String, dynamic>> menuList = [
-    {
-      "title": "Transaction history",
-      "icon": Icons.history_rounded,
-      "onTab": (BuildContext context) =>
-          context.push(TransactionHistoryScreen.routeName),
-    },
-    {
-      "title": "Settings",
-      "icon": Icons.settings,
-      "onTab": (BuildContext context) => context.push(SettingsScreen.routeName),
-    },
-    {
-      "title": "Logout",
-      "icon": Icons.logout,
-      "onTab": (BuildContext context) {},
+  void handleSignOut() async {
+    try {
+      context.read<AppBloc>().add(AppLogoutRequested());
+    } catch (e) {
+      debugPrint('$e');
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    final List<Map<String, dynamic>> menuList = [
+      {
+        "title": "Transaction history",
+        "icon": Icons.history_rounded,
+        "onTab": (BuildContext context) =>
+            context.push(TransactionHistoryScreen.routeName),
+      },
+      {
+        "title": "Settings",
+        "icon": Icons.settings,
+        "onTab": (BuildContext context) =>
+            context.push(SettingsScreen.routeName),
+      },
+      {
+        "title": "Logout",
+        "icon": Icons.logout,
+        "onTab": (BuildContext context) {
+          handleSignOut();
+        },
+      }
+    ];
 
     return ListView(
       padding: const EdgeInsets.only(top: 16),
