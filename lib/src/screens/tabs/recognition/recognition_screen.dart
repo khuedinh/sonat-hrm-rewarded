@@ -277,10 +277,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
-                                    // subtitle: notification.role == null ||
-                                    //         notification.role!.isEmpty
-                                    //     ? null
-                                    //     : Text(notification.role!),
                                     trailing: Text(
                                       notification.amount > 0
                                           ? '+${notification.amount.toString()}'
