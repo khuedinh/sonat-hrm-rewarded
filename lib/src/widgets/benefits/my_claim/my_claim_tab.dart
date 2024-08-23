@@ -42,13 +42,7 @@ class _MyClaimTabState extends State<MyClaimTab> {
   @override
   void initState() {
     super.initState();
-    listClaimedBenefits.addAll(
-      listBenefits
-          .where(
-            (benefit) => benefit.isClaimed! && !benefit.isUsed!,
-          )
-          .toList(),
-    );
+    listClaimedBenefits.addAll(listMockBenefits);
   }
 
   @override

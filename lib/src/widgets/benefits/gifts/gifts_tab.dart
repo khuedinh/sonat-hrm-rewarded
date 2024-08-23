@@ -1,29 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/benefit.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
+import 'package:sonat_hrm_rewarded/src/models/category.dart';
+import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/list_benefits_grid.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/list_benefits_horizontal.dart';
+import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/list_categories.dart';
 
-class GiftsTab extends StatelessWidget {
+class GiftsTab extends StatefulWidget {
   const GiftsTab({super.key});
 
   @override
+  State<GiftsTab> createState() => _GiftsTabState();
+}
+
+class _GiftsTabState extends State<GiftsTab> {
+  List listBenefits = [];
+  List listCategories = [];
+  bool isLoadingBenefits = true;
+  bool isLoadingCategories = true;
+  String _selectedCategory = "";
+
+  void handleSelectCategory(String category) {
+    setState(() {
+      _selectedCategory = category;
+    });
+  }
+
+  void handleGetListBenefit() async {
+    final queryParams = {
+      "categoryId": _selectedCategory,
+    };
+    final res = await BenefitApi.getListBenefit(queryParams: queryParams);
+
+    if (mounted) {
+      setState(() {
+        listBenefits =
+            res.map((item) => BenefitResponse.fromJson(item)).toList();
+        isLoadingBenefits = false;
+      });
+    }
+  }
+
+  void handleGetListCategories() async {
+    final res = await BenefitApi.getListCategories();
+    if (mounted) {
+      setState(() {
+        listCategories =
+            res.map((item) => CategoryResponse.fromJson(item)).toList();
+        isLoadingCategories = false;
+      });
+    }
+  }
+
+  void handleRedeemBenefit(String benefitId) async {
+    final res = await BenefitApi.redeemBenefit(data: {benefitId: benefitId});
+    print(res);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetListBenefit();
+    handleGetListCategories();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final listGifts = listBenefits.where((item) {
-      return item.type == BenefitType.gift;
-    }).toList();
-
-    final listFeaturedGifts = listGifts.where((item) {
-      return item.isFeatured!;
-    }).toList();
-
-    final listExchangeableGifts = listGifts.where((item) {
-      return item.price < currentUser.coin;
-    }).toList();
+    if (isLoadingCategories || isLoadingBenefits) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -49,39 +95,14 @@ class GiftsTab extends StatelessWidget {
               ),
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
-          SliverToBoxAdapter(
-            child: ScreenTitle(
-              title: 'Featured',
-              color: theme.colorScheme.onSurface,
-              fontSize: 18,
-            ),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          ListCategories(
+            listCategories: listCategories,
+            handleSelectCategory: handleSelectCategory,
+            selectedCategory: _selectedCategory,
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
-          ListBenefitsHorizontal(
-            listBenefits: listFeaturedGifts,
-          ),
-          SliverToBoxAdapter(
-            child: ScreenTitle(
-              title: 'Exchangeable',
-              color: theme.colorScheme.onSurface,
-              fontSize: 18,
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
-          ListBenefitsHorizontal(
-            listBenefits: listExchangeableGifts,
-          ),
-          SliverToBoxAdapter(
-            child: ScreenTitle(
-              title: 'Others',
-              color: theme.colorScheme.onSurface,
-              fontSize: 18,
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
           ListBenefitsGrid(
-            listBenefits: listGifts,
+            listBenefits: listBenefits,
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
         ],

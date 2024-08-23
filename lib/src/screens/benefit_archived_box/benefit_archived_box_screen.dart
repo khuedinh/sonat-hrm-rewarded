@@ -31,7 +31,7 @@ class BenefitArchivedBoxScreen extends StatelessWidget {
           children: [
             ListClaimedBenefits(
               isDismissible: false,
-              listClaimedBenefits: listBenefits
+              listClaimedBenefits: listMockBenefits
                   .where((benefit) => benefit.isClaimed! && benefit.isUsed!)
                   .toList(),
             ),
