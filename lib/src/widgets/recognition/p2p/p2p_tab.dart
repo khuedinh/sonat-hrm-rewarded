@@ -429,7 +429,13 @@ class _P2pTabState extends State<P2pTab> {
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: ChoiceChip(
-                                      label: Text("${point}p"),
+                                      label: Row(
+                                        children: [
+                                          const Icon(Icons.currency_bitcoin,
+                                              size: 16),
+                                          Text("$point"),
+                                        ],
+                                      ),
                                       selected: _selectedChipValue == point,
                                       onSelected: (bool selected) {
                                         setState(() {

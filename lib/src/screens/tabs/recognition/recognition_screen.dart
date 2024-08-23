@@ -321,16 +321,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                         radius: 24,
                                         child: ClipOval(
                                           child: Image.network(
-                                            (notification.detailRecognitions !=
-                                                        null &&
-                                                    notification
-                                                        .detailRecognitions!
-                                                        .isNotEmpty)
-                                                ? notification
-                                                    .detailRecognitions![0]
-                                                    .employee
-                                                    .picture
-                                                : "",
+                                            notification.employee.picture,
                                             fit: BoxFit.cover,
                                             width: 48,
                                             height: 48,
@@ -339,17 +330,13 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                       ),
                                     ),
                                     title: Text(
-                                      "S", // notification.detailRecognitions?.employee.name ?? "",
+                                      notification.employee.name,
                                       style:
                                           theme.textTheme.titleMedium!.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
-                                    // subtitle: notification.role == null ||
-                                    //         notification.role!.isEmpty
-                                    //     ? null
-                                    //     : Text(notification.role!),
                                     trailing: Text(
                                       notification.amount > 0
                                           ? '+${notification.amount.toString()}'

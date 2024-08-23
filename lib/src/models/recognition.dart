@@ -28,6 +28,7 @@ class Recognition {
   final String? cardContent;
   final String? type;
   final List<DetailRecognitions>? detailRecognitions;
+  final Employee employee;
 
   const Recognition({
     required this.id,
@@ -39,6 +40,7 @@ class Recognition {
     this.imageUrl,
     this.cardContent,
     this.detailRecognitions,
+    required this.employee,
   });
 
   factory Recognition.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class Recognition {
                   DetailRecognitions.fromJson(item as Map<String, dynamic>))
               .toList()
           : null,
+      employee: Employee.fromJson(json['employee']),
     );
   }
 }
