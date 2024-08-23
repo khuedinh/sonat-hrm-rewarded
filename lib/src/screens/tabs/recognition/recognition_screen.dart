@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
@@ -245,8 +246,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                       child: CircleAvatar(
                                         radius: 24,
                                         child: ClipOval(
-                                          child: Image.network(
-                                            (notification.detailRecognitions !=
+                                          child: CachedNetworkImage(
+                                            imageUrl: (notification
+                                                            .detailRecognitions !=
                                                         null &&
                                                     notification
                                                         .detailRecognitions!
@@ -259,6 +261,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                             fit: BoxFit.cover,
                                             width: 48,
                                             height: 48,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
                                           ),
                                         ),
                                       ),
@@ -316,11 +323,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                       child: CircleAvatar(
                                         radius: 24,
                                         child: ClipOval(
-                                          child: Image.network(
-                                            notification.employee.picture,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                notification.employee.picture,
                                             fit: BoxFit.cover,
                                             width: 48,
                                             height: 48,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
                                           ),
                                         ),
                                       ),

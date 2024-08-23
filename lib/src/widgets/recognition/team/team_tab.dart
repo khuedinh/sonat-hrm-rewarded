@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
@@ -195,11 +196,15 @@ class _TeamTabState extends State<TeamTab> {
                                   CircleAvatar(
                                     radius: 24,
                                     child: ClipOval(
-                                      child: Image.network(
-                                        user.picture,
+                                      child: CachedNetworkImage(
+                                        imageUrl: user.picture,
                                         fit: BoxFit.cover,
                                         width: 48,
                                         height: 48,
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
                                       ),
                                     ),
                                   ),
