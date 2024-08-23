@@ -43,14 +43,36 @@ import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 //   ),
 // ];
 
-final recognitionValue = [
-  const RecognitionValue(id: "1", name: "Statistics", icon: Icons.pin_outlined),
-  const RecognitionValue(
-      id: "2", name: "Oneness", icon: Icons.diversity_1_outlined),
-  const RecognitionValue(
-      id: "3", name: "Ardour", icon: Icons.local_fire_department_outlined),
-  const RecognitionValue(
-      id: "4", name: "Transparency", icon: Icons.person_search),
-  const RecognitionValue(
-      id: "5", name: "High Performance", icon: Icons.trending_up),
+// final recognitionValue = [
+//   const RecognitionValue(id: "1", name: "Statistics", icon: Icons.pin_outlined),
+//   const RecognitionValue(
+//       id: "2", name: "Oneness", icon: Icons.diversity_1_outlined),
+//   const RecognitionValue(
+//       id: "3", name: "Ardour", icon: Icons.local_fire_department_outlined),
+//   const RecognitionValue(
+//       id: "4", name: "Transparency", icon: Icons.person_search),
+//   const RecognitionValue(
+//       id: "5", name: "High Performance", icon: Icons.trending_up),
+// ];
+
+final recognitionValueColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.orange,
+  Colors.purple,
+  Colors.pink,
+  Colors.teal,
+  Colors.amber,
+  Colors.deepPurple,
+  Colors.indigo,
+  Colors.lightBlue,
+  Colors.lightGreen,
+  Colors.lime,
+  Colors.deepOrange,
+  Colors.cyan,
+  Colors.brown,
+  Colors.grey,
+  Colors.blueGrey,
+  Colors.yellow,
 ];

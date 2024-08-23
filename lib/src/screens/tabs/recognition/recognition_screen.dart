@@ -37,7 +37,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
           .toList();
       isLoading = false;
-      print("isLoading: $isLoading");
     });
   }
 
@@ -234,21 +233,44 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                 ],
                               )
                             : ListView.builder(
-                                itemCount: sentNotifications.length,
+                                itemCount: (sentNotifications).length,
                                 itemBuilder: (context, index) {
                                   final notification = sentNotifications[index];
                                   return ListTile(
                                     titleAlignment:
                                         ListTileTitleAlignment.center,
-                                    leading: const SizedBox(
+                                    leading: SizedBox(
                                       width: 50,
                                       height: 50,
                                       child: CircleAvatar(
-                                        child: Icon(Icons.person),
+                                        radius: 24,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            (notification.detailRecognitions !=
+                                                        null &&
+                                                    notification
+                                                        .detailRecognitions!
+                                                        .isNotEmpty)
+                                                ? notification
+                                                    .detailRecognitions![0]
+                                                    .employee
+                                                    .picture
+                                                : "",
+                                            fit: BoxFit.cover,
+                                            width: 48,
+                                            height: 48,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     title: Text(
-                                      notification.name,
+                                      (notification.detailRecognitions !=
+                                                  null &&
+                                              notification.detailRecognitions!
+                                                  .isNotEmpty)
+                                          ? notification.detailRecognitions![0]
+                                              .employee.name
+                                          : "",
                                       style:
                                           theme.textTheme.titleMedium!.copyWith(
                                         fontWeight: FontWeight.bold,
@@ -292,15 +314,32 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                   return ListTile(
                                     titleAlignment:
                                         ListTileTitleAlignment.center,
-                                    leading: const SizedBox(
+                                    leading: SizedBox(
                                       width: 50,
                                       height: 50,
                                       child: CircleAvatar(
-                                        child: Icon(Icons.person),
+                                        radius: 24,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            (notification.detailRecognitions !=
+                                                        null &&
+                                                    notification
+                                                        .detailRecognitions!
+                                                        .isNotEmpty)
+                                                ? notification
+                                                    .detailRecognitions![0]
+                                                    .employee
+                                                    .picture
+                                                : "",
+                                            fit: BoxFit.cover,
+                                            width: 48,
+                                            height: 48,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     title: Text(
-                                      notification.name,
+                                      "S", // notification.detailRecognitions?.employee.name ?? "",
                                       style:
                                           theme.textTheme.titleMedium!.copyWith(
                                         fontWeight: FontWeight.bold,
