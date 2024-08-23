@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: BenefitDetailScreen.routeName,
         builder: (context, state) {
-          Benefit benefit = state.extra as Benefit;
+          BenefitResponse benefit = state.extra as BenefitResponse;
           return BenefitDetailScreen(benefit: benefit);
         },
       ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
-import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/cards/cards_tab.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/filters/benefit_filters.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/gifts/gifts_tab.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/my_claim_tab.dart';
@@ -28,24 +26,13 @@ class _BenefitScreenState extends State<BenefitsScreen> {
     );
   }
 
-  void getListBenefit() async {
-    final res = await BenefitApi.getListBenefit();
-    print('[Benefit Screen]: $res');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getListBenefit();
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 
     return DefaultTabController(
       initialIndex: 0,
-      length: 3,
+      length: 2,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: theme.colorScheme.primary,
@@ -57,6 +44,7 @@ class _BenefitScreenState extends State<BenefitsScreen> {
                 amount: currentUser.coin,
                 icon: Icons.currency_bitcoin_rounded,
                 suffix: "Coins",
+                isBold: true,
                 textColor: theme.colorScheme.onPrimary,
               )
             ]),
@@ -78,7 +66,6 @@ class _BenefitScreenState extends State<BenefitsScreen> {
                   labelPadding: const EdgeInsets.symmetric(horizontal: 16),
                   tabs: const [
                     Tab(text: "Gifts"),
-                    Tab(text: "Cards"),
                     Tab(text: "My claim"),
                   ],
                 ),
@@ -87,7 +74,6 @@ class _BenefitScreenState extends State<BenefitsScreen> {
           ),
           body: const TabBarView(children: [
             GiftsTab(),
-            CardsTab(),
             MyClaimTab(),
           ])),
     );

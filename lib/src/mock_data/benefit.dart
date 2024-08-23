@@ -1,6 +1,6 @@
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 
-const listBenefits = [
+const listMockBenefits = [
   Benefit(
     id: 'b1',
     name: "Umbrella",
@@ -8,7 +8,7 @@ const listBenefits = [
     image:
         "https://www.totes.com/cdn/shop/products/9514_A44.jpg?v=1655128036&width=750",
     price: 50,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 38,
     exchanged: 12,
     isClaimed: true,
@@ -21,7 +21,7 @@ const listBenefits = [
     image:
         "https://shop.mixigaming.com/wp-content/uploads/2023/05/SanKaa-0770-scaled.jpg",
     price: 50,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 26,
     exchanged: 9,
   ),
@@ -32,7 +32,7 @@ const listBenefits = [
     image:
         "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MME73?wid=2000&hei=2000&fmt=jpeg&qlt=95&.v=1632861342000",
     price: 5000,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     isFeatured: true,
     stock: 6,
     exchanged: 3,
@@ -44,7 +44,7 @@ const listBenefits = [
     image:
         "https://product.hstatic.net/1000042622/product/at483_1_7e777ceef0f242e38e8e35693a466b2b_master.jpg",
     price: 100,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     isFeatured: true,
     stock: 47,
     exchanged: 17,
@@ -56,7 +56,7 @@ const listBenefits = [
     image:
         "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-m3-max-pro-spaceblack-select-202310?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1697230830118",
     price: 15000,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     isFeatured: true,
     stock: 2,
     exchanged: 0,
@@ -70,7 +70,7 @@ const listBenefits = [
     image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvVDH-sB7qh8MifUwkpDFMSekZi-qhlXScaw&s",
     price: 20000,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 1,
     exchanged: 0,
   ),
@@ -81,7 +81,7 @@ const listBenefits = [
     image:
         "https://hanoicomputercdn.com/media/product/77516_may_choi_game_sony_playstation_5_ps5_slim_standard_1.jpg",
     price: 10000,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 3,
     exchanged: 1,
   ),
@@ -92,7 +92,7 @@ const listBenefits = [
     image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV8d3J14fLWVkEN5OSzPZN3WRGA9L_FoVwww&s",
     price: 500,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 8,
     exchanged: 4,
   ),
@@ -103,7 +103,7 @@ const listBenefits = [
     image:
         "https://cdn.thewirecutter.com/wp-content/media/2020/11/notebooks-2048px-2008.jpg?auto=webp&quality=75&width=1024",
     price: 10,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 85,
     exchanged: 15,
   ),
@@ -114,7 +114,7 @@ const listBenefits = [
     image:
         "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/f/r/frame_100_1_2__2_2.png",
     price: 18000,
-    type: BenefitType.gift,
+    type: BenefitType.exchangable,
     stock: 2,
     exchanged: 0,
   ),
@@ -125,7 +125,7 @@ const listBenefits = [
     image:
         "https://viettelmoney.vn/wp-content/uploads/2023/04/Voucher-Higland-Coffee.jpg",
     price: 250,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
@@ -136,7 +136,7 @@ const listBenefits = [
     image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFHE0w5ZcZEWj2BnOIb-qcf--RTRaVIF4Vrw&s",
     price: 500,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
@@ -147,18 +147,18 @@ const listBenefits = [
     image:
         "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/3/small_image/245x/1e805736ee3519448ab72df742a3cdae/v/o/voucher1.png",
     price: 300,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
   Benefit(
     id: 'b14',
-    name: "Gym member card 1 year",
+    name: "Gym member nonExchangable 1 year",
     description: "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
     image:
         "https://printedsmileshop.com/cdn/shop/files/5_f6dae7d3-6cc6-4484-ad6b-4a892beb660e.png?v=1690059563&width=1946",
     price: 3000,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
@@ -169,7 +169,7 @@ const listBenefits = [
     image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdy7RIw_hROrf1Yxg_ia3CR8ZOU8QCfWiW_g&s",
     price: 200,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
     isUsed: false,
@@ -182,7 +182,7 @@ const listBenefits = [
     image:
         "https://media.istockphoto.com/id/914636732/vi/vec-to/m%E1%BA%ABu-v%C3%A9-l%C3%AAn-m%C3%A1y-bay-v%C3%A9-m%C3%A1y-bay-kh%C3%A1i-ni%E1%BB%87m-v%C3%A9-m%C3%A1y-bay-%C4%91%E1%BA%B7t-ch%E1%BB%97-tr%E1%BB%B1c-tuy%E1%BA%BFn.jpg?s=612x612&w=0&k=20&c=COQHTviVQzgptEU6mMscbZScKYP8VpXqr6HPrZNXjmQ=",
     price: 4000,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
@@ -193,7 +193,7 @@ const listBenefits = [
     image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnhu3SXFLlr3s2YU2jqJEIk1CAvipzp5-hMw&s",
     price: 800,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
     isClaimed: true,
@@ -206,7 +206,7 @@ const listBenefits = [
     image:
         "https://prestige.com.mm/uploads/thumbnails/course_thumbnails/course_thumbnail_nutras_59.jpg",
     price: 2000,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
@@ -217,18 +217,18 @@ const listBenefits = [
     image:
         "https://i.pinimg.com/736x/c3/22/8b/c3228b8a46d8fc20997dca6f6d509698.jpg",
     price: 3000,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),
   Benefit(
     id: 'b20',
-    name: "Garena card 500.000 VND",
+    name: "Garena nonExchangable 500.000 VND",
     description: "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
     image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcVQdPqXiDAr6shbgocSMBYI5qdch9-2Bbw&s",
     price: 500,
-    type: BenefitType.card,
+    type: BenefitType.nonExchangable,
     stock: 24,
     exchanged: 43,
   ),

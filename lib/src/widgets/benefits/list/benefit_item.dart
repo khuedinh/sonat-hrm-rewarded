@@ -3,12 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class BenefitItem extends StatelessWidget {
   const BenefitItem(
       {super.key, required this.benefit, required this.onTapBenefit});
 
-  final Benefit benefit;
+  final BenefitResponse benefit;
   final void Function() onTapBenefit;
 
   @override
@@ -31,8 +32,9 @@ class BenefitItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: Image.network(
-                      benefit.image,
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: benefit.imageUrls.first,
                       width: 160,
                       height: 160,
                       fit: BoxFit.cover,
@@ -54,13 +56,27 @@ class BenefitItem extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          DisplayAmount(
-                            amount: benefit.price,
-                            icon: Icons.currency_bitcoin_rounded,
-                            iconSize: 12,
-                            suffix: "coins",
-                            spacing: 4,
-                          )
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: DisplayAmount(
+                                    amount: benefit.exchangePrice,
+                                    icon: Icons.currency_bitcoin_rounded,
+                                    iconSize: 10,
+                                    fontSize: 12,
+                                    suffix: "coins",
+                                    spacing: 4,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    textAlign: TextAlign.end,
+                                    "Stock: ${benefit.inStock}",
+                                    style: theme.textTheme.bodySmall,
+                                  ),
+                                ),
+                              ])
                         ]),
                   )
                 ],

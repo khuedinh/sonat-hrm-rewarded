@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/benefit_item.dart';
 
 class ListBenefitsGrid extends StatelessWidget {
   const ListBenefitsGrid({super.key, required this.listBenefits});
 
-  final List<Benefit> listBenefits;
+  final List listBenefits;
 
   @override
   Widget build(BuildContext context) {

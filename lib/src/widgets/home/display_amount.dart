@@ -6,14 +6,18 @@ class DisplayAmount extends StatelessWidget {
     required this.amount,
     required this.icon,
     this.suffix,
-    this.iconSize,
+    this.fontSize = 14,
+    this.iconSize = 16,
     this.iconColor,
     this.textColor,
-    this.spacing,
+    this.isBold = false,
+    this.spacing = 8,
   });
 
   final IconData icon;
   final int amount;
+  final double fontSize;
+  final bool isBold;
   final double? iconSize;
   final String? suffix;
   final Color? iconColor;
@@ -37,14 +41,15 @@ class DisplayAmount extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            size: iconSize ?? 16,
+            size: iconSize,
           ),
         ),
-        SizedBox(width: spacing ?? 8),
+        SizedBox(width: spacing),
         Text(
           amountText,
           style: theme.textTheme.titleSmall!.copyWith(
-            fontWeight: FontWeight.bold,
+            fontSize: fontSize,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
             color: textColor ?? theme.colorScheme.onSurface,
           ),
         )
