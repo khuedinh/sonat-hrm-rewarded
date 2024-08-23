@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 
 enum SortByFilter { latest, earliest }
 
-enum TimeFilter { allTime, last7Days, last30Days, last60Days }
+enum TimeFilter { last7Days, last30Days, last60Days, allTime }
 
 enum TypeFilter { all, p2p, team, eCard, award }
 
 class RecognitionFilters extends StatefulWidget {
-  const RecognitionFilters({super.key});
+  final SortByFilter? initialSortByFilter;
+  final TimeFilter? initialTimeFilter;
+  final TypeFilter? initialTypeFilter;
+
+  const RecognitionFilters({
+    super.key,
+    this.initialSortByFilter,
+    this.initialTimeFilter,
+    this.initialTypeFilter,
+  });
 
   @override
   State<RecognitionFilters> createState() => _RecognitionFiltersState();
@@ -17,6 +26,14 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
   SortByFilter? _sortByFilter;
   TimeFilter? _timeFilter;
   TypeFilter? _typeFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    _sortByFilter = widget.initialSortByFilter;
+    _timeFilter = widget.initialTimeFilter;
+    _typeFilter = widget.initialTypeFilter;
+  }
 
   void _handleResetFilters() {
     setState(() {
@@ -175,7 +192,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                         ),
                         side: BorderSide(
                           width: 2,
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.primaryContainer,
                         ),
                       ),
                       child: const Text("Discard"),
