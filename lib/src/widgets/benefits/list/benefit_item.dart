@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
@@ -32,9 +33,13 @@ class BenefitItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: benefit.imageUrls.first,
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(),
+                      ),
+                      imageUrl: benefit.imageUrls.first,
                       width: 160,
                       height: 160,
                       fit: BoxFit.cover,

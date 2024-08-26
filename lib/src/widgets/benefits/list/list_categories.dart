@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/models/category.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ListCategories extends StatelessWidget {
   const ListCategories({
@@ -20,7 +20,7 @@ class ListCategories extends StatelessWidget {
 
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 70,
+        height: 90,
         child: ListView.separated(
           padding: const EdgeInsets.only(bottom: 16),
           scrollDirection: Axis.horizontal,
@@ -41,31 +41,36 @@ class ListCategories extends StatelessWidget {
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: category.imageUrl,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        imageUrl: category.imageUrl,
                         width: 36,
                         height: 36,
                         fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  SizedBox(
-                    width: 78,
-                    child: Text(
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      category.name,
-                      style: theme.textTheme.bodySmall!.copyWith(
-                        fontSize: 11,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
-                        color: isSelected
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.onSurface,
+                  Expanded(
+                    child: SizedBox(
+                      width: 76,
+                      child: Text(
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        category.name,
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          fontSize: 11,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurface,
+                        ),
                       ),
                     ),
                   ),

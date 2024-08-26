@@ -14,7 +14,7 @@ class BenefitApi {
     return DioClient.instance.get('$_pathBenefit/all?$queryString');
   }
 
-  static Future redeemBenefit({required Map<String, String> data}) {
+  static Future redeemBenefit({required Map<String, dynamic> data}) {
     return DioClient.instance.post('$_pathBenefit/redeem', data: data);
   }
 }
