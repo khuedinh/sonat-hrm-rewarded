@@ -6,27 +6,32 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/app/bloc/app_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
-import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_archived_box/benefit_archived_box_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/error/error_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/login/login_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/theme.dart';
 
 /// The Widget that configures your application.
-class MyApp extends StatelessWidget {
-  MyApp({
+class MyApp extends StatefulWidget {
+  const MyApp({
     required AuthenticationRepository authenticationRepository,
     super.key,
   }) : _authenticationRepository = authenticationRepository;
 
   final AuthenticationRepository _authenticationRepository;
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final GoRouter router = GoRouter(
     initialLocation: TabsScreen.routeName,
     redirect: (context, state) {
@@ -77,12 +82,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: _authenticationRepository,
+      value: widget._authenticationRepository,
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => AppBloc(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: widget._authenticationRepository,
             ),
           ),
           BlocProvider(

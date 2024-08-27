@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
-import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/models/user.dart';
+import 'package:sonat_hrm_rewarded/src/service/api/notification_api.dart';
+import 'package:sonat_hrm_rewarded/src/service/firebase/cloud_message.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
@@ -28,6 +31,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   late final StreamSubscription<User> _userSubscription;
 
   void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
+    if (firebase_auth.FirebaseAuth.instance.currentUser != null) {
+      final prefs = await SharedPreferences.getInstance();
+      final isStoredToken = prefs.getBool(kFCMTokenKey);
+
+      if (isStoredToken == null) {
+        CloudMessage.firebaseMessaging.getToken().then((value) {
+          if (value == null) return;
+          print("post token");
+          NotificationApi.registerFCMToken(token: value);
+          prefs.setBool(kFCMTokenKey, true);
+        });
+      }
+    }
     emit(
       firebase_auth.FirebaseAuth.instance.currentUser != null
           ? const AppState.authenticated()

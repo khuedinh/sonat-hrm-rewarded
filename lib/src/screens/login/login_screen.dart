@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/activity_indicator/activity_indicator.dart';
-import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
 import 'package:sonat_hrm_rewarded/src/screens/login/cubit/login_cubit.dart';
 
 class LoginScreen extends StatefulWidget {
