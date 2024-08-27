@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/authentication_repository.dart';
-import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/lib/src/models/user.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
+import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/models/user.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
