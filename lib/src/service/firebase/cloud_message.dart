@@ -1,8 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:logger/logger.dart';
 
 class CloudMessage {
   static final firebaseMessaging = FirebaseMessaging.instance;
+  final logger = Logger();
 
   Future<void> initNotifications() async {
     await firebaseMessaging.requestPermission(
@@ -38,6 +40,7 @@ class CloudMessage {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
+      logger.d(message.notification?.title ?? "test");
 
       if (notification != null && android != null) {
         await flutterLocalNotificationsPlugin.show(
