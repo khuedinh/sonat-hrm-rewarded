@@ -43,6 +43,8 @@ dependencies:
   package_info_plus: ^8.0.0
   qr_flutter: ^4.1.0
   shared_preferences: ^2.2.2
+  skeletonizer: ^1.4.2
+  substring_highlight: ^1.0.33
   transparent_image: ^2.0.1
 
 dev_dependencies:

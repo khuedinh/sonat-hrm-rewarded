@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
@@ -138,10 +139,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             children: [
                               const Text("Total Sent"),
                               isLoading
-                                  ? const SizedBox(
-                                      width: 14.0,
-                                      height: 14.0,
-                                      child: CircularProgressIndicator(),
+                                  ? const Skeletonizer(
+                                      child: Text("10000 Points"),
                                     )
                                   : sentNotifications.isEmpty
                                       ? const Text("0 Points")
@@ -172,10 +171,8 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             children: [
                               const Text("Total Received"),
                               isLoading
-                                  ? const SizedBox(
-                                      width: 14.0,
-                                      height: 14.0,
-                                      child: CircularProgressIndicator(),
+                                  ? const Skeletonizer(
+                                      child: Text("10000 Points"),
                                     )
                                   : receivedNotifications.isEmpty
                                       ? const Text("0 Points")
@@ -218,150 +215,231 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             ),
             const SizedBox(height: 8.0),
             Expanded(
-              child: isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : TabBarView(
-                      children: [
-                        sentNotifications.isEmpty
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.folder_off),
-                                    onPressed: () {},
+              child: TabBarView(
+                children: [
+                  // isLoading
+                  //     ? ListView.builder(
+                  //         itemCount: 3,
+                  //         itemBuilder: (context, index) {
+                  //           return ListTile(
+                  //             titleAlignment: ListTileTitleAlignment.center,
+                  //             leading: SizedBox(
+                  //               width: 50,
+                  //               height: 50,
+                  //               child: Skeletonizer(
+                  //                 child: Container(
+                  //                   width: 48,
+                  //                   height: 48,
+                  //                   decoration: BoxDecoration(
+                  //                     shape: BoxShape.circle,
+                  //                     color: Colors.grey[300],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             title: Skeletonizer(
+                  //               child: Container(
+                  //                 width: 40,
+                  //                 height: 20,
+                  //                 decoration: BoxDecoration(
+                  //                   color: Colors.grey[300],
+                  //                   borderRadius: BorderRadius.circular(8),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             trailing: Skeletonizer(
+                  //               child: Container(
+                  //                 width: 40,
+                  //                 height: 20,
+                  //                 decoration: BoxDecoration(
+                  //                   color: Colors.grey[300],
+                  //                   borderRadius: BorderRadius.circular(8),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             onTap: () {},
+                  //           );
+                  //         },
+                  //       )
+                  isLoading
+                      ? Skeletonizer(
+                          enabled: isLoading,
+                          child: ListView.builder(
+                            itemCount: 7,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                titleAlignment: ListTileTitleAlignment.center,
+                                leading: const SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircleAvatar(
+                                    radius: 24,
                                   ),
-                                  const Text("No data found."),
-                                ],
-                              )
-                            : ListView.builder(
-                                itemCount: (sentNotifications).length,
-                                itemBuilder: (context, index) {
-                                  final notification = sentNotifications[index];
-                                  return ListTile(
-                                    titleAlignment:
-                                        ListTileTitleAlignment.center,
-                                    leading: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: CircleAvatar(
-                                        radius: 24,
-                                        child: ClipOval(
-                                          child: CachedNetworkImage(
-                                            imageUrl: (notification
-                                                            .detailRecognitions !=
-                                                        null &&
-                                                    notification
-                                                        .detailRecognitions!
-                                                        .isNotEmpty)
-                                                ? notification
-                                                    .detailRecognitions![0]
-                                                    .employee
-                                                    .picture
-                                                : "",
-                                            fit: BoxFit.cover,
-                                            width: 48,
-                                            height: 48,
-                                            placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                          ),
+                                ),
+                                title: const Text("Pham Van Thach"),
+                                trailing: const Text("+1000"),
+                                onTap: () {},
+                              );
+                            },
+                          ),
+                        )
+                      : sentNotifications.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.folder_off),
+                                  onPressed: () {},
+                                ),
+                                const Text("No data found."),
+                              ],
+                            )
+                          : ListView.builder(
+                              itemCount: (sentNotifications).length,
+                              itemBuilder: (context, index) {
+                                final notification = sentNotifications[index];
+                                return ListTile(
+                                  titleAlignment: ListTileTitleAlignment.center,
+                                  leading: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircleAvatar(
+                                      radius: 24,
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: (notification
+                                                          .detailRecognitions !=
+                                                      null &&
+                                                  notification
+                                                      .detailRecognitions!
+                                                      .isNotEmpty)
+                                              ? notification
+                                                  .detailRecognitions![0]
+                                                  .employee
+                                                  .picture
+                                              : "",
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
                                       ),
                                     ),
-                                    title: Text(
-                                      (notification.detailRecognitions !=
-                                                  null &&
-                                              notification.detailRecognitions!
-                                                  .isNotEmpty)
-                                          ? notification.detailRecognitions![0]
-                                              .employee.name
-                                          : "",
-                                      style:
-                                          theme.textTheme.titleMedium!.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    trailing: Text(
-                                      notification.amount > 0
-                                          ? '+${notification.amount.toString()}'
-                                          : notification.amount.toString(),
-                                      style: TextStyle(
-                                        color: notification.amount > 0
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
-                                    ),
-                                    onTap: () {},
-                                  );
-                                },
-                              ),
-                        receivedNotifications.isEmpty
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.folder_off),
-                                    onPressed: () {},
                                   ),
-                                  const Text("No data found."),
-                                ],
-                              )
-                            : ListView.builder(
-                                itemCount: receivedNotifications.length,
-                                itemBuilder: (context, index) {
-                                  final notification =
-                                      receivedNotifications[index];
-                                  return ListTile(
-                                    titleAlignment:
-                                        ListTileTitleAlignment.center,
-                                    leading: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: CircleAvatar(
-                                        radius: 24,
-                                        child: ClipOval(
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                notification.employee.picture,
-                                            fit: BoxFit.cover,
-                                            width: 48,
-                                            height: 48,
-                                            placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                          ),
+                                  title: Text(
+                                    (notification.detailRecognitions != null &&
+                                            notification
+                                                .detailRecognitions!.isNotEmpty)
+                                        ? notification.detailRecognitions![0]
+                                            .employee.name
+                                        : "",
+                                    style:
+                                        theme.textTheme.titleMedium!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  trailing: Text(
+                                    notification.amount > 0
+                                        ? '+${notification.amount.toString()}'
+                                        : notification.amount.toString(),
+                                    style: TextStyle(
+                                      color: notification.amount > 0
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                  ),
+                                  onTap: () {},
+                                );
+                              },
+                            ),
+                  isLoading
+                      ? Skeletonizer(
+                          enabled: isLoading,
+                          child: ListView.builder(
+                            itemCount: 7,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                titleAlignment: ListTileTitleAlignment.center,
+                                leading: const SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircleAvatar(
+                                    radius: 24,
+                                  ),
+                                ),
+                                title: const Text("Pham Van Thach"),
+                                trailing: const Text("+1000"),
+                                onTap: () {},
+                              );
+                            },
+                          ),
+                        )
+                      : receivedNotifications.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.folder_off),
+                                  onPressed: () {},
+                                ),
+                                const Text("No data found."),
+                              ],
+                            )
+                          : ListView.builder(
+                              itemCount: receivedNotifications.length,
+                              itemBuilder: (context, index) {
+                                final notification =
+                                    receivedNotifications[index];
+                                return ListTile(
+                                  titleAlignment: ListTileTitleAlignment.center,
+                                  leading: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircleAvatar(
+                                      radius: 24,
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              notification.employee.picture,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
                                       ),
                                     ),
-                                    title: Text(
-                                      notification.employee.name,
-                                      style:
-                                          theme.textTheme.titleMedium!.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.start,
+                                  ),
+                                  title: Text(
+                                    notification.employee.name,
+                                    style:
+                                        theme.textTheme.titleMedium!.copyWith(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    trailing: Text(
-                                      notification.amount > 0
-                                          ? '+${notification.amount.toString()}'
-                                          : notification.amount.toString(),
-                                      style: TextStyle(
-                                        color: notification.amount > 0
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  trailing: Text(
+                                    notification.amount > 0
+                                        ? '+${notification.amount.toString()}'
+                                        : notification.amount.toString(),
+                                    style: TextStyle(
+                                      color: notification.amount > 0
+                                          ? Colors.green
+                                          : Colors.red,
                                     ),
-                                    onTap: () {},
-                                  );
-                                },
-                              ),
-                      ],
-                    ),
+                                  ),
+                                  onTap: () {},
+                                );
+                              },
+                            ),
+                ],
+              ),
             ),
           ],
         ),
