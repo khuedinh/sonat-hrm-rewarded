@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/widgets/block_picker.dart';
+import 'package:sonat_hrm_rewarded/src/service/firebase/cloud_message.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -13,12 +15,16 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  String? _fCMToken;
   void changeColor(Color color) =>
       BlocProvider.of<ThemeBloc>(context).add(ChangeColorEvent(color));
 
   @override
   void initState() {
     super.initState();
+    CloudMessage.firebaseMessaging.getToken().then((value) => setState(() {
+          _fCMToken = value;
+        }));
   }
 
   @override
@@ -86,6 +92,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onColorChanged: changeColor,
                   colorHistory: colorHistory,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Copy FCM Token'),
+                    IconButton(
+                      onPressed: _fCMToken != null
+                          ? () =>
+                              Clipboard.setData(ClipboardData(text: _fCMToken!))
+                                  .then((value) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(const SnackBar(
+                                    content:
+                                        Text('Copied FCM token to clipboard'),
+                                  ));
+                              })
+                          : null,
+                      icon: const Icon(Icons.copy_outlined),
+                    )
+                  ],
+                )
               ],
             ),
           ),
