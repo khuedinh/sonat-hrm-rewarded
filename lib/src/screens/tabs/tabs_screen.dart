@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/account/account_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/benefits_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/home_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/recognition_screen.dart';
 
@@ -80,10 +82,13 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
       body: <Widget>[
-        const HomeScreen(), // Home page
-        const RecognitionScreen(), // Recognition page
-        const BenefitsScreen(), // Benefit page
-        const AccountScreen(), // Account page
+        const HomeScreen(),
+        const RecognitionScreen(),
+        BlocProvider(
+          create: (context) => BenefitsBloc(),
+          child: const BenefitsScreen(),
+        ),
+        const AccountScreen(),
       ][currentPageIndex],
     );
   }

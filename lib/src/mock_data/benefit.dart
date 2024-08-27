@@ -15,29 +15,6 @@ const listMockBenefits = [
     isUsed: true,
   ),
   Benefit(
-    id: 'b2',
-    name: "Water bottle",
-    description: "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
-    image:
-        "https://shop.mixigaming.com/wp-content/uploads/2023/05/SanKaa-0770-scaled.jpg",
-    price: 50,
-    type: BenefitType.exchangable,
-    stock: 26,
-    exchanged: 9,
-  ),
-  Benefit(
-    id: 'b3',
-    name: "Airpod",
-    description: "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
-    image:
-        "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MME73?wid=2000&hei=2000&fmt=jpeg&qlt=95&.v=1632861342000",
-    price: 5000,
-    type: BenefitType.exchangable,
-    isFeatured: true,
-    stock: 6,
-    exchanged: 3,
-  ),
-  Benefit(
     id: 'b4',
     name: "Sonat Uniform 2024",
     description: "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
