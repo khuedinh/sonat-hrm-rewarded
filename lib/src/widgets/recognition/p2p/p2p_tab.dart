@@ -6,6 +6,8 @@ import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/widgets/recognition/recognition-values/recognition_values.dart';
 import 'dart:math';
 import 'failure_screen.dart';
 import 'loading_screen.dart';
@@ -176,72 +178,142 @@ class _P2pTabState extends State<P2pTab> {
             },
           ),
         ),
-        bottomNavigationBar: isLoading
-            ? const SizedBox()
-            : BottomAppBar(
-                elevation: 2,
-                height: 64,
-                color: theme.colorScheme.surface,
-                child: FilledButton(
-                  onPressed: () {
-                    sendRecognition(context);
-                  },
-                  child: Text(
-                    'Send now',
-                    style: TextStyle(
-                      color: theme.colorScheme.onPrimary,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 2,
+          height: 64,
+          color: theme.colorScheme.surface,
+          child: FilledButton(
+            onPressed:
+                _selectedRecognitionValue == null || _selectedRecipient == null
+                    ? null
+                    : () => sendRecognition(context),
+            child: Text(
+              'Send now',
+              style: TextStyle(
+                color: theme.colorScheme.onPrimary,
+                fontSize: 16,
               ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                    SliverToBoxAdapter(
-                      child: TextField(
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter email or name',
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          prefixIcon: Icon(Icons.search, size: 28),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                        onChanged: (text) {
-                          setState(() {
-                            _searchedRecipient = text;
-                          });
-                        },
+            ),
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: CustomScrollView(
+            shrinkWrap: true,
+            slivers: [
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+              SliverToBoxAdapter(
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter email or name',
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    prefixIcon: Icon(Icons.search, size: 28),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
                       ),
                     ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 12)),
-                    _searchedRecipient == null
-                        ? const SliverToBoxAdapter(
-                            child: Text("Recent recipients",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          )
-                        : const SliverToBoxAdapter(
-                            child: Text("Founded recipients",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                    SliverToBoxAdapter(
-                        child: _searchedRecipient == null
-                            ? Row(
+                  ),
+                  onChanged: (text) {
+                    setState(() {
+                      _searchedRecipient = text;
+                    });
+                  },
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              _searchedRecipient == null
+                  ? const SliverToBoxAdapter(
+                      child: Text("Recent recipients",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    )
+                  : const SliverToBoxAdapter(
+                      child: Text("Founded recipients",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              SliverToBoxAdapter(
+                  child: isLoading
+                      ? Skeletonizer(
+                          child: Row(
+                          children: [1, 2, 3, 4, 5].map((user) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 24,
+                                  ),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: splitText("Pham Van Thach", 6),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ))
+                      : _searchedRecipient == null
+                          ? Row(
+                              children: employeeList
+                                  .sublist(0, min(employeeList.length, 5))
+                                  .map((user) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedRecipient = user;
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 24,
+                                          child: ClipOval(
+                                            child: CachedNetworkImage(
+                                              imageUrl: user.picture,
+                                              fit: BoxFit.cover,
+                                              width: 48,
+                                              height: 48,
+                                              placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(), // Optional: Placeholder widget
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  const Icon(Icons
+                                                      .error), // Optional: Error widget
+                                            ),
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            children: splitText(user.name, 6),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            )
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
                                 children: employeeList
-                                    .sublist(0, min(employeeList.length, 5))
+                                    .where((user) =>
+                                        user.name.toLowerCase().contains(
+                                            _searchedRecipient.toLowerCase()) ||
+                                        user.email.toLowerCase().contains(
+                                            _searchedRecipient.toLowerCase()))
                                     .map((user) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -263,11 +335,10 @@ class _P2pTabState extends State<P2pTab> {
                                                 width: 48,
                                                 height: 48,
                                                 placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(), // Optional: Placeholder widget
-                                                errorWidget: (context, url,
-                                                        error) =>
-                                                    const Icon(Icons
-                                                        .error), // Optional: Error widget
+                                                    const CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
                                               ),
                                             ),
                                           ),
@@ -282,304 +353,184 @@ class _P2pTabState extends State<P2pTab> {
                                     ),
                                   );
                                 }).toList(),
-                              )
-                            : SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: employeeList
-                                      .where((user) =>
-                                          user.name.toLowerCase().contains(
-                                              _searchedRecipient
-                                                  .toLowerCase()) ||
-                                          user.email.toLowerCase().contains(
-                                              _searchedRecipient.toLowerCase()))
-                                      .map((user) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedRecipient = user;
-                                          });
-                                        },
-                                        child: Column(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 24,
-                                              child: ClipOval(
-                                                child: CachedNetworkImage(
-                                                  imageUrl: user.picture,
-                                                  fit: BoxFit.cover,
-                                                  width: 48,
-                                                  height: 48,
-                                                  placeholder: (context, url) =>
-                                                      const CircularProgressIndicator(),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
-                                                ),
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                children:
-                                                    splitText(user.name, 6),
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              )),
-                    SliverToBoxAdapter(
-                        child: _selectedRecipient != null
-                            ? const SizedBox(height: 8)
-                            : const SizedBox.shrink()),
-                    SliverToBoxAdapter(
-                        child: _selectedRecipient != null
-                            ? ScreenTitle(
-                                title: "Recipient",
-                                color: theme.colorScheme.onSurface,
-                              )
-                            : const SizedBox.shrink()),
-                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                    SliverToBoxAdapter(
-                        child: _selectedRecipient == null
-                            ? const SizedBox.shrink()
-                            : Column(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 24,
-                                    child: ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: _selectedRecipient.picture,
-                                        fit: BoxFit.cover,
-                                        width: 48,
-                                        height: 48,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(), // Optional: Placeholder widget
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons
-                                                .error), // Optional: Error widget
-                                      ),
-                                    ),
-                                  ),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: splitText(
-                                          _selectedRecipient.name, 12),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              )),
-                    const SliverToBoxAdapter(child: SizedBox(height: 12)),
-                    SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ScreenTitle(
-                            title: 'Recognition Points',
-                            color: theme.colorScheme.onSurface,
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text("Points balanced: ",
-                                  style: TextStyle(fontSize: 16)),
-                              const SizedBox(width: 8),
-                              isLoadingBalance
-                                  ? const SizedBox(
-                                      width: 14.0,
-                                      height: 14.0,
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : DisplayAmount(
-                                      amount: balance,
-                                      icon: Icons.currency_bitcoin_rounded,
-                                      suffix: "Points",
-                                    ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "${_sliderValue.toInt().toString()} Points",
-                                style: theme.textTheme.titleMedium,
                               ),
-                              const SizedBox(height: 8),
-                              SliderTheme(
-                                data: SliderTheme.of(context).copyWith(
-                                  trackHeight: 4,
-                                  overlayShape: const RoundSliderOverlayShape(
-                                    overlayRadius: 12,
-                                  ),
-                                ),
-                                child: Slider(
-                                  mouseCursor: WidgetStateMouseCursor.textable,
-                                  value: _sliderValue,
-                                  min: 5,
-                                  max: 500,
-                                  onChanged: (double value) {
-                                    setState(() {
-                                      _sliderValue = value;
-                                      if (!points.contains(_sliderValue)) {
-                                        _selectedChipValue = -1;
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              const Text("Use slider to select the amount"),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: points.map((point) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: ChoiceChip(
-                                      label: Row(
-                                        children: [
-                                          const Icon(Icons.currency_bitcoin,
-                                              size: 16),
-                                          Text("$point"),
-                                        ],
-                                      ),
-                                      selected: _selectedChipValue == point,
-                                      onSelected: (bool selected) {
-                                        setState(() {
-                                          if (selected) {
-                                            _selectedChipValue = point;
-                                            _sliderValue = point.toDouble();
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 12)),
-                    SliverToBoxAdapter(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                            )),
+              SliverToBoxAdapter(
+                  child: _selectedRecipient != null
+                      ? const SizedBox(height: 8)
+                      : const SizedBox.shrink()),
+              SliverToBoxAdapter(
+                  child: _selectedRecipient != null
+                      ? ScreenTitle(
+                          title: "Recipient",
+                          color: theme.colorScheme.onSurface,
+                        )
+                      : const SizedBox.shrink()),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              SliverToBoxAdapter(
+                  child: _selectedRecipient == null
+                      ? const SizedBox.shrink()
+                      : Column(
                           children: [
-                            ScreenTitle(
-                              title: 'Recognition Value',
-                              color: theme.colorScheme.onSurface,
+                            CircleAvatar(
+                              radius: 24,
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: _selectedRecipient.picture,
+                                  fit: BoxFit.cover,
+                                  width: 48,
+                                  height: 48,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(), // Optional: Placeholder widget
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons
+                                          .error), // Optional: Error widget
+                                ),
+                              ),
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: recognitionValueList
-                                  .asMap()
-                                  .entries
-                                  .map((entry) {
-                                int index = entry.key;
-                                var recognitionValue = entry.value;
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                            Text.rich(
+                              TextSpan(
+                                children:
+                                    splitText(_selectedRecipient.name, 12),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ScreenTitle(
+                      title: 'Recognition Points',
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text("Points balanced: ",
+                            style: TextStyle(fontSize: 16)),
+                        const SizedBox(width: 8),
+                        isLoadingBalance
+                            ? const Skeletonizer(child: Text("10000 Points"))
+                            : DisplayAmount(
+                                amount: balance,
+                                icon: Icons.currency_bitcoin_rounded,
+                                suffix: "Points",
+                              ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${_sliderValue.toInt().toString()} Points",
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 4,
+                            overlayShape: const RoundSliderOverlayShape(
+                              overlayRadius: 12,
+                            ),
+                          ),
+                          child: Slider(
+                            mouseCursor: WidgetStateMouseCursor.textable,
+                            value: _sliderValue,
+                            min: 5,
+                            max: 500,
+                            onChanged: (double value) {
+                              setState(() {
+                                _sliderValue = value;
+                                if (!points.contains(_sliderValue)) {
+                                  _selectedChipValue = -1;
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text("Use slider to select the amount"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: points.map((point) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ChoiceChip(
+                                label: Row(
                                   children: [
-                                    Text(
-                                      recognitionValue.name,
-                                      style:
-                                          theme.textTheme.titleMedium?.copyWith(
-                                        color: recognitionValueColors[index %
-                                            recognitionValueColors.length],
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    ...recognitionValue.recognitionValues
-                                        .map((v) {
-                                      return SizedBox(
-                                        width: double.infinity,
-                                        child: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              _selectedRecognitionValue = v;
-                                            });
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Radio<dynamic>(
-                                                value: v,
-                                                groupValue:
-                                                    _selectedRecognitionValue,
-                                                onChanged: (dynamic value) {
-                                                  setState(() {
-                                                    _selectedRecognitionValue =
-                                                        value;
-                                                  });
-                                                },
-                                              ),
-                                              Icon(
-                                                Icons.star,
-                                                color: recognitionValueColors[
-                                                    index %
-                                                        recognitionValueColors
-                                                            .length],
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                v.name,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    })
+                                    const Icon(Icons.currency_bitcoin,
+                                        size: 16),
+                                    Text("$point"),
                                   ],
-                                );
-                              }).toList(),
-                            ),
-                          ]),
-                    ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 12)),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        "Recognition Message",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                                ),
+                                selected: _selectedChipValue == point,
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    if (selected) {
+                                      _selectedChipValue = point;
+                                      _sliderValue = point.toDouble();
+                                    }
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      ),
+                      ],
                     ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                    SliverToBoxAdapter(
-                      child: TextField(
-                        controller: _textFieldController,
-                        keyboardType: TextInputType.multiline,
-                        minLines: 3,
-                        maxLines: 3,
-                        decoration: const InputDecoration(
-                          hintText: 'Type message',
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
                   ],
                 ),
-              ));
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              RecognitionValueWidget(
+                  isLoading: isLoading,
+                  recognitionValueList: recognitionValueList,
+                  selectedRecognitionValue: _selectedRecognitionValue,
+                  onRecognitionValueChanged: (value) {
+                    setState(() {
+                      _selectedRecognitionValue = value;
+                    });
+                  },
+                  recognitionValueColors: recognitionValueColors),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              const SliverToBoxAdapter(
+                child: Text(
+                  "Recognition Message",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              SliverToBoxAdapter(
+                child: TextField(
+                  controller: _textFieldController,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                    hintText: 'Type message',
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            ],
+          ),
+        ));
   }
 }
