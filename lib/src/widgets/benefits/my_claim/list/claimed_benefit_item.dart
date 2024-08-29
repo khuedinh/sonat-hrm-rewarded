@@ -7,16 +7,24 @@ import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/code_dialog.dar
 class ClaimedBenefitItem extends StatelessWidget {
   const ClaimedBenefitItem({
     super.key,
-    required this.benefit,
+    required this.claimedBenefit,
+    this.isArchived = false,
+    this.handleRestoreBenefit,
   });
 
-  final Benefit benefit;
+  final ClaimedBenefit claimedBenefit;
+  final bool isArchived;
+  final void Function(ClaimedBenefit claimedBenefit)? handleRestoreBenefit;
 
-  void _handleShowCode(BuildContext context) async {
+  void _handleShowCode(
+      BuildContext context, ClaimedBenefit claimedBenefit) async {
     showDialog(
       context: context,
       builder: (context) {
-        return const CodeDialog();
+        return CodeDialog(
+          qrCode: claimedBenefit.qrCode,
+          code: claimedBenefit.code,
+        );
       },
     );
   }
@@ -29,48 +37,56 @@ class ClaimedBenefitItem extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
-          context.push(BenefitDetailScreen.routeName, extra: benefit);
+          context.push(BenefitDetailsScreen.routeName, extra: {
+            'benefit': claimedBenefit.benefit,
+            'claimedBenefit': claimedBenefit,
+          });
         },
         borderRadius: BorderRadius.circular(8),
         child: Column(children: [
           Padding(
             padding: const EdgeInsets.all(12),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                  child: Image.network(
+                    claimedBenefit.benefit.thumbnails
+                        .firstWhere((thumbnail) => thumbnail.isPrimary)
+                        .imageUrl,
+                    width: 76,
+                    height: 76,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                child: Image.network(
-                  benefit.image,
-                  width: 76,
-                  height: 76,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      benefit.name,
-                      style: theme.textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        claimedBenefit.benefit.name,
+                        style: theme.textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                    Text(
-                      benefit.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                  ],
+                      Text(
+                        claimedBenefit.benefit.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
+              ],
+            ),
           ),
           const Divider(height: 0),
           Padding(
@@ -78,12 +94,16 @@ class ClaimedBenefitItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Claimed at: 2024/07/08 12:54"),
+                Text("Claimed at: ${claimedBenefit.formattedCreatedAt}"),
                 SizedBox(
                   height: 28,
                   child: OutlinedButton(
                     onPressed: () {
-                      _handleShowCode(context);
+                      if (isArchived) {
+                        handleRestoreBenefit!(claimedBenefit);
+                        return;
+                      }
+                      _handleShowCode(context, claimedBenefit);
                     },
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -94,7 +114,7 @@ class ClaimedBenefitItem extends StatelessWidget {
                         color: theme.colorScheme.primary,
                       ),
                     ),
-                    child: const Text('Show code'),
+                    child: Text(isArchived ? "Restore" : 'Show code'),
                   ),
                 )
               ],

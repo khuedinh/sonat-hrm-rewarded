@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/filters/benefit_filters.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/gifts/gifts_tab.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/my_claim_tab.dart';
@@ -16,14 +18,35 @@ class BenefitsScreen extends StatefulWidget {
 }
 
 class _BenefitScreenState extends State<BenefitsScreen> {
-  void _handleOpenFilter() {
+  final List<Tab> tabs = const [
+    Tab(text: "Gifts"),
+    Tab(text: "My claim"),
+  ];
+
+  int _currentTab = 0;
+
+  void _handleOpenFilter(BuildContext context) {
     showModalBottomSheet(
       useSafeArea: true,
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      builder: (context) => const BenefitFilters(),
+      builder: (_) => BlocProvider.value(
+        value: BlocProvider.of<BenefitsBloc>(context),
+        child: BenefitFilters(
+          defaultPriceRange: context.read<BenefitsBloc>().state.priceRange ??
+              const RangeValues(0, 30000),
+          defaultSortPrice: context.read<BenefitsBloc>().state.sortPrice,
+          defaultSortName: context.read<BenefitsBloc>().state.sortName,
+        ),
+      ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<BenefitsBloc>(context).add(InitCurrentBalance());
   }
 
   @override
@@ -34,48 +57,89 @@ class _BenefitScreenState extends State<BenefitsScreen> {
       initialIndex: 0,
       length: 2,
       child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: theme.colorScheme.primary,
-            foregroundColor: theme.colorScheme.onPrimary,
-            title: Row(children: [
+        appBar: AppBar(
+          backgroundColor: theme.colorScheme.primary,
+          foregroundColor: theme.colorScheme.onPrimary,
+          title: Row(
+            children: [
               const ScreenTitle(title: "Current balance"),
               const SizedBox(width: 16),
-              DisplayAmount(
-                amount: currentUser.coin,
-                icon: Icons.currency_bitcoin_rounded,
-                suffix: "Coins",
-                isBold: true,
-                textColor: theme.colorScheme.onPrimary,
-              )
-            ]),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.filter_alt),
-                onPressed: _handleOpenFilter,
+              BlocBuilder<BenefitsBloc, BenefitsState>(
+                builder: (context, state) {
+                  final isLoadingCurrentBalance = state.isLoadingCurrentBalance;
+                  final currentBalance = state.currentBalance;
+
+                  if (isLoadingCurrentBalance) {
+                    return const Skeletonizer(
+                      child: Bone.text(words: 1, fontSize: 16),
+                    );
+                  }
+
+                  return DisplayAmount(
+                    amount: currentBalance,
+                    icon: Icons.currency_bitcoin_rounded,
+                    suffix: "Coins",
+                    isBold: true,
+                    textColor: theme.colorScheme.onPrimary,
+                  );
+                },
               ),
             ],
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight - 8),
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-                margin: EdgeInsets.zero,
-                child: TabBar(
-                  indicatorColor: theme.colorScheme.primary,
-                  labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  tabs: const [
-                    Tab(text: "Gifts"),
-                    Tab(text: "My claim"),
-                  ],
-                ),
+          ),
+          actions: [
+            if (_currentTab == 0)
+              BlocBuilder<BenefitsBloc, BenefitsState>(
+                builder: (context, state) {
+                  int filterCount = 0;
+                  if (state.priceRange != null &&
+                      (state.priceRange?.start != defaultPriceRange.start ||
+                          state.priceRange?.end != defaultPriceRange.end)) {
+                    filterCount++;
+                  }
+                  if (state.sortName != null) filterCount++;
+                  if (state.sortPrice != null) filterCount++;
+
+                  return IconButton(
+                    icon: filterCount > 0
+                        ? Badge.count(
+                            count: filterCount,
+                            child: const Icon(Icons.filter_alt_rounded))
+                        : const Icon(Icons.filter_alt_outlined),
+                    onPressed: () => _handleOpenFilter(context),
+                  );
+                },
+              ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight - 8),
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
+              margin: EdgeInsets.zero,
+              child: TabBar(
+                onTap: (int index) {
+                  setState(() {
+                    _currentTab = index;
+                  });
+                },
+                indicatorColor: theme.colorScheme.primary,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+                tabs: const [
+                  Tab(text: "Gifts"),
+                  Tab(text: "My claim"),
+                ],
               ),
             ),
           ),
-          body: const TabBarView(children: [
+        ),
+        body: const TabBarView(
+          children: [
             GiftsTab(),
             MyClaimTab(),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 }

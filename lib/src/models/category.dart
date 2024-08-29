@@ -1,4 +1,4 @@
-class CategoryResponse {
+class CategoryData {
   String id;
   String name;
   String description;
@@ -8,7 +8,7 @@ class CategoryResponse {
   String? updatedAt;
   String? deletedAt;
 
-  CategoryResponse({
+  CategoryData({
     required this.id,
     required this.name,
     required this.description,
@@ -19,7 +19,7 @@ class CategoryResponse {
     this.deletedAt,
   });
 
-  CategoryResponse.fromJson(Map<String, dynamic> json)
+  CategoryData.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         createdAt = json['createdAt'],
         updatedAt = json['updatedAt'],

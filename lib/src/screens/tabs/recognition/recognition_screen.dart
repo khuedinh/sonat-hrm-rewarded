@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/recognition/filters/recognition_filters.dart';
@@ -31,15 +30,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   Future<void> fetchNotifications() async {
     final response = await RecognitionApi.getHistory();
 
-    setState(() {
-      sentNotifications = (response['sent'] as List)
-          .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
-          .toList();
-      receivedNotifications = (response['received'] as List)
-          .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
-          .toList();
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        sentNotifications = (response['sent'] as List)
+            .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
+            .toList();
+        receivedNotifications = (response['received'] as List)
+            .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
+            .toList();
+        isLoading = false;
+      });
+    }
   }
 
   @override

@@ -1,27 +1,51 @@
 import 'package:flutter/material.dart';
-
-enum PriceFilter { descending, ascending }
-
-enum NameFilter { aToZ, zToA }
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 
 class BenefitFilters extends StatefulWidget {
-  const BenefitFilters({super.key});
+  const BenefitFilters({
+    super.key,
+    required this.defaultPriceRange,
+    this.defaultSortPrice,
+    this.defaultSortName,
+  });
+
+  final RangeValues defaultPriceRange;
+  final SortPrice? defaultSortPrice;
+  final SortName? defaultSortName;
 
   @override
   State<BenefitFilters> createState() => _BenefitFiltersState();
 }
 
 class _BenefitFiltersState extends State<BenefitFilters> {
-  RangeValues _priceRange = const RangeValues(0, 15000);
-  PriceFilter? _priceFilter;
-  NameFilter? _nameFilter;
+  RangeValues? _priceRange;
+  SortPrice? _sortPrice;
+  SortName? _sortName;
 
   void _handleResetFilters() {
     setState(() {
-      _priceRange = const RangeValues(0, 15000);
-      _priceFilter = null;
-      _nameFilter = null;
+      _priceRange = const RangeValues(0, 30000);
+      _sortPrice = null;
+      _sortName = null;
     });
+  }
+
+  void _handleApplyFilter() {
+    context.read<BenefitsBloc>().add(ChangeFilter(
+          priceRange: _priceRange,
+          sortPrice: _sortPrice,
+          sortName: _sortName,
+        ));
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _priceRange = widget.defaultPriceRange;
+    _sortPrice = widget.defaultSortPrice;
+    _sortName = widget.defaultSortName;
   }
 
   @override
@@ -62,7 +86,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Price range (${_priceRange.start.toInt().toString()} - ${_priceRange.end.toInt().toString()})",
+                    "Price range (${_priceRange!.start.toInt().toString()} - ${_priceRange!.end.toInt().toString()})",
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
@@ -75,10 +99,10 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                     ),
                     child: RangeSlider(
                       mouseCursor: WidgetStateMouseCursor.textable,
-                      values: _priceRange,
+                      values: _priceRange!,
                       min: 0,
-                      max: 15000,
-                      divisions: 150,
+                      max: 30000,
+                      divisions: 300,
                       onChanged: (RangeValues values) {
                         setState(() {
                           _priceRange = values;
@@ -99,8 +123,8 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
-                    children: PriceFilter.values.map((item) {
-                      final label = item == PriceFilter.descending
+                    children: SortPrice.values.map((item) {
+                      final label = item == SortPrice.descending
                           ? "Descending"
                           : "Ascending";
                       return FilterChip(
@@ -108,13 +132,13 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
-                                _priceFilter = item;
+                                _sortPrice = item;
                                 return;
                               }
-                              _priceFilter = null;
+                              _sortPrice = null;
                             });
                           },
-                          selected: _priceFilter == item);
+                          selected: _sortPrice == item);
                     }).toList(),
                   ),
                 ],
@@ -130,21 +154,20 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
-                    children: NameFilter.values.map((item) {
-                      final label =
-                          item == NameFilter.aToZ ? "A to Z" : "Z to A";
+                    children: SortName.values.map((item) {
+                      final label = item == SortName.aToZ ? "A to Z" : "Z to A";
                       return FilterChip(
                           label: Text(label),
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
-                                _nameFilter = item;
+                                _sortName = item;
                                 return;
                               }
-                              _nameFilter = null;
+                              _sortName = null;
                             });
                           },
-                          selected: _nameFilter == item);
+                          selected: _sortName == item);
                     }).toList(),
                   ),
                 ],
@@ -173,7 +196,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                   Expanded(
                     child: FilledButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        _handleApplyFilter();
                       },
                       child: const Text("Apply"),
                     ),
