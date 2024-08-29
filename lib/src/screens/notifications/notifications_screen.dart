@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/activity_indicator/activity_indicator.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/refreshable_widget/refreshable_widget.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/activity_indicator/activity_indicator.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/widgets/notification_item.dart';
 

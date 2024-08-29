@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/transaction_history.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/transaction_history/balance_card.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/transaction_history/list_transactions.dart';

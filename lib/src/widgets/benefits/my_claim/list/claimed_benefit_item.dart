@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/code_dialog.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ClaimedBenefitItem extends StatelessWidget {
   const ClaimedBenefitItem({
@@ -53,8 +54,9 @@ class ClaimedBenefitItem extends StatelessWidget {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
                   ),
-                  child: Image.network(
-                    claimedBenefit.benefit.thumbnails
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: claimedBenefit.benefit.thumbnails
                         .firstWhere((thumbnail) => thumbnail.isPrimary)
                         .imageUrl,
                     width: 76,

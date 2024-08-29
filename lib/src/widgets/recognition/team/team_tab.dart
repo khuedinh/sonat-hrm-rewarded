@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
@@ -59,7 +59,7 @@ class _TeamTabState extends State<TeamTab> {
   Future<void> fetchBalance() async {
     final balanceResponse = await BalanceApi.getCurrentBalance();
     setState(() {
-      balance = Balance.fromJson(balanceResponse as Map<String, dynamic>)
+      balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
           .currentPoint;
       isLoadingBalance = false;
     });

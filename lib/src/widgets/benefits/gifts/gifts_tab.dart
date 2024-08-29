@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/refreshable_widget/refreshable_widget.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/list_benefits_grid.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/list_categories.dart';

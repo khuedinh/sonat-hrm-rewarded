@@ -38,7 +38,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       if (isStoredToken == null) {
         CloudMessage.firebaseMessaging.getToken().then((value) {
           if (value == null) return;
-          print("post token");
           NotificationApi.registerFCMToken(token: value);
           prefs.setBool(kFCMTokenKey, true);
         });

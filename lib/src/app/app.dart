@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/app/bloc/app_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/app/router.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
@@ -69,6 +70,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (context) => NotificationBloc(),
+          ),
+          BlocProvider(
+            create: (context) => UserBloc()..add(InitUserInfo()),
           ),
         ],
         child: BlocListener<AppBloc, AppState>(

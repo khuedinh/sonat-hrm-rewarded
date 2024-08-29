@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
 
 enum SortByFilter { latest, earliest }

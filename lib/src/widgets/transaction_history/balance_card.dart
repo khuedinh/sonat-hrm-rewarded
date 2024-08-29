@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/label/label.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/label/label.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({
