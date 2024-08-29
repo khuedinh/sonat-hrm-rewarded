@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/account/account_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/benefits_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/home_screen.dart';
@@ -38,13 +42,19 @@ class _TabsScreenState extends State<TabsScreen> {
               backgroundColor: theme.colorScheme.primary,
               foregroundColor: theme.colorScheme.onPrimary,
               actions: [
-                IconButton(
-                  icon: Badge.count(
-                    count: 2,
-                    child: const Icon(Icons.notifications),
-                  ),
-                  color: theme.colorScheme.onPrimary,
-                  onPressed: () {},
+                BlocBuilder<NotificationBloc, NotificationState>(
+                  builder: (context, state) {
+                    return IconButton(
+                      icon: Badge.count(
+                        count: state.unreadCount,
+                        child: const Icon(Icons.notifications),
+                      ),
+                      color: theme.colorScheme.onPrimary,
+                      onPressed: () {
+                        context.push(NotificationsScreen.routeName);
+                      },
+                    );
+                  },
                 ),
               ],
             ),
