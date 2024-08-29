@@ -14,7 +14,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(state.copyWith(isLoadingUserInfo: true));
 
       final response = await UserApi.getUserInfo();
-      print(response);
 
       emit(state.copyWith(
         userInfo: UserInfo.fromJson(response),

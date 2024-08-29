@@ -8,7 +8,7 @@ const RangeValues defaultPriceRange = RangeValues(0, 30000);
 
 class BenefitsState extends Equatable {
   const BenefitsState({
-    required this.currentBalance,
+    this.currentBalance,
     required this.listCategories,
     required this.listBenefits,
     required this.listClaimedBenefits,
@@ -26,7 +26,7 @@ class BenefitsState extends Equatable {
     this.priceRange = defaultPriceRange,
   });
 
-  final int currentBalance;
+  final int? currentBalance;
   final List<CategoryData> listCategories;
   final List<BenefitData> listBenefits;
   final List<ClaimedBenefit> listClaimedBenefits;

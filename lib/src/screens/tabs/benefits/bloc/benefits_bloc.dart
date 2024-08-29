@@ -1,7 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/models/category.dart';
@@ -22,18 +22,20 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
             currentBalance: 0,
           ),
         ) {
-    on<InitCurrentBalance>((BenefitsEvent event, Emitter emit) async {
-      emit(state.copyWith(isLoadingCurrentBalance: true));
+    on<InitBenefitsData>((BenefitsEvent event, Emitter emit) async {
+      if (state.listBenefits.isNotEmpty) return;
 
-      final balanceData = await fetchCurrentBalance();
+      emit(state.copyWith(isLoadingBenefits: true));
+
+      final listBenefits = await fetchBenefits(state);
 
       emit(state.copyWith(
-        isLoadingCurrentBalance: false,
-        currentBalance: balanceData.currentCoin ?? 0,
+        isLoadingBenefits: false,
+        listBenefits: listBenefits,
       ));
     });
 
-    on<InitBenefitsData>((BenefitsEvent event, Emitter emit) async {
+    on<RefreshBenefitsData>((BenefitsEvent event, Emitter emit) async {
       emit(state.copyWith(isLoadingBenefits: true));
 
       final listBenefits = await fetchBenefits(state);
@@ -45,6 +47,8 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
     });
 
     on<InitCategoriesData>((BenefitsEvent event, Emitter emit) async {
+      if (state.listCategories.isNotEmpty) return;
+
       emit(state.copyWith(isLoadingCategories: true));
 
       final listCategories = await fetchCategories();
@@ -56,12 +60,27 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
     });
 
     on<InitMyClaim>((BenefitsEvent event, Emitter emit) async {
+      if (state.listArchivedBenefits.isNotEmpty ||
+          state.listClaimedBenefits.isNotEmpty) return;
+
       emit(state.copyWith(isLoadingMyClaim: true));
       final claimedBenefits = await fetchMyClaim();
 
       emit(state.copyWith(
         isLoadingMyClaim: false,
         listClaimedBenefits: claimedBenefits.readyToUse ?? [],
+        listArchivedBenefits: claimedBenefits.archivedBox ?? [],
+      ));
+    });
+
+    on<RefreshMyClaim>((BenefitsEvent event, Emitter emit) async {
+      emit(state.copyWith(isLoadingMyClaim: true));
+      final claimedBenefits = await fetchMyClaim();
+
+      emit(state.copyWith(
+        isLoadingMyClaim: false,
+        listClaimedBenefits: claimedBenefits.readyToUse ?? [],
+        listArchivedBenefits: claimedBenefits.archivedBox ?? [],
       ));
     });
 

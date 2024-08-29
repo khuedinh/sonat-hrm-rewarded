@@ -7,17 +7,22 @@ class InitBenefitsData extends BenefitsEvent {
   List<Object?> get props => [];
 }
 
+class RefreshBenefitsData extends BenefitsEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class InitCategoriesData extends BenefitsEvent {
   @override
   List<Object?> get props => [];
 }
 
-class InitCurrentBalance extends BenefitsEvent {
+class InitMyClaim extends BenefitsEvent {
   @override
   List<Object?> get props => [];
 }
 
-class InitMyClaim extends BenefitsEvent {
+class RefreshMyClaim extends BenefitsEvent {
   @override
   List<Object?> get props => [];
 }
