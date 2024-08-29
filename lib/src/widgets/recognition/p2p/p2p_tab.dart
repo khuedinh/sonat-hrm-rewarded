@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/api_call_status_indicator/failure_screen.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/api_call_status_indicator/loading_screen.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/api_call_status_indicator/success_screen.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_screen.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_screen.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_screen.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
@@ -44,7 +44,7 @@ class _P2pTabState extends State<P2pTab> {
   Future<void> fetchBalance() async {
     final balanceResponse = await BalanceApi.getCurrentBalance();
     setState(() {
-      balance = Balance.fromJson(balanceResponse as Map<String, dynamic>)
+      balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
           .currentPoint;
       isLoadingBalance = false;
     });
@@ -63,7 +63,7 @@ class _P2pTabState extends State<P2pTab> {
         return RecognitionValue.fromJson(item as Map<String, dynamic>);
       }).toList();
 
-      balance = Balance.fromJson(balanceResponse as Map<String, dynamic>)
+      balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
           .currentPoint;
       isLoading = false;
       isLoadingBalance = false;

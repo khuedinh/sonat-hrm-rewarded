@@ -211,7 +211,7 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
 
   Future fetchCurrentBalance() async {
     final response = await BalanceApi.getCurrentBalance();
-    if (response != null) return Balance.fromJson(response);
+    if (response != null) return CurrentBalance.fromJson(response);
   }
 
   Future fetchMyClaim() async {

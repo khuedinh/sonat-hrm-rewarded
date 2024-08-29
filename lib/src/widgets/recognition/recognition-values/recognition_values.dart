@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 
 class RecognitionValueWidget extends StatefulWidget {
   final bool isLoading;
@@ -81,7 +81,8 @@ class _RecognitionValueWidgetState extends State<RecognitionValueWidget> {
                 )
               : Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: widget.recognitionValueList.asMap().entries.map((entry) {
+                  children:
+                      widget.recognitionValueList.asMap().entries.map((entry) {
                     int index = entry.key;
                     var recognitionValue = entry.value;
                     return Column(
@@ -91,7 +92,8 @@ class _RecognitionValueWidgetState extends State<RecognitionValueWidget> {
                         Text(
                           recognitionValue.name,
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: widget.recognitionValueColors[index % widget.recognitionValueColors.length],
+                            color: widget.recognitionValueColors[
+                                index % widget.recognitionValueColors.length],
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -113,7 +115,8 @@ class _RecognitionValueWidgetState extends State<RecognitionValueWidget> {
                                   ),
                                   Icon(
                                     Icons.star,
-                                    color: widget.recognitionValueColors[index % widget.recognitionValueColors.length],
+                                    color: widget.recognitionValueColors[index %
+                                        widget.recognitionValueColors.length],
                                   ),
                                   const SizedBox(width: 8),
                                   Text(

@@ -1,18 +1,18 @@
-class Balance {
+class CurrentBalance {
   final String id;
   final int currentPoint;
   final int currentCoin;
   final String employeeEmail;
 
-  Balance({
+  CurrentBalance({
     required this.id,
     required this.currentPoint,
     required this.currentCoin,
     required this.employeeEmail,
   });
 
-  factory Balance.fromJson(Map<String, dynamic> json) {
-    return Balance(
+  factory CurrentBalance.fromJson(Map<String, dynamic> json) {
+    return CurrentBalance(
       id: json['id'],
       currentPoint: json['currentPoint'],
       currentCoin: json['currentCoin'],

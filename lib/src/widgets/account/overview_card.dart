@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class OverviewCard extends StatelessWidget {
   const OverviewCard({
@@ -7,12 +8,14 @@ class OverviewCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.value,
+    this.isLoading = false,
   });
 
   final Color color;
   final IconData icon;
   final String title;
   final int value;
+  final bool? isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +37,17 @@ class OverviewCard extends StatelessWidget {
             Column(
               children: [
                 Text(title, style: theme.textTheme.bodySmall),
-                Text(
-                  "$value",
-                  style: theme.textTheme.titleMedium!.copyWith(
-                    color: color,
-                  ),
-                ),
+                isLoading!
+                    ? const Skeletonizer(
+                        child: Bone.text(
+                        words: 1,
+                      ))
+                    : Text(
+                        "$value",
+                        style: theme.textTheme.titleMedium!.copyWith(
+                          color: color,
+                        ),
+                      ),
               ],
             ),
           ],

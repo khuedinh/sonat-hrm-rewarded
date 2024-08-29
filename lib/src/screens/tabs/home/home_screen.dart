@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
