@@ -41,7 +41,6 @@ dependencies:
   logger: ^2.4.0
   meta: ^1.11.0
   package_info_plus: ^8.0.0
-  qr_flutter: ^4.1.0
   shared_preferences: ^2.2.2
   skeletonizer: ^1.4.2
   substring_highlight: ^1.0.33

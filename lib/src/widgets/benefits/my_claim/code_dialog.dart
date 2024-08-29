@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class CodeDialog extends StatelessWidget {
-  const CodeDialog({super.key});
+  const CodeDialog({super.key, required this.qrCode, required this.code});
+
+  final String qrCode;
+  final String code;
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +27,18 @@ class CodeDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text("Show QR code or input code to admin"),
+          const SizedBox(height: 8),
           SizedBox(
             width: 160,
             height: 160,
-            child: QrImageView(
-              data: "1234567890",
-              version: QrVersions.auto,
-              size: 80,
+            child: Image.memory(
+              base64Decode(qrCode.split('base64,').last),
+              width: 160,
+              height: 160,
             ),
           ),
-          Text('1234567890', style: theme.textTheme.titleMedium),
+          const SizedBox(height: 8),
+          Text(code, style: theme.textTheme.titleMedium),
           const SizedBox(height: 16),
           SizedBox(
             height: 28,

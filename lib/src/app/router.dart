@@ -43,10 +43,15 @@ class AppRouter {
         builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
-        path: BenefitDetailScreen.routeName,
+        path: BenefitDetailsScreen.routeName,
         builder: (context, state) {
-          BenefitResponse benefit = state.extra as BenefitResponse;
-          return BenefitDetailScreen(benefit: benefit);
+          final extraData = state.extra as Map<String, dynamic>;
+          final BenefitData benefit = extraData['benefit'] as BenefitData;
+          ClaimedBenefit? claimedBenefit = extraData['claimedBenefit'];
+          return BenefitDetailsScreen(
+            benefit: benefit,
+            claimedBenefit: claimedBenefit,
+          );
         },
       ),
       GoRoute(
