@@ -1,20 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/app/bloc/app_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
+import 'package:sonat_hrm_rewarded/src/app/router.dart';
 import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
-import 'package:sonat_hrm_rewarded/src/screens/benefit_archived_box/benefit_archived_box_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/error/error_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/login/login_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/theme.dart';
 
@@ -32,57 +27,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GoRouter router = GoRouter(
-    initialLocation: TabsScreen.routeName,
-    redirect: (context, state) {
-      if (FirebaseAuth.instance.currentUser == null) {
-        return LoginScreen.routeName;
-      }
-      if (state.fullPath == LoginScreen.routeName) {
-        return TabsScreen.routeName;
-      }
-      return null;
-    },
-    errorBuilder: (context, state) => const ErrorScreen(),
-    routes: [
-      GoRoute(
-        path: LoginScreen.routeName,
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: TabsScreen.routeName,
-        builder: (context, state) => const TabsScreen(),
-      ),
-      GoRoute(
-        path: SettingsScreen.routeName,
-        builder: (context, state) => const SettingsScreen(),
-      ),
-      GoRoute(
-        path: NotificationsScreen.routeName,
-        builder: (context, state) => const NotificationsScreen(),
-      ),
-      GoRoute(
-        path: BenefitDetailsScreen.routeName,
-        builder: (context, state) {
-          final extraData = state.extra as Map<String, dynamic>;
-          final BenefitData benefit = extraData['benefit'] as BenefitData;
-          ClaimedBenefit? claimedBenefit = extraData['claimedBenefit'];
-          return BenefitDetailsScreen(
-            benefit: benefit,
-            claimedBenefit: claimedBenefit,
-          );
-        },
-      ),
-      GoRoute(
-        path: BenefitArchivedBoxScreen.routeName,
-        builder: (context, state) => const BenefitArchivedBoxScreen(),
-      ),
-      GoRoute(
-        path: TransactionHistoryScreen.routeName,
-        builder: (context, state) => const TransactionHistoryScreen(),
-      )
-    ],
-  );
+  late StreamSubscription<RemoteMessage> onMessageOpenedAppStream;
+  final router = AppRouter.router;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) async {
+      if (message == null) return;
+      router.go(NotificationsScreen.routeName);
+    });
+
+    onMessageOpenedAppStream = FirebaseMessaging.onMessageOpenedApp
+        .listen((RemoteMessage? message) async {
+      if (message == null) return;
+      router.go(NotificationsScreen.routeName);
+    });
+  }
+
+  @override
+  void dispose() {
+    onMessageOpenedAppStream.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +66,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (context) => ThemeBloc()..add(InitialThemeEvent()),
+          ),
+          BlocProvider(
+            create: (context) => NotificationBloc(),
           ),
         ],
         child: BlocListener<AppBloc, AppState>(

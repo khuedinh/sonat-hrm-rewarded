@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common_widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
+import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/leaderboard_item.dart';
 
@@ -16,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   void _handleOpenNotifications() {
-    context.push('/notifications');
+    context.push(NotificationsScreen.routeName);
   }
 
   @override
