@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
+import 'package:sonat_hrm_rewarded/src/models/user.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/home/leaderboard_item.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.handleOpenRecognitionScreen});
 
   static const screenTitle = 'Home';
+
+  final void Function() handleOpenRecognitionScreen;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -77,38 +82,44 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DisplayAmount(
-                  amount: currentUser.point,
-                  icon: Icons.attach_money_rounded,
-                  suffix: "Points",
-                ),
-                const SizedBox(width: 8),
-                DisplayAmount(
-                  amount: currentUser.coin,
-                  icon: Icons.currency_bitcoin_rounded,
-                  suffix: "Coins",
-                ),
-                const SizedBox(width: 8),
-                SizedBox(
-                  height: 28,
-                  child: FilledButton.icon(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      iconSize: WidgetStateProperty.all<double>(20),
-                      padding: WidgetStateProperty.all<EdgeInsets>(
-                        const EdgeInsets.symmetric(
-                          horizontal: 8,
+            child: BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                final UserInfo? userInfo = state.userInfo;
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DisplayAmount(
+                      amount: userInfo?.balance.currentPoint ?? 0,
+                      icon: Icons.attach_money_rounded,
+                      suffix: "Points",
+                      iconSize: 14,
+                    ),
+                    DisplayAmount(
+                      amount: userInfo?.balance.currentCoin ?? 0,
+                      icon: Icons.currency_bitcoin_rounded,
+                      suffix: "Coins",
+                      iconSize: 14,
+                    ),
+                    SizedBox(
+                      height: 28,
+                      child: FilledButton.icon(
+                        onPressed: widget.handleOpenRecognitionScreen,
+                        style: ButtonStyle(
+                          iconSize: WidgetStateProperty.all<double>(20),
+                          padding: WidgetStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                          ),
                         ),
+                        icon: const Icon(Icons.present_to_all_rounded),
+                        label: const Text("Recognize"),
                       ),
                     ),
-                    icon: const Icon(Icons.present_to_all_rounded),
-                    label: const Text("Recognize"),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
         ),

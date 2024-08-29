@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/transaction_history.dart';
+import 'package:sonat_hrm_rewarded/src/models/user.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/transaction_history/balance_card.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/transaction_history/list_transactions.dart';
 
@@ -49,24 +52,30 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               fontSize: 18,
             ),
             const SizedBox(height: 12),
-            const Row(
-              children: [
-                Expanded(
-                  child: BalanceCard(
-                    title: "Points",
-                    value: 2000,
-                    rateChange: 18.212348,
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: BalanceCard(
-                    title: "Coins",
-                    value: 1000,
-                    rateChange: -24.11231232,
-                  ),
-                ),
-              ],
+            BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                final UserInfo? userInfo = state.userInfo;
+
+                return  Row(
+                  children: [
+                    Expanded(
+                      child: BalanceCard(
+                        title: "Points",
+                        value: userInfo?.balance.currentPoint ?? 0,
+                        // rateChange: 18.212348,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: BalanceCard(
+                        title: "Coins",
+                        value: userInfo?.balance.currentCoin ?? 0,
+                        // rateChange: -24.11231232,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 18),
             ScreenTitle(

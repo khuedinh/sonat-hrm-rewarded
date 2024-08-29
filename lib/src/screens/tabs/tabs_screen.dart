@@ -22,6 +22,12 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int currentPageIndex = 0;
 
+  void _handleOpenRecognition() {
+    setState(() {
+      currentPageIndex = 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -91,7 +97,7 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
       body: <Widget>[
-        const HomeScreen(),
+        HomeScreen(handleOpenRecognitionScreen: _handleOpenRecognition),
         const RecognitionScreen(),
         BlocProvider(
           create: (context) => BenefitsBloc(),

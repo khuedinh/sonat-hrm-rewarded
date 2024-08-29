@@ -18,12 +18,9 @@ class BenefitsScreen extends StatefulWidget {
   State<BenefitsScreen> createState() => _BenefitScreenState();
 }
 
-class _BenefitScreenState extends State<BenefitsScreen> {
-  final List<Tab> tabs = const [
-    Tab(text: "Gifts"),
-    Tab(text: "My claim"),
-  ];
-
+class _BenefitScreenState extends State<BenefitsScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   int _currentTab = 0;
 
   void _handleOpenFilter(BuildContext context) {
@@ -44,9 +41,19 @@ class _BenefitScreenState extends State<BenefitsScreen> {
     );
   }
 
+  void _tabListener() {
+    if (_currentTab != _tabController.animation!.value.round()) {
+      setState(() {
+        _currentTab = _tabController.animation!.value.round();
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.animation!.addListener(_tabListener);
   }
 
   @override
@@ -67,7 +74,7 @@ class _BenefitScreenState extends State<BenefitsScreen> {
               BlocBuilder<UserBloc, UserState>(
                 builder: (context, state) {
                   final isLoadingCurrentBalance = state.isLoadingCurrentBalance;
-                  final currentCoin = state.currentBalance?.currentCoin ?? 0;
+                  final currentCoin = state.userInfo?.balance.currentCoin ?? 0;
 
                   if (isLoadingCurrentBalance) {
                     return const Skeletonizer(
@@ -123,6 +130,7 @@ class _BenefitScreenState extends State<BenefitsScreen> {
                     _currentTab = index;
                   });
                 },
+                controller: _tabController,
                 indicatorColor: theme.colorScheme.primary,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 16),
                 tabs: const [
@@ -133,8 +141,9 @@ class _BenefitScreenState extends State<BenefitsScreen> {
             ),
           ),
         ),
-        body: const TabBarView(
-          children: [
+        body: TabBarView(
+          controller: _tabController,
+          children: const [
             GiftsTab(),
             MyClaimTab(),
           ],

@@ -87,6 +87,14 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final listThumbnails = _benefitDetails?.thumbnails ?? [];
+
+    listThumbnails.sort(
+      (a, b) {
+        return b.isPrimary ? 1 : 0;
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
@@ -150,7 +158,7 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                             enlargeCenterPage: true,
                             scrollDirection: Axis.horizontal,
                           ),
-                          items: _benefitDetails!.thumbnails.map((item) {
+                          items: listThumbnails.map((item) {
                             return FadeInImage.memoryNetwork(
                               placeholder: kTransparentImage,
                               image: item.imageUrl,
