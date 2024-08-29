@@ -26,8 +26,7 @@ class _GiftsTabState extends State<GiftsTab> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RefreshableWidget(
           onRefresh: () async {
-            context.read<BenefitsBloc>().add(InitCurrentBalance());
-            context.read<BenefitsBloc>().add(InitBenefitsData());
+            context.read<BenefitsBloc>().add(RefreshBenefitsData());
           },
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: 16)),

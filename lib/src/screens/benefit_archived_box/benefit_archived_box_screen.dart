@@ -7,9 +7,12 @@ import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/list/claimed_benefit_item.dart';
 
 class BenefitArchivedBoxScreen extends StatefulWidget {
-  const BenefitArchivedBoxScreen({super.key});
+  const BenefitArchivedBoxScreen(
+      {super.key, required this.initArchivedBenefits});
 
   static const routeName = '/benefit-archived-box';
+
+  final List<ClaimedBenefit> initArchivedBenefits;
 
   @override
   State<BenefitArchivedBoxScreen> createState() =>
@@ -18,9 +21,9 @@ class BenefitArchivedBoxScreen extends StatefulWidget {
 
 class _BenefitArchivedBoxScreenState extends State<BenefitArchivedBoxScreen> {
   List<ClaimedBenefit> _listArchiveBenefits = [];
-  bool _isLoading = true;
+  bool _isLoading = false;
 
-  Future _handleGetListArchiveBenefits() async {
+  Future _handleRefreshArchiveBenefits() async {
     setState(() {
       _isLoading = true;
     });
@@ -58,7 +61,7 @@ class _BenefitArchivedBoxScreenState extends State<BenefitArchivedBoxScreen> {
   @override
   void initState() {
     super.initState();
-    _handleGetListArchiveBenefits();
+    _listArchiveBenefits.addAll(widget.initArchivedBenefits);
   }
 
   @override
@@ -79,7 +82,7 @@ class _BenefitArchivedBoxScreenState extends State<BenefitArchivedBoxScreen> {
       ),
       body: RefreshableWidget(
         onRefresh: () async {
-          await _handleGetListArchiveBenefits();
+          await _handleRefreshArchiveBenefits();
         },
         slivers: [
           if (_isLoading)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/widgets/benefits/filters/benefit_filters.dart';
@@ -46,7 +47,6 @@ class _BenefitScreenState extends State<BenefitsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<BenefitsBloc>(context).add(InitCurrentBalance());
   }
 
   @override
@@ -64,10 +64,10 @@ class _BenefitScreenState extends State<BenefitsScreen> {
             children: [
               const ScreenTitle(title: "Current balance"),
               const SizedBox(width: 16),
-              BlocBuilder<BenefitsBloc, BenefitsState>(
+              BlocBuilder<UserBloc, UserState>(
                 builder: (context, state) {
                   final isLoadingCurrentBalance = state.isLoadingCurrentBalance;
-                  final currentBalance = state.currentBalance;
+                  final currentCoin = state.currentBalance?.currentCoin ?? 0;
 
                   if (isLoadingCurrentBalance) {
                     return const Skeletonizer(
@@ -76,7 +76,7 @@ class _BenefitScreenState extends State<BenefitsScreen> {
                   }
 
                   return DisplayAmount(
-                    amount: currentBalance,
+                    amount: currentCoin,
                     icon: Icons.currency_bitcoin_rounded,
                     suffix: "Coins",
                     isBold: true,

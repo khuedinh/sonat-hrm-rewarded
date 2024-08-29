@@ -56,7 +56,13 @@ class AppRouter {
       ),
       GoRoute(
         path: BenefitArchivedBoxScreen.routeName,
-        builder: (context, state) => const BenefitArchivedBoxScreen(),
+        builder: (context, state) {
+          final archivedBenefits = state.extra as List<ClaimedBenefit>;
+
+          return BenefitArchivedBoxScreen(
+            initArchivedBenefits: archivedBenefits,
+          );
+        },
       ),
       GoRoute(
         path: TransactionHistoryScreen.routeName,
