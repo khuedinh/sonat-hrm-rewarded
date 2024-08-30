@@ -38,13 +38,13 @@ class _MyAppState extends State<MyApp> {
         .getInitialMessage()
         .then((RemoteMessage? message) async {
       if (message == null) return;
-      router.go(NotificationsScreen.routeName);
+      router.push(NotificationsScreen.routeName);
     });
 
     onMessageOpenedAppStream = FirebaseMessaging.onMessageOpenedApp
         .listen((RemoteMessage? message) async {
       if (message == null) return;
-      router.go(NotificationsScreen.routeName);
+      router.push(NotificationsScreen.routeName);
     });
   }
 

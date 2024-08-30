@@ -5,6 +5,7 @@ import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
 import 'package:sonat_hrm_rewarded/src/models/user.dart';
+import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/leaderboard_item.dart';
@@ -136,13 +137,17 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.transparent,
             title: const ScreenTitle(title: HomeScreen.screenTitle),
             actions: [
-              IconButton(
-                icon: Badge.count(
-                  count: 2,
-                  child: const Icon(Icons.notifications),
-                ),
-                color: theme.colorScheme.onPrimary,
-                onPressed: _handleOpenNotifications,
+              BlocBuilder<NotificationBloc, NotificationState>(
+                builder: (context, state) {
+                  return IconButton(
+                    icon: Badge.count(
+                      count: state.unreadCount,
+                      child: const Icon(Icons.notifications),
+                    ),
+                    color: theme.colorScheme.onPrimary,
+                    onPressed: _handleOpenNotifications,
+                  );
+                },
               ),
             ],
           ),

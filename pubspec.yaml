@@ -15,6 +15,7 @@ dependencies:
   cached_network_image: ^3.3.1
   carousel_slider: ^5.0.0
   collection: ^1.18.0
+  deepcopy: ^1.1.2
   dio: ^5.4.2
   equatable: ^2.0.5
   firebase_auth: ^5.1.1
