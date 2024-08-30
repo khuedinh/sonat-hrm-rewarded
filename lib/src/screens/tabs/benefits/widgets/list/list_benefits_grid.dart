@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/list/benefit_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/list/benefit_item.dart';
 
 class ListBenefitsGrid extends StatelessWidget {
   const ListBenefitsGrid({
@@ -64,18 +65,8 @@ class ListBenefitsGrid extends StatelessWidget {
       }
 
       if (!isLoadingBenefits && listBenefits.isEmpty) {
-        return const SliverToBoxAdapter(
-          child: SizedBox(
-            height: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.folder_off),
-                SizedBox(height: 4),
-                Text("No data found."),
-              ],
-            ),
-          ),
+        return const SliverFillRemaining(
+          child: NoData(message: "No benefits found."),
         );
       }
 

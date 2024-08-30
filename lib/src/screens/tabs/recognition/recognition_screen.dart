@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/filters/recognition_filters.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/p2p/p2p_tab.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/team/team_tab.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/recognition/filters/recognition_filters.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/recognition/p2p/p2p_tab.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/recognition/team/team_tab.dart';
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});

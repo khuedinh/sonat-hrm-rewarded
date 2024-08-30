@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/list/claimed_benefit_item.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/list/claimed_benefit_item.dart';
 
 class BenefitArchivedBoxScreen extends StatefulWidget {
   const BenefitArchivedBoxScreen(
@@ -112,18 +113,8 @@ class _BenefitArchivedBoxScreenState extends State<BenefitArchivedBoxScreen> {
               ),
             ),
           if (_listArchiveBenefits.isEmpty)
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 300,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.folder_off),
-                    SizedBox(height: 4),
-                    Text("No data found."),
-                  ],
-                ),
-              ),
+            const SliverFillRemaining(
+              child: NoData(message: "No archived benefits found."),
             ),
           if (_listArchiveBenefits.isNotEmpty)
             SliverPadding(

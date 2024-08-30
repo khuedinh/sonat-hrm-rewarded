@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class BenefitItem extends StatelessWidget {

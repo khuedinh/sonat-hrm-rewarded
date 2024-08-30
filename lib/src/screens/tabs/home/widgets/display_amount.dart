@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class DisplayAmount extends StatelessWidget {
   const DisplayAmount({
@@ -28,7 +29,9 @@ class DisplayAmount extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final String amountText = suffix != null ? '$amount $suffix' : '$amount';
+    final String amountText = suffix != null
+        ? '${formatShortenNumber(amount)} $suffix'
+        : '$formatShortenNumber(amount)';
 
     return Row(
       children: [

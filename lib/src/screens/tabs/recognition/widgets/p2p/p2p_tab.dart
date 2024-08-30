@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_screen.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_screen.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_screen.dart';
@@ -8,12 +11,10 @@ import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/recognition/recognition-values/recognition_values.dart';
-import 'dart:math';
 
 class P2pTab extends StatefulWidget {
   const P2pTab({super.key});
