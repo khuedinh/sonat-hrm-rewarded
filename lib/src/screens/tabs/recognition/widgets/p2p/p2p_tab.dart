@@ -41,6 +41,7 @@ class _P2pTabState extends State<P2pTab> {
   void initState() {
     super.initState();
     fetchEmployees();
+    fetchBalance();
   }
 
   Future<void> fetchBalance() async {
@@ -56,7 +57,7 @@ class _P2pTabState extends State<P2pTab> {
     final response = await RecognitionApi.getEmployees();
     final recognitionValueResponse =
         await RecognitionApi.getRecognitionValues();
-    final balanceResponse = await BalanceApi.getCurrentBalance();
+    //final balanceResponse = await RecognitionApi.getBalance();
     setState(() {
       employeeList = (response as List)
           .map((item) => Employee.fromJson(item as Map<String, dynamic>))
@@ -65,10 +66,9 @@ class _P2pTabState extends State<P2pTab> {
         return RecognitionValue.fromJson(item as Map<String, dynamic>);
       }).toList();
 
-      balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
-          .currentPoint;
+      // balance = Balance.fromJson(balanceResponse as Map<String, dynamic>)
+      //     .currentPoint;
       isLoading = false;
-      isLoadingBalance = false;
     });
   }
 

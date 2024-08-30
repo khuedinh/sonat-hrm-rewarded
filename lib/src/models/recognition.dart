@@ -74,7 +74,6 @@ class RecognitionHistory {
   });
 
   factory RecognitionHistory.fromJson(Map<String, dynamic> json) {
-    print('json: $json');
     return RecognitionHistory(
       sent: (json['sent'] as List)
           .map((item) => Recognition.fromJson(item as Map<String, dynamic>))

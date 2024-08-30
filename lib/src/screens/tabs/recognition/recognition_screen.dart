@@ -17,30 +17,28 @@ class RecognitionScreen extends StatefulWidget {
 }
 
 class _RecognitionScreenState extends State<RecognitionScreen> {
-  List<Recognition> sentNotifications = [];
-  List<Recognition> receivedNotifications = [];
+  List<Recognition> sentRecognition = [];
+  List<Recognition> receivedRecognition = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchNotifications();
+    fetchRecognition();
   }
 
-  Future<void> fetchNotifications() async {
+  Future<void> fetchRecognition() async {
     final response = await RecognitionApi.getHistory();
 
-    if (mounted) {
-      setState(() {
-        sentNotifications = (response['sent'] as List)
-            .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
-            .toList();
-        receivedNotifications = (response['received'] as List)
-            .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
-            .toList();
-        isLoading = false;
-      });
-    }
+    setState(() {
+      sentRecognition = (response['sent'] as List)
+          .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
+          .toList();
+      receivedRecognition = (response['received'] as List)
+          .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
+          .toList();
+      isLoading = false;
+    });
   }
 
   @override
@@ -143,10 +141,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                   ? const Skeletonizer(
                                       child: Text("10000 Points"),
                                     )
-                                  : sentNotifications.isEmpty
+                                  : sentRecognition.isEmpty
                                       ? const Text("0 Points")
                                       : Text(
-                                          "${sentNotifications.fold(0, (previousValue, element) => previousValue + element.amount)} Points",
+                                          "${sentRecognition.fold(0, (previousValue, element) => previousValue + element.amount)} Points",
                                         ),
                             ],
                           )
@@ -175,10 +173,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                   ? const Skeletonizer(
                                       child: Text("10000 Points"),
                                     )
-                                  : receivedNotifications.isEmpty
+                                  : receivedRecognition.isEmpty
                                       ? const Text("0 Points")
                                       : Text(
-                                          "${receivedNotifications.fold(0, (previousValue, element) => previousValue + element.amount)} Points",
+                                          "${receivedRecognition.fold(0, (previousValue, element) => previousValue + element.amount)} Points",
                                         ),
                             ],
                           )
@@ -218,50 +216,6 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  // isLoading
-                  //     ? ListView.builder(
-                  //         itemCount: 3,
-                  //         itemBuilder: (context, index) {
-                  //           return ListTile(
-                  //             titleAlignment: ListTileTitleAlignment.center,
-                  //             leading: SizedBox(
-                  //               width: 50,
-                  //               height: 50,
-                  //               child: Skeletonizer(
-                  //                 child: Container(
-                  //                   width: 48,
-                  //                   height: 48,
-                  //                   decoration: BoxDecoration(
-                  //                     shape: BoxShape.circle,
-                  //                     color: Colors.grey[300],
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             title: Skeletonizer(
-                  //               child: Container(
-                  //                 width: 40,
-                  //                 height: 20,
-                  //                 decoration: BoxDecoration(
-                  //                   color: Colors.grey[300],
-                  //                   borderRadius: BorderRadius.circular(8),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             trailing: Skeletonizer(
-                  //               child: Container(
-                  //                 width: 40,
-                  //                 height: 20,
-                  //                 decoration: BoxDecoration(
-                  //                   color: Colors.grey[300],
-                  //                   borderRadius: BorderRadius.circular(8),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             onTap: () {},
-                  //           );
-                  //         },
-                  //       )
                   isLoading
                       ? Skeletonizer(
                           enabled: isLoading,
@@ -284,7 +238,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             },
                           ),
                         )
-                      : sentNotifications.isEmpty
+                      : sentRecognition.isEmpty
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -296,9 +250,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                               ],
                             )
                           : ListView.builder(
-                              itemCount: (sentNotifications).length,
+                              itemCount: (sentRecognition).length,
                               itemBuilder: (context, index) {
-                                final notification = sentNotifications[index];
+                                final recognition = sentRecognition[index];
                                 return ListTile(
                                   titleAlignment: ListTileTitleAlignment.center,
                                   leading: SizedBox(
@@ -308,17 +262,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                       radius: 24,
                                       child: ClipOval(
                                         child: CachedNetworkImage(
-                                          imageUrl: (notification
-                                                          .detailRecognitions !=
-                                                      null &&
-                                                  notification
-                                                      .detailRecognitions!
-                                                      .isNotEmpty)
-                                              ? notification
-                                                  .detailRecognitions![0]
-                                                  .employee
-                                                  .picture
-                                              : "",
+                                          imageUrl:
+                                              (recognition.detailRecognitions !=
+                                                          null &&
+                                                      recognition
+                                                          .detailRecognitions!
+                                                          .isNotEmpty)
+                                                  ? recognition
+                                                      .detailRecognitions![0]
+                                                      .employee
+                                                      .picture
+                                                  : "",
                                           fit: BoxFit.cover,
                                           width: 48,
                                           height: 48,
@@ -331,10 +285,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     ),
                                   ),
                                   title: Text(
-                                    (notification.detailRecognitions != null &&
-                                            notification
+                                    (recognition.detailRecognitions != null &&
+                                            recognition
                                                 .detailRecognitions!.isNotEmpty)
-                                        ? notification.detailRecognitions![0]
+                                        ? recognition.detailRecognitions![0]
                                             .employee.name
                                         : "",
                                     style:
@@ -344,11 +298,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     textAlign: TextAlign.start,
                                   ),
                                   trailing: Text(
-                                    notification.amount > 0
-                                        ? '+${notification.amount.toString()}'
-                                        : notification.amount.toString(),
+                                    recognition.amount > 0
+                                        ? '+${recognition.amount.toString()}'
+                                        : recognition.amount.toString(),
                                     style: TextStyle(
-                                      color: notification.amount > 0
+                                      color: recognition.amount > 0
                                           ? Colors.green
                                           : Colors.red,
                                     ),
@@ -379,7 +333,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                             },
                           ),
                         )
-                      : receivedNotifications.isEmpty
+                      : receivedRecognition.isEmpty
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -391,10 +345,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                               ],
                             )
                           : ListView.builder(
-                              itemCount: receivedNotifications.length,
+                              itemCount: receivedRecognition.length,
                               itemBuilder: (context, index) {
-                                final notification =
-                                    receivedNotifications[index];
+                                final recognition = receivedRecognition[index];
                                 return ListTile(
                                   titleAlignment: ListTileTitleAlignment.center,
                                   leading: SizedBox(
@@ -405,7 +358,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                       child: ClipOval(
                                         child: CachedNetworkImage(
                                           imageUrl:
-                                              notification.employee.picture,
+                                              recognition.employee.picture,
                                           fit: BoxFit.cover,
                                           width: 48,
                                           height: 48,
@@ -418,7 +371,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     ),
                                   ),
                                   title: Text(
-                                    notification.employee.name,
+                                    recognition.employee.name,
                                     style:
                                         theme.textTheme.titleMedium!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -426,11 +379,11 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                                     textAlign: TextAlign.start,
                                   ),
                                   trailing: Text(
-                                    notification.amount > 0
-                                        ? '+${notification.amount.toString()}'
-                                        : notification.amount.toString(),
+                                    recognition.amount > 0
+                                        ? '+${recognition.amount.toString()}'
+                                        : recognition.amount.toString(),
                                     style: TextStyle(
-                                      color: notification.amount > 0
+                                      color: recognition.amount > 0
                                           ? Colors.green
                                           : Colors.red,
                                     ),

@@ -18,4 +18,16 @@ class RecognitionApi {
   static Future sendRecognition(Map<String, dynamic> data) {
     return DioClient.instance.post("$_path/give-points", data: data);
   }
+
+  static Future getBalance() {
+    return DioClient.instance.get("/balances/current");
+  }
+
+  static Future getGroups() {
+    return DioClient.instance.get("/groups");
+  }
+
+  static Future getGroupMembers(String groupId) {
+    return DioClient.instance.get("/groups/$groupId");
+  }
 }

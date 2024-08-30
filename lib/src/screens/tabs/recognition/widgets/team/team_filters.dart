@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
+import 'package:sonat_hrm_rewarded/src/models/employee.dart';
+import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 
 enum SortByFilter { latest, earliest }
 
@@ -9,7 +11,16 @@ enum TimeFilter { allTime, last7Days, last30Days, last60Days }
 enum TypeFilter { all, p2p, team, eCard, award }
 
 class TeamFilters extends StatefulWidget {
-  const TeamFilters({super.key});
+  final List<Group> groups;
+  final List<MemberGroup> selectedRecipients;
+  final Function(List<MemberGroup>) onSelectedRecipientChanged;
+
+  const TeamFilters({
+    super.key,
+    required this.groups,
+    required this.selectedRecipients,
+    required this.onSelectedRecipientChanged,
+  });
 
   @override
   State<TeamFilters> createState() => _TeamFiltersState();
@@ -24,6 +35,47 @@ class _TeamFiltersState extends State<TeamFilters> {
   String _selectedRecognitionValue = 'Core values';
   dynamic _selectedRecipient;
   dynamic _searchedRecipient;
+  bool isLoadingMembers = true;
+  List<MemberGroup> detailedGroups = [];
+  List<MemberGroup> _localSelectedRecipients = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _localSelectedRecipients = List.from(widget.selectedRecipients);
+  }
+
+  Future<void> fetchDetailedGroup(String id) async {
+    try {
+      final groupResponse = await RecognitionApi.getGroupMembers(id);
+      if (groupResponse != null && groupResponse['memberGroups'] is List) {
+        final List<MemberGroup> memberGroups =
+            (groupResponse['memberGroups'] as List).map((item) {
+          return MemberGroup.fromJson(item as Map<String, dynamic>);
+        }).toList();
+        if (mounted) {
+          setState(() {
+            detailedGroups = memberGroups;
+            isLoadingMembers = false;
+          });
+        }
+        _updateSelectedRecipients(memberGroups);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingMembers = false;
+        });
+      }
+    }
+  }
+
+  void _updateSelectedRecipients(List<MemberGroup> newRecipients) {
+    setState(() {
+      _localSelectedRecipients = newRecipients;
+    });
+    widget.onSelectedRecipientChanged(_localSelectedRecipients);
+  }
 
   void _handleResetFilters() {
     setState(() {
@@ -81,7 +133,7 @@ class _TeamFiltersState extends State<TeamFilters> {
             child: TextField(
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
-                hintText: 'Enter email or name',
+                hintText: "Enter a member or group",
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 8,
                   vertical: 4,
@@ -114,20 +166,21 @@ class _TeamFiltersState extends State<TeamFilters> {
           SliverToBoxAdapter(
               child: _searchedRecipient == null
                   ? Row(
-                      children: listLeaderboard.sublist(1, 5).map((user) {
+                      children: widget.groups.map((user) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
                                 _selectedRecipient = user;
+                                fetchDetailedGroup(user.id);
                               });
                             },
                             child: Column(
                               children: [
                                 const CircleAvatar(
                                   radius: 24,
-                                  child: Icon(Icons.person),
+                                  child: Icon(Icons.groups),
                                 ),
                                 Text.rich(
                                   TextSpan(
@@ -142,14 +195,13 @@ class _TeamFiltersState extends State<TeamFilters> {
                       }).toList(),
                     )
                   : Row(
-                      children: listLeaderboard
-                          .where((user) =>
-                              user.name
-                                  .toLowerCase()
-                                  .contains(_searchedRecipient.toLowerCase()) ||
-                              user.email
-                                  .toLowerCase()
-                                  .contains(_searchedRecipient.toLowerCase()))
+                      children: widget.groups
+                          .where((user) => user.name.toLowerCase().contains(
+                                  _searchedRecipient.toLowerCase()) //||
+                              // user.email
+                              //     .toLowerCase()
+                              //     .contains(_searchedRecipient.toLowerCase())
+                              )
                           .map((user) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -196,7 +248,7 @@ class _TeamFiltersState extends State<TeamFilters> {
                       children: [
                         const CircleAvatar(
                           radius: 24,
-                          child: Icon(Icons.person),
+                          child: Icon(Icons.group),
                         ),
                         Text.rich(
                           TextSpan(
@@ -207,6 +259,69 @@ class _TeamFiltersState extends State<TeamFilters> {
                       ],
                     )),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
+          SliverToBoxAdapter(
+              child: _selectedRecipient != null
+                  ? const SizedBox.shrink()
+                  : const Text("Members",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          _localSelectedRecipients.isNotEmpty
+              ? SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 400,
+                    child: Scrollbar(
+                      child: ListView.builder(
+                        itemCount: _localSelectedRecipients.length,
+                        itemBuilder: (context, index) {
+                          final recognition = _localSelectedRecipients
+                              .elementAt(index)
+                              .employees;
+
+                          return ListTile(
+                            titleAlignment: ListTileTitleAlignment.center,
+                            leading: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircleAvatar(
+                                radius: 24,
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    imageUrl: (recognition.picture != null)
+                                        ? recognition.picture
+                                        : "",
+                                    fit: BoxFit.cover,
+                                    width: 48,
+                                    height: 48,
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            title: Text(recognition.name),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.cancel),
+                              onPressed: () {
+                                _updateSelectedRecipients(
+                                    _localSelectedRecipients
+                                        .where((element) =>
+                                            element.employees.id !=
+                                            recognition.id)
+                                        .toList());
+                              },
+                            ),
+                            onTap: () {},
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                )
+              : const SliverToBoxAdapter(
+                  child: SizedBox(),
+                ),
         ]));
   }
 }
