@@ -11,3 +11,12 @@ class GetCurrentBalance extends UserEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UpdateBalance extends UserEvent {
+  final CurrentBalance balance;
+
+  UpdateBalance(this.balance);
+
+  @override
+  List<Object?> get props => [balance];
+}

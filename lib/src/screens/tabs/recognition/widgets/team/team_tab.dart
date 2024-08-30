@@ -11,6 +11,7 @@ import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognit
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/team/team_filters.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class TeamTab extends StatefulWidget {
   const TeamTab({super.key});
@@ -285,9 +286,9 @@ class _TeamTabState extends State<TeamTab> {
                             style: TextStyle(fontSize: 16)),
                         const SizedBox(width: 8),
                         isLoadingBalance
-                            ? const Skeletonizer(child: Text("10000 Points"))
+                            ? const Skeletonizer(child: Bone.text(words: 1))
                             : DisplayAmount(
-                                amount: balance,
+                                amount: formatNumber(balance),
                                 icon: Icons.currency_bitcoin_rounded,
                                 suffix: "Points",
                               ),

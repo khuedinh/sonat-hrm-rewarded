@@ -2,10 +2,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/models/category.dart';
-import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
 
 part 'benefits_event.dart';
@@ -19,7 +17,6 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
             listBenefits: [],
             listClaimedBenefits: [],
             listArchivedBenefits: [],
-            currentBalance: 0,
           ),
         ) {
     on<InitBenefitsData>((BenefitsEvent event, Emitter emit) async {
@@ -241,8 +238,6 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
         "maxPrice": state.priceRange?.end,
       };
 
-      print(queryParams);
-
       final response =
           await BenefitApi.getListBenefits(queryParams: queryParams);
       if (response != null) {
@@ -270,11 +265,6 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
     } catch (error) {
       return [];
     }
-  }
-
-  Future fetchCurrentBalance() async {
-    final response = await BalanceApi.getCurrentBalance();
-    if (response != null) return CurrentBalance.fromJson(response);
   }
 
   Future fetchMyClaim() async {

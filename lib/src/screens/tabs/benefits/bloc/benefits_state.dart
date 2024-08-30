@@ -11,12 +11,10 @@ const RangeValues defaultPriceRange = RangeValues(0, 30000);
 
 class BenefitsState extends Equatable {
   const BenefitsState({
-    this.currentBalance,
     required this.listCategories,
     required this.listBenefits,
     required this.listClaimedBenefits,
     required this.listArchivedBenefits,
-    this.isLoadingCurrentBalance = true,
     this.isLoadingCategories = true,
     this.isLoadingBenefits = true,
     this.isLoadingMyClaim = true,
@@ -30,12 +28,10 @@ class BenefitsState extends Equatable {
     this.priceRange = defaultPriceRange,
   });
 
-  final int? currentBalance;
   final List<CategoryData> listCategories;
   final List<BenefitData> listBenefits;
   final List<ClaimedBenefit> listClaimedBenefits;
   final List<ClaimedBenefit> listArchivedBenefits;
-  final bool isLoadingCurrentBalance;
   final bool isLoadingCategories;
   final bool isLoadingBenefits;
   final bool isLoadingMyClaim;
@@ -68,13 +64,10 @@ class BenefitsState extends Equatable {
     RangeValues? priceRange,
   }) {
     return BenefitsState(
-      currentBalance: currentBalance ?? this.currentBalance,
       listCategories: listCategories ?? this.listCategories,
       listBenefits: listBenefits ?? this.listBenefits,
       listClaimedBenefits: listClaimedBenefits ?? this.listClaimedBenefits,
       listArchivedBenefits: listArchivedBenefits ?? this.listArchivedBenefits,
-      isLoadingCurrentBalance:
-          isLoadingCurrentBalance ?? this.isLoadingCurrentBalance,
       isLoadingCategories: isLoadingCategories ?? this.isLoadingCategories,
       isLoadingBenefits: isLoadingBenefits ?? this.isLoadingBenefits,
       isLoadingMyClaim: isLoadingMyClaim ?? this.isLoadingMyClaim,
@@ -92,12 +85,10 @@ class BenefitsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        currentBalance,
         listCategories,
         listBenefits,
         listClaimedBenefits,
         listArchivedBenefits,
-        isLoadingCurrentBalance,
         isLoadingCategories,
         isLoadingBenefits,
         isLoadingMyClaim,

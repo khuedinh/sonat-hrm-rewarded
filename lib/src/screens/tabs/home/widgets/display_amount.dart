@@ -16,7 +16,7 @@ class DisplayAmount extends StatelessWidget {
   });
 
   final IconData icon;
-  final int amount;
+  final String amount;
   final double fontSize;
   final bool isBold;
   final double? iconSize;
@@ -29,9 +29,8 @@ class DisplayAmount extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final String amountText = suffix != null
-        ? '${formatShortenNumber(amount)} $suffix'
-        : '$formatShortenNumber(amount)';
+    final String amountText =
+        suffix != null ? '$amount $suffix' : '$formatShortenNumber(amount)';
 
     return Row(
       children: [

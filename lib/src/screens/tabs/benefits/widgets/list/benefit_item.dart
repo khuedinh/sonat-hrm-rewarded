@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class BenefitItem extends StatelessWidget {
@@ -44,8 +45,8 @@ class BenefitItem extends StatelessWidget {
                       children: [
                         Text(
                           benefit.name,
-                          maxLines: 1,
                           textAlign: TextAlign.center,
+                          maxLines: 1,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleSmall!.copyWith(
@@ -58,7 +59,7 @@ class BenefitItem extends StatelessWidget {
                           children: [
                             Expanded(
                               child: DisplayAmount(
-                                amount: benefit.exchangePrice,
+                                amount: formatNumber(benefit.exchangePrice),
                                 icon: Icons.currency_bitcoin_rounded,
                                 iconSize: 10,
                                 fontSize: 12,
