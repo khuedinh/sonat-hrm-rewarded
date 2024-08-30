@@ -7,6 +7,11 @@ class InitBenefitsData extends BenefitsEvent {
   List<Object?> get props => [];
 }
 
+class LoadMoreBenefits extends BenefitsEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class RefreshBenefitsData extends BenefitsEvent {
   @override
   List<Object?> get props => [];

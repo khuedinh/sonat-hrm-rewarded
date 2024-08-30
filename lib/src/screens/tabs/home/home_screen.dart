@@ -8,6 +8,7 @@ import 'package:sonat_hrm_rewarded/src/models/user.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/leaderboard_item.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.handleOpenRecognitionScreen});
@@ -90,13 +91,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     DisplayAmount(
-                      amount: userInfo?.balance.currentPoint ?? 0,
+                      amount: formatShortenNumber(
+                        userInfo?.balance.currentPoint ?? 0,
+                      ),
                       icon: Icons.attach_money_rounded,
                       suffix: "Points",
                       iconSize: 14,
                     ),
                     DisplayAmount(
-                      amount: userInfo?.balance.currentCoin ?? 0,
+                      amount: formatShortenNumber(
+                        userInfo?.balance.currentCoin ?? 0,
+                      ),
                       icon: Icons.currency_bitcoin_rounded,
                       suffix: "Coins",
                       iconSize: 14,

@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_screen.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_screen.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
@@ -9,6 +11,7 @@ import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/code_dialog.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class BenefitDetailsScreen extends StatefulWidget {
@@ -64,6 +67,10 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
     );
 
     await BenefitApi.redeemBenefit(_benefitDetails!.id);
+
+    if (mounted) {
+      context.read<UserBloc>().add(GetCurrentBalance());
+    }
 
     if (!mounted) return;
 
@@ -190,14 +197,18 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          Expanded(
+                                              child: Text(
                                             _benefitDetails!.name,
+                                            maxLines: 2,
+                                            softWrap: true,
+                                            overflow: TextOverflow.ellipsis,
                                             style: theme.textTheme.titleLarge!
                                                 .copyWith(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                             ),
-                                          ),
+                                          )),
                                           if (widget.claimedBenefit != null)
                                             SizedBox(
                                               height: 28,
@@ -237,8 +248,9 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                                             ),
                                           )
                                         : DisplayAmount(
-                                            amount:
-                                                _benefitDetails!.exchangePrice,
+                                            amount: formatNumber(
+                                              _benefitDetails!.exchangePrice,
+                                            ),
                                             icon:
                                                 Icons.currency_bitcoin_rounded,
                                             suffix: "coins",

@@ -2,10 +2,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/models/category.dart';
-import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
 
 part 'benefits_event.dart';
@@ -19,7 +17,6 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
             listBenefits: [],
             listClaimedBenefits: [],
             listArchivedBenefits: [],
-            currentBalance: 0,
           ),
         ) {
     on<InitBenefitsData>((BenefitsEvent event, Emitter emit) async {
@@ -27,22 +24,44 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
 
       emit(state.copyWith(isLoadingBenefits: true));
 
-      final listBenefits = await fetchBenefits(state);
+      final benefitResponse = await fetchBenefits(state, null);
 
       emit(state.copyWith(
         isLoadingBenefits: false,
-        listBenefits: listBenefits,
+        listBenefits: benefitResponse.data,
+        hasReachedMaxBenefits:
+            benefitResponse.page == benefitResponse.totalPages,
       ));
     });
 
-    on<RefreshBenefitsData>((BenefitsEvent event, Emitter emit) async {
-      emit(state.copyWith(isLoadingBenefits: true));
+    on<LoadMoreBenefits>(
+      (event, emit) async {
+        if (state.hasReachedMaxBenefits) return;
 
-      final listBenefits = await fetchBenefits(state);
+        final benefitResponse = await fetchBenefits(state, state.page + 1);
+
+        emit(
+          state.copyWith(
+            page: state.page + 1,
+            listBenefits: [...state.listBenefits, ...benefitResponse.data],
+            hasReachedMaxBenefits:
+                benefitResponse.page == benefitResponse.totalPages,
+          ),
+        );
+      },
+      transformer: restartable(),
+    );
+
+    on<RefreshBenefitsData>((BenefitsEvent event, Emitter emit) async {
+      emit(state.copyWith(isLoadingBenefits: true, page: 1));
+
+      final benefitResponse = await fetchBenefits(state, null);
 
       emit(state.copyWith(
         isLoadingBenefits: false,
-        listBenefits: listBenefits,
+        listBenefits: benefitResponse.data,
+        hasReachedMaxBenefits:
+            benefitResponse.page == benefitResponse.totalPages,
       ));
     });
 
@@ -86,16 +105,22 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
 
     on<ChangeTextSearch>(
       (ChangeTextSearch event, Emitter emit) async {
-        emit(state.copyWith(textSearch: event.text, isLoadingBenefits: true));
+        emit(state.copyWith(
+          textSearch: event.text,
+          isLoadingBenefits: true,
+          page: 1,
+        ));
 
         await Future.delayed(const Duration(milliseconds: 500));
         if (emit.isDone) return;
 
-        final listBenefitsBySearch = await fetchBenefits(state);
+        final benefitResponse = await fetchBenefits(state, null);
 
         emit(state.copyWith(
-          listBenefits: listBenefitsBySearch,
+          listBenefits: benefitResponse.data,
           isLoadingBenefits: false,
+          hasReachedMaxBenefits:
+              benefitResponse.page == benefitResponse.totalPages,
         ));
       },
       transformer: restartable(),
@@ -106,16 +131,19 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
         emit(state.copyWith(
           selectedCategory: event.categoryId,
           isLoadingBenefits: true,
+          page: 1,
         ));
 
         await Future.delayed(const Duration(milliseconds: 300));
         if (emit.isDone) return;
 
-        final listBenefitsByCategory = await fetchBenefits(state);
+        final benefitResponse = await fetchBenefits(state, null);
 
         emit(state.copyWith(
-          listBenefits: listBenefitsByCategory,
+          listBenefits: benefitResponse.data,
           isLoadingBenefits: false,
+          hasReachedMaxBenefits:
+              benefitResponse.page == benefitResponse.totalPages,
         ));
       },
       transformer: restartable(),
@@ -124,16 +152,19 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
     on<ChangeFilter>((ChangeFilter event, Emitter emit) async {
       emit(state.copyWith(
         isLoadingBenefits: true,
+        page: 1,
         sortPrice: event.sortPrice,
         sortName: event.sortName,
         priceRange: event.priceRange,
       ));
 
-      final filteredBenefits = await fetchBenefits(state);
+      final benefitResponse = await fetchBenefits(state, null);
 
       emit(state.copyWith(
-        listBenefits: filteredBenefits,
+        listBenefits: benefitResponse.data,
         isLoadingBenefits: false,
+        hasReachedMaxBenefits:
+            benefitResponse.page == benefitResponse.totalPages,
       ));
     });
 
@@ -186,15 +217,23 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
     });
   }
 
-  Future fetchBenefits(BenefitsState state) async {
+  Future fetchBenefits(BenefitsState state, int? page) async {
     try {
       final queryParams = {
         'categoryId': state.selectedCategory,
-        'page': state.page,
+        'page': page ?? state.page,
         'pageSize': state.pageSize,
         'search': state.textSearch,
-        "sortPrice": state.sortPrice == SortPrice.ascending ? "ASC" : "DESC",
-        "sortName": state.sortName == SortName.aToZ ? "ASC" : "DESC",
+        "sortPrice": state.sortPrice != null
+            ? state.sortPrice == SortPrice.ascending
+                ? "ASC"
+                : "DESC"
+            : null,
+        "sortName": state.sortName != null
+            ? state.sortName == SortName.aToZ
+                ? "ASC"
+                : "DESC"
+            : null,
         "minPrice": state.priceRange?.start,
         "maxPrice": state.priceRange?.end,
       };
@@ -204,7 +243,7 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
       if (response != null) {
         final benefitResponse = BenefitResponse.fromJson(response);
 
-        return benefitResponse.data;
+        return benefitResponse;
       }
       return [];
     } catch (error) {
@@ -226,11 +265,6 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
     } catch (error) {
       return [];
     }
-  }
-
-  Future fetchCurrentBalance() async {
-    final response = await BalanceApi.getCurrentBalance();
-    if (response != null) return CurrentBalance.fromJson(response);
   }
 
   Future fetchMyClaim() async {

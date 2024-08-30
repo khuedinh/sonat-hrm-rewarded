@@ -8,6 +8,7 @@ import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/filters/ben
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/gifts/gifts_tab.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/my_claim_tab.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class BenefitsScreen extends StatefulWidget {
   const BenefitsScreen({super.key});
@@ -54,6 +55,7 @@ class _BenefitScreenState extends State<BenefitsScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.animation!.addListener(_tabListener);
+    context.read<UserBloc>().add(GetCurrentBalance());
   }
 
   @override
@@ -74,7 +76,7 @@ class _BenefitScreenState extends State<BenefitsScreen>
               BlocBuilder<UserBloc, UserState>(
                 builder: (context, state) {
                   final isLoadingCurrentBalance = state.isLoadingCurrentBalance;
-                  final currentCoin = state.userInfo?.balance.currentCoin ?? 0;
+                  final currentCoin = state.currentBalance?.currentCoin ?? 0;
 
                   if (isLoadingCurrentBalance) {
                     return const Skeletonizer(
@@ -83,7 +85,7 @@ class _BenefitScreenState extends State<BenefitsScreen>
                   }
 
                   return DisplayAmount(
-                    amount: currentCoin,
+                    amount: formatNumber(currentCoin),
                     icon: Icons.currency_bitcoin_rounded,
                     suffix: "Coins",
                     isBold: true,

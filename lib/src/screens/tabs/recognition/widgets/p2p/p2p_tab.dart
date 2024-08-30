@@ -15,6 +15,7 @@ import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class P2pTab extends StatefulWidget {
   const P2pTab({super.key});
@@ -416,9 +417,9 @@ class _P2pTabState extends State<P2pTab> {
                             style: TextStyle(fontSize: 16)),
                         const SizedBox(width: 8),
                         isLoadingBalance
-                            ? const Skeletonizer(child: Text("10000 Points"))
+                            ? const Skeletonizer(child: Bone.text(words: 1))
                             : DisplayAmount(
-                                amount: balance,
+                                amount: formatNumber(balance),
                                 icon: Icons.currency_bitcoin_rounded,
                                 suffix: "Points",
                               ),

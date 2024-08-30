@@ -1,6 +1,9 @@
 part of "benefits_bloc.dart";
 
-enum SortPrice { descending, ascending }
+enum SortPrice {
+  ascending,
+  descending,
+}
 
 enum SortName { aToZ, zToA }
 
@@ -8,33 +11,31 @@ const RangeValues defaultPriceRange = RangeValues(0, 30000);
 
 class BenefitsState extends Equatable {
   const BenefitsState({
-    this.currentBalance,
     required this.listCategories,
     required this.listBenefits,
     required this.listClaimedBenefits,
     required this.listArchivedBenefits,
-    this.isLoadingCurrentBalance = true,
     this.isLoadingCategories = true,
     this.isLoadingBenefits = true,
     this.isLoadingMyClaim = true,
     this.selectedCategory = "",
+    this.hasReachedMaxBenefits = false,
     this.page = 1,
-    this.pageSize = 12,
+    this.pageSize = 10,
     this.textSearch = "",
     this.sortPrice,
     this.sortName,
     this.priceRange = defaultPriceRange,
   });
 
-  final int? currentBalance;
   final List<CategoryData> listCategories;
   final List<BenefitData> listBenefits;
   final List<ClaimedBenefit> listClaimedBenefits;
   final List<ClaimedBenefit> listArchivedBenefits;
-  final bool isLoadingCurrentBalance;
   final bool isLoadingCategories;
   final bool isLoadingBenefits;
   final bool isLoadingMyClaim;
+  final bool hasReachedMaxBenefits;
   final String selectedCategory;
   final String textSearch;
   final int page;
@@ -53,6 +54,7 @@ class BenefitsState extends Equatable {
     bool? isLoadingCategories,
     bool? isLoadingBenefits,
     bool? isLoadingMyClaim,
+    bool? hasReachedMaxBenefits,
     String? selectedCategory,
     String? textSearch,
     int? page,
@@ -62,16 +64,15 @@ class BenefitsState extends Equatable {
     RangeValues? priceRange,
   }) {
     return BenefitsState(
-      currentBalance: currentBalance ?? this.currentBalance,
       listCategories: listCategories ?? this.listCategories,
       listBenefits: listBenefits ?? this.listBenefits,
       listClaimedBenefits: listClaimedBenefits ?? this.listClaimedBenefits,
       listArchivedBenefits: listArchivedBenefits ?? this.listArchivedBenefits,
-      isLoadingCurrentBalance:
-          isLoadingCurrentBalance ?? this.isLoadingCurrentBalance,
       isLoadingCategories: isLoadingCategories ?? this.isLoadingCategories,
       isLoadingBenefits: isLoadingBenefits ?? this.isLoadingBenefits,
       isLoadingMyClaim: isLoadingMyClaim ?? this.isLoadingMyClaim,
+      hasReachedMaxBenefits:
+          hasReachedMaxBenefits ?? this.hasReachedMaxBenefits,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       textSearch: textSearch ?? this.textSearch,
       page: page ?? this.page,
@@ -84,15 +85,14 @@ class BenefitsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        currentBalance,
         listCategories,
         listBenefits,
         listClaimedBenefits,
         listArchivedBenefits,
-        isLoadingCurrentBalance,
         isLoadingCategories,
         isLoadingBenefits,
         isLoadingMyClaim,
+        hasReachedMaxBenefits,
         selectedCategory,
         textSearch,
         priceRange,
