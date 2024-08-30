@@ -4,10 +4,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/filters/benefit_filters.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/gifts/gifts_tab.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/my_claim_tab.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/filters/benefit_filters.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/gifts/gifts_tab.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/my_claim_tab.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 
 class BenefitsScreen extends StatefulWidget {
   const BenefitsScreen({super.key});

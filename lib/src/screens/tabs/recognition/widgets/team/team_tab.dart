@@ -6,11 +6,11 @@ import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/team/team_filters.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/recognition/recognition-values/recognition_values.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/recognition/team/team_filters.dart';
 
 class TeamTab extends StatefulWidget {
   const TeamTab({super.key});

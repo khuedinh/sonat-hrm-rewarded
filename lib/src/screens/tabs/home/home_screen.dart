@@ -6,8 +6,8 @@ import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.
 import 'package:sonat_hrm_rewarded/src/mock_data/user.dart';
 import 'package:sonat_hrm_rewarded/src/models/user.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/home/display_amount.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/home/leaderboard_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/leaderboard_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.handleOpenRecognitionScreen});

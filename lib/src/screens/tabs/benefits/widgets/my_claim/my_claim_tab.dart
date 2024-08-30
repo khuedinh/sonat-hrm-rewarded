@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_archived_box/benefit_archived_box_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/list/list_claimed_benefits.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/list/list_claimed_benefits.dart';
 
 class MyClaimTab extends StatefulWidget {
   const MyClaimTab({super.key});

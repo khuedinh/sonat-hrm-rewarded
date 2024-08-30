@@ -5,9 +5,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/app/bloc/app_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/models/user.dart';
-import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/account/overview_card.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/account/widgets/overview_card.dart';
+import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class AccountScreen extends StatefulWidget {

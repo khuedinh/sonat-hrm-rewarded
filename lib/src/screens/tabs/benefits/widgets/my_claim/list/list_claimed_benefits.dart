@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/widgets/benefits/my_claim/list/claimed_benefit_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/list/claimed_benefit_item.dart';
 
 class ListClaimedBenefits extends StatefulWidget {
   const ListClaimedBenefits({
@@ -85,18 +86,8 @@ class _ListClaimedBenefitsState extends State<ListClaimedBenefits> {
         }
 
         if (listClaimedBenefits.isEmpty) {
-          return const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 300,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.folder_off),
-                  SizedBox(height: 4),
-                  Text("No data found."),
-                ],
-              ),
-            ),
+          return const SliverFillRemaining(
+            child: NoData(message: "No claimed benefits found."),
           );
         }
 
