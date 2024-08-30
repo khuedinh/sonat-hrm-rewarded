@@ -1,3 +1,5 @@
+import 'package:sonat_hrm_rewarded/src/models/transaction_history.dart';
+
 class NotificationListRes {
   List<NotificationData>? data;
   int? page;
@@ -41,7 +43,7 @@ class NotificationData {
   String? deletedAt;
   bool? isRead;
   String? employeeEmail;
-  TransactionHistory? transactionHistory;
+  TransactionHistoryData? transactionHistory;
 
   NotificationData(
       {this.id,
@@ -60,7 +62,7 @@ class NotificationData {
     isRead = json['isRead'];
     employeeEmail = json['employeeEmail'];
     transactionHistory = json['transactionHistory'] != null
-        ? TransactionHistory.fromJson(json['transactionHistory'])
+        ? TransactionHistoryData.fromJson(json['transactionHistory'])
         : null;
   }
 
@@ -72,91 +74,9 @@ class NotificationData {
     data['deletedAt'] = deletedAt;
     data['isRead'] = isRead;
     data['employeeEmail'] = employeeEmail;
-    if (transactionHistory != null) {
-      data['transactionHistory'] = transactionHistory!.toJson();
-    }
-    return data;
-  }
-}
-
-class TransactionHistory {
-  String? id;
-  String? createdAt;
-  String? updatedAt;
-  String? deletedAt;
-  String? currency;
-  int? amount;
-  int? endingBalance;
-  String? type;
-  String? event;
-  String? description;
-  Source? source;
-  List<Sink>? sink;
-  String? employeeEmail;
-  String? fromEmail;
-  String? toEmail;
-
-  TransactionHistory(
-      {this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.currency,
-      this.amount,
-      this.endingBalance,
-      this.type,
-      this.event,
-      this.description,
-      this.source,
-      this.sink,
-      this.employeeEmail,
-      this.fromEmail,
-      this.toEmail});
-
-  TransactionHistory.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    deletedAt = json['deletedAt'];
-    currency = json['currency'];
-    amount = json['amount'];
-    endingBalance = json['endingBalance'];
-    type = json['type'];
-    event = json['event'];
-    description = json['description'];
-    source = json['source'] != null ? Source.fromJson(json['source']) : null;
-    if (json['sink'] != null) {
-      sink = <Sink>[];
-      json['sink'].forEach((v) {
-        sink!.add(Sink.fromJson(v));
-      });
-    }
-    employeeEmail = json['employeeEmail'];
-    fromEmail = json['fromEmail'];
-    toEmail = json['toEmail'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['deletedAt'] = deletedAt;
-    data['currency'] = currency;
-    data['amount'] = amount;
-    data['endingBalance'] = endingBalance;
-    data['type'] = type;
-    data['event'] = event;
-    data['description'] = description;
-    if (source != null) {
-      data['source'] = source!.toJson();
-    }
-    if (sink != null) {
-      data['sink'] = sink!.map((v) => v.toJson()).toList();
-    }
-    data['employeeEmail'] = employeeEmail;
-    data['fromEmail'] = fromEmail;
-    data['toEmail'] = toEmail;
+    // if (transactionHistory != null) {
+    //   data['transactionHistory'] = transactionHistory!.toJson();
+    // }
     return data;
   }
 }
