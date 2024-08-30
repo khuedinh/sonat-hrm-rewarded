@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/list/benefit_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/list/skeleton_item.dart';
 
 class ListBenefitsGrid extends StatelessWidget {
   const ListBenefitsGrid({
@@ -15,6 +15,7 @@ class ListBenefitsGrid extends StatelessWidget {
     return BlocBuilder<BenefitsBloc, BenefitsState>(builder: (context, state) {
       final listBenefits = state.listBenefits;
       final isLoadingBenefits = state.isLoadingBenefits;
+      final hasReachMax = state.hasReachedMaxBenefits;
 
       if (isLoadingBenefits) {
         return SliverGrid(
@@ -26,39 +27,7 @@ class ListBenefitsGrid extends StatelessWidget {
           ),
           delegate: SliverChildListDelegate(
             [
-              for (int i = 0; i < 6; i++)
-                const Skeletonizer(
-                  child: Card(
-                    clipBehavior: Clip.hardEdge,
-                    margin: EdgeInsets.zero,
-                    elevation: 2,
-                    child: SizedBox(
-                      child: Stack(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: Bone.square(),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Bone.text(words: 2, fontSize: 14),
-                                    SizedBox(height: 4),
-                                    Bone.text(words: 3, fontSize: 12),
-                                  ],
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              for (int i = 0; i < 6; i++) const SkeletonItem(),
             ],
           ),
         );
@@ -80,6 +49,8 @@ class ListBenefitsGrid extends StatelessWidget {
         delegate: SliverChildListDelegate(
           [
             for (final benefit in listBenefits) BenefitItem(benefit: benefit),
+            if (!hasReachMax)
+              for (int i = 0; i < 2; i++) const SkeletonItem(),
           ],
         ),
       );

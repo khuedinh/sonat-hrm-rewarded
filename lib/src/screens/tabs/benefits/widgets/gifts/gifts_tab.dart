@@ -12,12 +12,24 @@ class GiftsTab extends StatefulWidget {
   State<GiftsTab> createState() => _GiftsTabState();
 }
 
-class _GiftsTabState extends State<GiftsTab> {
+class _GiftsTabState extends State<GiftsTab>
+    with SingleTickerProviderStateMixin {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     BlocProvider.of<BenefitsBloc>(context).add(InitBenefitsData());
     BlocProvider.of<BenefitsBloc>(context).add(InitCategoriesData());
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    if (currentScroll >= (maxScroll * 0.9)) {
+      context.read<BenefitsBloc>().add(LoadMoreBenefits());
+    }
   }
 
   @override
@@ -25,6 +37,7 @@ class _GiftsTabState extends State<GiftsTab> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RefreshableWidget(
+          controller: _scrollController,
           onRefresh: () async {
             context.read<BenefitsBloc>().add(RefreshBenefitsData());
           },

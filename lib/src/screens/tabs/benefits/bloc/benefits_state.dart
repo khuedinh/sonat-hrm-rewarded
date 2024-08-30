@@ -1,6 +1,9 @@
 part of "benefits_bloc.dart";
 
-enum SortPrice { descending, ascending }
+enum SortPrice {
+  ascending,
+  descending,
+}
 
 enum SortName { aToZ, zToA }
 
@@ -18,8 +21,9 @@ class BenefitsState extends Equatable {
     this.isLoadingBenefits = true,
     this.isLoadingMyClaim = true,
     this.selectedCategory = "",
+    this.hasReachedMaxBenefits = false,
     this.page = 1,
-    this.pageSize = 12,
+    this.pageSize = 10,
     this.textSearch = "",
     this.sortPrice,
     this.sortName,
@@ -35,6 +39,7 @@ class BenefitsState extends Equatable {
   final bool isLoadingCategories;
   final bool isLoadingBenefits;
   final bool isLoadingMyClaim;
+  final bool hasReachedMaxBenefits;
   final String selectedCategory;
   final String textSearch;
   final int page;
@@ -53,6 +58,7 @@ class BenefitsState extends Equatable {
     bool? isLoadingCategories,
     bool? isLoadingBenefits,
     bool? isLoadingMyClaim,
+    bool? hasReachedMaxBenefits,
     String? selectedCategory,
     String? textSearch,
     int? page,
@@ -72,6 +78,8 @@ class BenefitsState extends Equatable {
       isLoadingCategories: isLoadingCategories ?? this.isLoadingCategories,
       isLoadingBenefits: isLoadingBenefits ?? this.isLoadingBenefits,
       isLoadingMyClaim: isLoadingMyClaim ?? this.isLoadingMyClaim,
+      hasReachedMaxBenefits:
+          hasReachedMaxBenefits ?? this.hasReachedMaxBenefits,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       textSearch: textSearch ?? this.textSearch,
       page: page ?? this.page,
@@ -93,6 +101,7 @@ class BenefitsState extends Equatable {
         isLoadingCategories,
         isLoadingBenefits,
         isLoadingMyClaim,
+        hasReachedMaxBenefits,
         selectedCategory,
         textSearch,
         priceRange,
