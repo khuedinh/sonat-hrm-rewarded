@@ -24,21 +24,26 @@ class _TeamTabState extends State<TeamTab> {
   double _sliderValue = 200;
   int _selectedChipValue = 200;
   dynamic _selectedRecognitionValue = 'Core values';
-  dynamic _selectedRecipient;
-  dynamic _searchedRecipient;
+  //dynamic _selectedRecipient;
+  //dynamic _searchedRecipient;
   dynamic _isSavePresets = false;
   dynamic _isAllocateCustom = false;
   List<RecognitionValue> recognitionValueList = [];
   bool isLoading = true;
   bool isLoadingBalance = true;
+  bool isLoadingGroups = true;
   List<Employee> employeeList = [];
   List<int> points = [100, 200, 300, 500];
   int balance = 0;
+  List<Group> groups = [];
+  List<MemberGroup> _selectedRecipients = [];
 
   @override
   void initState() {
     super.initState();
     fetchEmployees();
+    fetchBalance();
+    fetchGroups();
   }
 
   Future<void> fetchEmployees() async {
@@ -63,6 +68,16 @@ class _TeamTabState extends State<TeamTab> {
       balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
           .currentPoint;
       isLoadingBalance = false;
+    });
+  }
+
+  Future<void> fetchGroups() async {
+    final groupsResponse = await RecognitionApi.getGroups();
+    setState(() {
+      groups = (groupsResponse as List).map((item) {
+        return Group.fromJson(item as Map<String, dynamic>);
+      }).toList();
+      isLoadingGroups = false;
     });
   }
 
@@ -117,8 +132,15 @@ class _TeamTabState extends State<TeamTab> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const Dialog(
-            child: TeamFilters(),
+          return Dialog(
+            child: TeamFilters(
+                groups: groups,
+                selectedRecipients: _selectedRecipients,
+                onSelectedRecipientChanged: (selectedRecipients) {
+                  setState(() {
+                    _selectedRecipients = selectedRecipients;
+                  });
+                }),
           );
         },
       );
@@ -194,13 +216,13 @@ class _TeamTabState extends State<TeamTab> {
                       ),
                     ),
                   ),
-                  ...employeeList.sublist(0, 0).map((user) {
+                  ..._selectedRecipients.map((user) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedRecipient = user;
+                            // _selectedRecipient = user;
                           });
                         },
                         child: Column(
@@ -209,7 +231,7 @@ class _TeamTabState extends State<TeamTab> {
                               radius: 24,
                               child: ClipOval(
                                 child: CachedNetworkImage(
-                                  imageUrl: user.picture,
+                                  imageUrl: user.employees.picture,
                                   fit: BoxFit.cover,
                                   width: 48,
                                   height: 48,
@@ -222,7 +244,7 @@ class _TeamTabState extends State<TeamTab> {
                             ),
                             Text.rich(
                               TextSpan(
-                                children: splitText(user.name, 6),
+                                children: splitText(user.employees.name, 6),
                               ),
                               textAlign: TextAlign.center,
                             ),
