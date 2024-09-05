@@ -4,6 +4,6 @@ DateTime parseDate(String date) {
   return DateTime.parse(date);
 }
 
-String formatDate(DateTime date) {
-  return DateFormat("dd/MM/yyyy HH:mm:ss").format(date.toLocal());
+String formatDate(DateTime date, {String? format}) {
+  return DateFormat(format ?? "dd/MM/yyyy HH:mm:ss").format(date.toLocal());
 }

@@ -33,9 +33,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         isScrollControlled: true,
         enableDrag: false,
         builder: (context) => const RecognitionFilters(
-          initialSortByFilter: SortByFilter.latest,
-          initialTimeFilter: TimeFilter.last7Days,
-          initialTypeFilter: TypeFilter.all,
+          initialSortByFilter: null,
+          initialTimeFilter: null,
+          initialTypeFilter: null,
         ),
       );
     }

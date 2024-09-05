@@ -34,5 +34,32 @@ class RecognitionBloc extends Bloc<RecognitionEvent, RecognitionState> {
         isLoadingRecognitionHistory: false,
       ));
     });
+
+    on<FilterRecognitionHistory>((RecognitionEvent event, Emitter emit) async {
+      emit(state.copyWith(isLoadingRecognitionHistory: true));
+
+      final response = await RecognitionApi.getHistory();
+
+      if (response != null) {
+        emit(
+          state.copyWith(
+            isLoadingRecognitionHistory: false,
+            sentHistory: (response['sent'] as List)
+                .map((item) =>
+                    Recognition.fromJson(item as Map<String, dynamic>))
+                .toList(),
+            receivedHistory: (response['received'] as List)
+                .map((item) =>
+                    Recognition.fromJson(item as Map<String, dynamic>))
+                .toList(),
+          ),
+        );
+        return;
+      }
+
+      emit(state.copyWith(
+        isLoadingRecognitionHistory: false,
+      ));
+    });
   }
 }

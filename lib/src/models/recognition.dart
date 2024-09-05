@@ -1,5 +1,11 @@
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 
+enum SortByFilter { latest, earliest }
+
+enum TimeFilter { last7Days, last30Days, last60Days, allTime }
+
+enum TypeFilter { p2p, team, eCard }
+
 class DetailRecognitions {
   final String id;
   final Employee employee;

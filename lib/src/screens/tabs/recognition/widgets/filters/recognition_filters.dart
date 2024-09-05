@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
-enum SortByFilter { latest, earliest }
-
-enum TimeFilter { last7Days, last30Days, last60Days, allTime }
-
-enum TypeFilter { all, p2p, team, eCard, award }
+import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
+import 'package:sonat_hrm_rewarded/src/utils/date_time.dart';
 
 class RecognitionFilters extends StatefulWidget {
   final SortByFilter? initialSortByFilter;
@@ -26,13 +22,25 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
   SortByFilter? _sortByFilter;
   TimeFilter? _timeFilter;
   TypeFilter? _typeFilter;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
-  @override
-  void initState() {
-    super.initState();
-    _sortByFilter = widget.initialSortByFilter;
-    _timeFilter = widget.initialTimeFilter;
-    _typeFilter = widget.initialTypeFilter;
+  Future<DateTime?> _handleSelectDateRange() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+
+    final selectedDate = await showDateRangePicker(
+      context: context,
+      firstDate: firstDate,
+      lastDate: now,
+    );
+
+    if (selectedDate == null) return null;
+
+    setState(() {
+      _startDate = selectedDate.start;
+      _endDate = selectedDate.end;
+    });
   }
 
   void _handleResetFilters() {
@@ -41,6 +49,18 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
       _sortByFilter = null;
       _typeFilter = null;
     });
+  }
+
+  void _handleApplyFilters() {
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _sortByFilter = widget.initialSortByFilter;
+    _timeFilter = widget.initialTimeFilter;
+    _typeFilter = widget.initialTypeFilter;
   }
 
   @override
@@ -88,15 +108,19 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                   Wrap(
                     spacing: 8,
                     children: TypeFilter.values.map((item) {
-                      final label = item == TypeFilter.all
-                          ? "All"
-                          : item == TypeFilter.p2p
-                              ? "P2P"
-                              : item == TypeFilter.team
-                                  ? "Team"
-                                  : item == TypeFilter.eCard
-                                      ? "E-Card"
-                                      : "Award";
+                      String label = "P2P";
+                      switch (item) {
+                        case TypeFilter.p2p:
+                          label = "P2P";
+                          break;
+                        case TypeFilter.team:
+                          label = "Team";
+                          break;
+                        case TypeFilter.eCard:
+                          label = "E-Card";
+                          break;
+                      }
+
                       return FilterChip(
                           label: Text(label),
                           onSelected: (bool selected) {
@@ -147,21 +171,42 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Time",
-                    style: theme.textTheme.titleMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Time",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      TextButton.icon(
+                          onPressed: _handleSelectDateRange,
+                          icon: const Icon(Icons.calendar_month_rounded),
+                          label: Text(_startDate != null && _endDate != null
+                              ? "${formatDate(_startDate!, format: "dd/MM/yyyy")} - ${formatDate(_endDate!, format: "dd/MM/yyyy")}"
+                              : "Select date range"))
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     children: TimeFilter.values.map((item) {
-                      final label = item == TimeFilter.allTime
-                          ? "All time"
-                          : item == TimeFilter.last7Days
-                              ? "Last 7 days"
-                              : item == TimeFilter.last30Days
-                                  ? "Last 30 days"
-                                  : "Last 60 days";
+                      String label = "P2P";
+                      switch (item) {
+                        case TimeFilter.allTime:
+                          label = "Last 7 days";
+                          break;
+                        case TimeFilter.last7Days:
+                          label = "Last 7 days";
+                          break;
+                        case TimeFilter.last30Days:
+                          label = "Last 30 days";
+                          break;
+                        case TimeFilter.last60Days:
+                          label = "Last 60 days";
+                          break;
+                      }
+
                       return FilterChip(
                           label: Text(label),
                           onSelected: (bool selected) {

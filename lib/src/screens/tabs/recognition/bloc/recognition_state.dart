@@ -5,11 +5,17 @@ class RecognitionState extends Equatable {
     this.isLoadingRecognitionHistory = true,
     this.sentHistory = const [],
     this.receivedHistory = const [],
+    this.sortByFilter,
+    this.timeFilter,
+    this.typeFilter,
   });
 
   final bool isLoadingRecognitionHistory;
   final List<Recognition> sentHistory;
   final List<Recognition> receivedHistory;
+  final SortByFilter? sortByFilter;
+  final TimeFilter? timeFilter;
+  final TypeFilter? typeFilter;
 
   RecognitionState copyWith({
     bool? isLoadingRecognitionHistory,
