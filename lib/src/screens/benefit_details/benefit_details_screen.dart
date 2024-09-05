@@ -84,7 +84,7 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
     await BenefitApi.redeemBenefit(_benefitDetails!.id);
 
     if (mounted) {
-      context.read<UserBloc>().add(RefreshCurrentBalance());
+      context.read<UserBloc>().add(FetchCurrentBalance());
       Navigator.of(context).pop();
       showDialog(
         context: context,

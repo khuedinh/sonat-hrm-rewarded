@@ -112,8 +112,14 @@ class ListTransactions extends StatelessWidget {
                             fontSize: theme.textTheme.bodyMedium!.fontSize,
                             color: theme.colorScheme.onSurface),
                         leading: item.type == TransactionType.gain
-                            ? const Icon(Icons.arrow_forward)
-                            : const Icon(Icons.arrow_back),
+                            ? const Icon(
+                                Icons.input_rounded,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.output_rounded,
+                                color: Colors.red,
+                              ),
                         title: HtmlWidget(
                           generateMessage(item),
                         ),

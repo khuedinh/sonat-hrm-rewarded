@@ -10,6 +10,7 @@ class NoData extends StatelessWidget {
     return Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(Icons.folder_off),
+        const SizedBox(height: 8),
         Text(message),
       ]),
     );

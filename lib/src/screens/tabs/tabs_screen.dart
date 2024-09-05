@@ -6,7 +6,6 @@ import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_b
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/account/account_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/benefits_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/home_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/recognition_screen.dart';
 
@@ -99,10 +98,7 @@ class _TabsScreenState extends State<TabsScreen> {
       body: <Widget>[
         HomeScreen(handleOpenRecognitionScreen: _handleOpenRecognition),
         const RecognitionScreen(),
-        BlocProvider(
-          create: (context) => BenefitsBloc(),
-          child: const BenefitsScreen(),
-        ),
+        const BenefitsScreen(),
         const AccountScreen(),
       ][currentPageIndex],
     );

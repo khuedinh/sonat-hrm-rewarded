@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    context.read<UserBloc>().add(GetCurrentBalance());
+    context.read<UserBloc>().add(FetchCurrentBalance());
   }
 
   void _onScroll() {
@@ -51,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen>
       body: RefreshableWidget(
         controller: _scrollController,
         onRefresh: () async {
-          context.read<HomeBloc>().add(RefreshLeaderboard());
+          context.read<HomeBloc>().add(FetchLeaderboard());
+          context.read<UserBloc>().add(RefreshCurrentBalance());
         },
         slivers: [
           SliverAppBar(
@@ -109,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       child: BlocBuilder<UserBloc, UserState>(
                         builder: (context, state) {
+                          final isLoading = state.isLoadingCurrentBalance;
                           final currentBalance = state.currentBalance;
 
                           return Row(
@@ -117,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 : MainAxisAlignment.spaceBetween,
                             children: [
                               DisplayAmount(
+                                isLoading: isLoading,
                                 amount: formatShortenNumber(
                                   currentBalance?.currentPoint ?? 0,
                                 ),
@@ -129,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                               if (_isScrolledDown) const SizedBox(width: 8),
                               DisplayAmount(
+                                isLoading: isLoading,
                                 amount: formatShortenNumber(
                                     currentBalance?.currentCoin ?? 0),
                                 textColor:
@@ -181,8 +184,9 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
-              final listLeaderboard =
-                  state.listLeaderboard.slice(0, 5).toList();
+              final listLeaderboard = state.listLeaderboard.length > 5
+                  ? state.listLeaderboard.sublist(0, 5)
+                  : state.listLeaderboard;
               final isLoadingLeaderboard = state.isLoadingLeaderboard;
 
               if (isLoadingLeaderboard) {

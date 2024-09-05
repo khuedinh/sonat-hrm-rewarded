@@ -10,7 +10,7 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(const UserState()) {
-    on<InitUserInfo>((UserEvent event, Emitter emit) async {
+    on<FetchUserInfo>((UserEvent event, Emitter emit) async {
       emit(state.copyWith(isLoadingUserInfo: true));
 
       final response = await UserApi.getUserInfo();
@@ -21,7 +21,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       ));
     });
 
-    on<GetCurrentBalance>((UserEvent event, Emitter emit) async {
+    on<FetchCurrentBalance>((UserEvent event, Emitter emit) async {
       if (state.currentBalance != null) return;
       emit(state.copyWith(isLoadingCurrentBalance: true));
 
