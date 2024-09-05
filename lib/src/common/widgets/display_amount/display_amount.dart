@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class DisplayAmount extends StatelessWidget {
@@ -13,6 +14,7 @@ class DisplayAmount extends StatelessWidget {
     this.textColor,
     this.isBold = false,
     this.spacing = 8,
+    this.isLoading = false,
   });
 
   final IconData icon;
@@ -24,6 +26,7 @@ class DisplayAmount extends StatelessWidget {
   final Color? iconColor;
   final Color? textColor;
   final double? spacing;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +50,16 @@ class DisplayAmount extends StatelessWidget {
           ),
         ),
         SizedBox(width: spacing),
-        Text(
-          amountText,
-          style: theme.textTheme.titleSmall!.copyWith(
-            fontSize: fontSize,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            color: textColor ?? theme.colorScheme.onSurface,
-          ),
-        )
+        isLoading
+            ? const Skeletonizer(child: Bone.text(words: 1))
+            : Text(
+                amountText,
+                style: theme.textTheme.titleSmall!.copyWith(
+                  fontSize: fontSize,
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                  color: textColor ?? theme.colorScheme.onSurface,
+                ),
+              )
       ],
     );
   }

@@ -6,8 +6,8 @@ import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/team/team_filters.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/recognition_values.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/team/team_filters.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
@@ -34,14 +34,14 @@ final recognitionValueColors = [
   Colors.yellow,
 ];
 
-class TeamTab extends StatefulWidget {
-  const TeamTab({super.key});
+class Team extends StatefulWidget {
+  const Team({super.key});
 
   @override
-  State<TeamTab> createState() => _TeamTabState();
+  State<Team> createState() => _TeamState();
 }
 
-class _TeamTabState extends State<TeamTab> {
+class _TeamState extends State<Team> {
   double _sliderValue = 200;
   int _selectedChipValue = 200;
   dynamic _selectedRecognitionValue = 'Core values';

@@ -28,9 +28,9 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
 
       emit(state.copyWith(
         isLoadingBenefits: false,
-        listBenefits: benefitResponse.data,
+        listBenefits: benefitResponse?.data ?? [],
         hasReachedMaxBenefits:
-            benefitResponse.page == benefitResponse.totalPages,
+            benefitResponse?.page == benefitResponse?.totalPages,
       ));
     });
 
@@ -45,7 +45,7 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
             page: state.page + 1,
             listBenefits: [...state.listBenefits, ...benefitResponse.data],
             hasReachedMaxBenefits:
-                benefitResponse.page == benefitResponse.totalPages,
+                benefitResponse?.page == benefitResponse?.totalPages,
           ),
         );
       },
@@ -59,9 +59,9 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
 
       emit(state.copyWith(
         isLoadingBenefits: false,
-        listBenefits: benefitResponse.data,
+        listBenefits: benefitResponse?.data ?? [],
         hasReachedMaxBenefits:
-            benefitResponse.page == benefitResponse.totalPages,
+            benefitResponse?.page == benefitResponse?.totalPages,
       ));
     });
 
@@ -117,10 +117,10 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
         final benefitResponse = await fetchBenefits(state, null);
 
         emit(state.copyWith(
-          listBenefits: benefitResponse.data,
+          listBenefits: benefitResponse?.data ?? [],
           isLoadingBenefits: false,
           hasReachedMaxBenefits:
-              benefitResponse.page == benefitResponse.totalPages,
+              benefitResponse?.page == benefitResponse?.totalPages,
         ));
       },
       transformer: restartable(),
@@ -140,10 +140,10 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
         final benefitResponse = await fetchBenefits(state, null);
 
         emit(state.copyWith(
-          listBenefits: benefitResponse.data,
+          listBenefits: benefitResponse?.data ?? [],
           isLoadingBenefits: false,
           hasReachedMaxBenefits:
-              benefitResponse.page == benefitResponse.totalPages,
+              benefitResponse?.page == benefitResponse?.totalPages,
         ));
       },
       transformer: restartable(),
@@ -161,10 +161,10 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
       final benefitResponse = await fetchBenefits(state, null);
 
       emit(state.copyWith(
-        listBenefits: benefitResponse.data,
+        listBenefits: benefitResponse?.data ?? [],
         isLoadingBenefits: false,
         hasReachedMaxBenefits:
-            benefitResponse.page == benefitResponse.totalPages,
+            benefitResponse?.page == benefitResponse?.totalPages,
       ));
     });
 
@@ -245,9 +245,9 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
 
         return benefitResponse;
       }
-      return [];
+      return {};
     } catch (error) {
-      return [];
+      return {};
     }
   }
 

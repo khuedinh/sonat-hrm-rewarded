@@ -12,7 +12,7 @@ import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/recognition_values.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
@@ -39,14 +39,14 @@ final recognitionValueColors = [
   Colors.yellow,
 ];
 
-class P2pTab extends StatefulWidget {
-  const P2pTab({super.key});
+class PeerToPeer extends StatefulWidget {
+  const PeerToPeer({super.key});
 
   @override
-  State<P2pTab> createState() => _P2pTabState();
+  State<PeerToPeer> createState() => _PeerToPeerState();
 }
 
-class _P2pTabState extends State<P2pTab> {
+class _PeerToPeerState extends State<PeerToPeer> {
   double _sliderValue = 200;
   int _selectedChipValue = 200;
   dynamic _selectedRecognitionValue = 'Core values';

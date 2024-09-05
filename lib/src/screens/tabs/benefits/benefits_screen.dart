@@ -24,20 +24,17 @@ class _BenefitScreenState extends State<BenefitsScreen>
   late TabController _tabController;
   int _currentTab = 0;
 
-  void _handleOpenFilter(BuildContext context) {
+  void _handleOpenFilter() {
     showModalBottomSheet(
       useSafeArea: true,
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      builder: (_) => BlocProvider.value(
-        value: BlocProvider.of<BenefitsBloc>(context),
-        child: BenefitFilters(
-          defaultPriceRange: context.read<BenefitsBloc>().state.priceRange ??
-              const RangeValues(0, 30000),
-          defaultSortPrice: context.read<BenefitsBloc>().state.sortPrice,
-          defaultSortName: context.read<BenefitsBloc>().state.sortName,
-        ),
+      builder: (_) => BenefitFilters(
+        defaultPriceRange: context.read<BenefitsBloc>().state.priceRange ??
+            const RangeValues(0, 30000),
+        defaultSortPrice: context.read<BenefitsBloc>().state.sortPrice,
+        defaultSortName: context.read<BenefitsBloc>().state.sortName,
       ),
     );
   }
@@ -55,7 +52,6 @@ class _BenefitScreenState extends State<BenefitsScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.animation!.addListener(_tabListener);
-    context.read<UserBloc>().add(GetCurrentBalance());
   }
 
   @override
@@ -114,7 +110,7 @@ class _BenefitScreenState extends State<BenefitsScreen>
                             count: filterCount,
                             child: const Icon(Icons.filter_alt_rounded))
                         : const Icon(Icons.filter_alt_outlined),
-                    onPressed: () => _handleOpenFilter(context),
+                    onPressed: _handleOpenFilter,
                   );
                 },
               ),

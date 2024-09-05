@@ -11,7 +11,9 @@ import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/home/bloc/home_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/theme.dart';
 
@@ -73,11 +75,16 @@ class _MyAppState extends State<MyApp> {
             create: (context) => NotificationBloc(),
           ),
           BlocProvider(
-            create: (context) => UserBloc()..add(InitUserInfo()),
+            create: (context) => UserBloc()..add(FetchUserInfo()),
           ),
           BlocProvider(
-            create: (context) => HomeBloc()..add(InitLeaderboard()),
+            create: (context) => HomeBloc()..add(FetchLeaderboard()),
           ),
+          BlocProvider(
+            create: (context) =>
+                RecognitionBloc()..add(FetchRecognitionHistory()),
+          ),
+          BlocProvider(create: (context) => BenefitsBloc()),
         ],
         child: BlocListener<AppBloc, AppState>(
           listener: (context, state) {

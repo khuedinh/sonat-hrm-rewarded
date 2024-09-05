@@ -8,27 +8,7 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(const HomeState()) {
-    on<InitLeaderboard>((HomeEvent event, Emitter emit) async {
-      emit(state.copyWith(isLoadingLeaderboard: true));
-
-      final response = await RecognitionApi.getLeaderboard();
-
-      if (response is List) {
-        final List<LeaderboardData> listLeaderboard = response
-            .map((e) => LeaderboardData.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-        emit(state.copyWith(
-          listLeaderboard: listLeaderboard,
-          isLoadingLeaderboard: false,
-        ));
-        return;
-      }
-
-      emit(state.copyWith(isLoadingLeaderboard: false));
-    });
-
-    on<RefreshLeaderboard>((HomeEvent event, Emitter emit) async {
+    on<FetchLeaderboard>((HomeEvent event, Emitter emit) async {
       emit(state.copyWith(isLoadingLeaderboard: true));
 
       final response = await RecognitionApi.getLeaderboard();

@@ -2,12 +2,12 @@ part of "user_bloc.dart";
 
 sealed class UserEvent extends Equatable {}
 
-class InitUserInfo extends UserEvent {
+class FetchUserInfo extends UserEvent {
   @override
   List<Object?> get props => [];
 }
 
-class GetCurrentBalance extends UserEvent {
+class FetchCurrentBalance extends UserEvent {
   @override
   List<Object?> get props => [];
 }
