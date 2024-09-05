@@ -30,15 +30,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   Future<void> fetchRecognition() async {
     final response = await RecognitionApi.getHistory();
 
-    setState(() {
-      sentRecognition = (response['sent'] as List)
-          .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
-          .toList();
-      receivedRecognition = (response['received'] as List)
-          .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
-          .toList();
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        sentRecognition = (response['sent'] as List)
+            .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
+            .toList();
+        receivedRecognition = (response['received'] as List)
+            .map((item) => Recognition.fromJson(item as Map<String, dynamic>))
+            .toList();
+        isLoading = false;
+      });
+    }
   }
 
   @override

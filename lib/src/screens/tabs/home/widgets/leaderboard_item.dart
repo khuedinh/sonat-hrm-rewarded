@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/models/user.dart';
+import 'package:sonat_hrm_rewarded/src/models/leaderboard.dart';
 
 class LeaderboardItem extends StatelessWidget {
   const LeaderboardItem({super.key, required this.index, required this.item});
 
-  final User item;
+  final LeaderboardData item;
   final int index;
 
   @override
@@ -29,13 +30,22 @@ class LeaderboardItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        CircleAvatar(
-          radius: 16,
-          backgroundColor: theme.colorScheme.primary,
-          child: const Icon(
-            Icons.person,
-            size: 20,
-            color: Colors.white,
+        SizedBox(
+          width: 36,
+          height: 36,
+          child: CircleAvatar(
+            radius: 24,
+            child: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: item.picture,
+                fit: BoxFit.cover,
+
+                errorWidget: (context, url, error) => Image.asset(
+                  "assets/images/default_avatar.png",
+                  fit: BoxFit.cover,
+                ), // Optional: Error widget
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 8),
@@ -47,7 +57,7 @@ class LeaderboardItem extends StatelessWidget {
         ),
         const Spacer(),
         Text(
-          "${item.coin} coins",
+          "${item.totalReceived} recognitions",
           style: theme.textTheme.titleMedium!.copyWith(
             color: theme.colorScheme.onSurface,
           ),

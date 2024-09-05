@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,6 @@ import 'package:sonat_hrm_rewarded/src/models/user.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/settings_screen.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/account/widgets/overview_card.dart';
 import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_history_screen.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -71,23 +71,24 @@ class _AccountScreenState extends State<AccountScreen> {
                         child: Bone.circle(size: 80),
                       ),
                     if (userInfo?.picture != null)
-                      Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                              color: theme.colorScheme.primary,
-                              width: 1,
+                      SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: CircleAvatar(
+                          radius: 24,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: userInfo?.picture ?? "",
+                              fit: BoxFit.cover,
+
+                              errorWidget: (context, url, error) => Image.asset(
+                                "assets/images/default_avatar.png",
+                                fit: BoxFit.cover,
+                              ), // Optional: Error widget
                             ),
                           ),
-                          child: FadeInImage.memoryNetwork(
-                            placeholder: kTransparentImage,
-                            image: userInfo?.picture ?? "",
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          )),
+                        ),
+                      ),
                     if (!isLoadingUserInfo && userInfo?.picture == null)
                       CircleAvatar(
                         radius: 40,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -33,7 +33,13 @@ class BenefitItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FadeInImage.memoryNetwork(
-                      image: benefit.thumbnails.first.imageUrl ?? "",
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/images/gift_all.jpg",
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      image: benefit.thumbnails.first.imageUrl,
                       placeholder: kTransparentImage,
                       fit: BoxFit.cover,
                     ),
@@ -61,8 +67,8 @@ class BenefitItem extends StatelessWidget {
                               child: DisplayAmount(
                                 amount: formatNumber(benefit.exchangePrice),
                                 icon: Icons.currency_bitcoin_rounded,
-                                iconSize: 10,
-                                fontSize: 12,
+                                iconSize: 8,
+                                fontSize: 11,
                                 suffix: "coins",
                                 spacing: 4,
                               ),
@@ -71,7 +77,8 @@ class BenefitItem extends StatelessWidget {
                               child: Text(
                                 textAlign: TextAlign.end,
                                 "Stock: ${benefit.inStock}",
-                                style: theme.textTheme.bodySmall,
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(fontSize: 11),
                               ),
                             ),
                           ],

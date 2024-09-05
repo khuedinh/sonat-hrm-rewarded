@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
-import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_screen.dart';
-import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_screen.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/confirm_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/code_dialog.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/benefit_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -58,29 +59,42 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
   }
 
   void _handleRedeemBenefit() async {
-    showDialog(
+    final isConfirmed = await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const LoadingScreen();
+        return ConfirmDialog(
+          messages:
+              "Are you sure you want to redeem <b>${_benefitDetails?.name}</b> with <b>${_benefitDetails?.exchangePrice}</b> coins?",
+        );
       },
     );
+    if (!isConfirmed) return;
+
+    if (mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const LoadingDialog();
+        },
+      );
+    }
 
     await BenefitApi.redeemBenefit(_benefitDetails!.id);
 
     if (mounted) {
-      context.read<UserBloc>().add(GetCurrentBalance());
+      context.read<UserBloc>().add(RefreshCurrentBalance());
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const SuccessDialog(
+            message: "Redeem successfully",
+          );
+        },
+      );
     }
-
-    if (!mounted) return;
-
-    Navigator.of(context).pop();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const SuccessScreen();
-      },
-    );
   }
 
   @override
@@ -167,6 +181,12 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                           ),
                           items: listThumbnails.map((item) {
                             return FadeInImage.memoryNetwork(
+                              imageErrorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  "assets/images/gift_all.jpg",
+                                  fit: BoxFit.cover,
+                                );
+                              },
                               placeholder: kTransparentImage,
                               image: item.imageUrl,
                               fit: BoxFit.cover,

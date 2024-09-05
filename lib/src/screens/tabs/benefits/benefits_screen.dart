@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/filters/benefit_filters.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/gifts/gifts_tab.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/my_claim/my_claim_tab.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class BenefitsScreen extends StatefulWidget {
