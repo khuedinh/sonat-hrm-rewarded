@@ -11,6 +11,7 @@ import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/packages/authentication_repository/authentication_repository.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/notifications_screen.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/home/bloc/home_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/theme/theme.dart';
 
@@ -73,6 +74,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (context) => UserBloc()..add(InitUserInfo()),
+          ),
+          BlocProvider(
+            create: (context) => HomeBloc()..add(InitLeaderboard()),
           ),
         ],
         child: BlocListener<AppBloc, AppState>(

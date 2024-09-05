@@ -55,6 +55,14 @@ class ClaimedBenefitItem extends StatelessWidget {
                     Radius.circular(8),
                   ),
                   child: FadeInImage.memoryNetwork(
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/images/gift_all.jpg",
+                        fit: BoxFit.cover,
+                        width: 76,
+                        height: 76,
+                      );
+                    },
                     placeholder: kTransparentImage,
                     image: claimedBenefit.benefit.thumbnails
                         .firstWhere((thumbnail) => thumbnail.isPrimary)

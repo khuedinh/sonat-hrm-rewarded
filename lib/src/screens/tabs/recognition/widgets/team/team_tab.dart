@@ -1,17 +1,38 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/team/team_filters.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
+
+final recognitionValueColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.orange,
+  Colors.purple,
+  Colors.pink,
+  Colors.teal,
+  Colors.amber,
+  Colors.deepPurple,
+  Colors.indigo,
+  Colors.lightBlue,
+  Colors.lightGreen,
+  Colors.lime,
+  Colors.deepOrange,
+  Colors.cyan,
+  Colors.brown,
+  Colors.grey,
+  Colors.blueGrey,
+  Colors.yellow,
+];
 
 class TeamTab extends StatefulWidget {
   const TeamTab({super.key});

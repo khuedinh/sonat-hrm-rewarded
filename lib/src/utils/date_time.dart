@@ -5,5 +5,5 @@ DateTime parseDate(String date) {
 }
 
 String formatDate(DateTime date) {
-  return DateFormat("dd/MM/yyyy HH:mm:ss").format(date);
+  return DateFormat("dd/MM/yyyy HH:mm:ss").format(date.toLocal());
 }

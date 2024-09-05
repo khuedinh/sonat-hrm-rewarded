@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 
-class FailureScreen extends StatelessWidget {
-  const FailureScreen({super.key});
+class SuccessDialog extends StatelessWidget {
+  const SuccessDialog({super.key, required this.message});
+
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +17,14 @@ class FailureScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const ScreenTitle(title: "Failure"),
+            const ScreenTitle(title: "Success"),
             const SizedBox(height: 20),
-            const Icon(Icons.error, color: Colors.red, size: 100),
+            const Icon(Icons.check, color: Colors.green, size: 100),
             const SizedBox(height: 20),
-            const Center(
+            Center(
               child: Text(
-                'Failed to send recognition.',
-                style: TextStyle(fontSize: 24),
+                message,
+                style: const TextStyle(fontSize: 24),
               ),
             ),
             const SizedBox(height: 20),

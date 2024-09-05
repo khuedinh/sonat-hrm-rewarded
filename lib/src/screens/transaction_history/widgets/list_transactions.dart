@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/activity_indicator/activity_indicator.dart';
 import 'package:sonat_hrm_rewarded/src/models/transaction_history.dart';
@@ -22,7 +23,7 @@ class ListTransactions extends StatelessWidget {
 
     for (var transactionHistory in listTransactionHistory) {
       final String dateKey = DateFormat('dd-MM-yyyy')
-          .format(DateTime.parse(transactionHistory.createdAt));
+          .format(DateTime.parse(transactionHistory.createdAt).toLocal());
       if (groupedTransactionHistory.containsKey(dateKey)) {
         groupedTransactionHistory[dateKey]!.add(transactionHistory);
       } else {
@@ -49,20 +50,20 @@ class ListTransactions extends StatelessWidget {
       }
 
       if (transactionHistory.event == TransactionEvent.allocate) {
-        return "You have been allocated ${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}.";
+        return "You have been allocated <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}</b>.";
       }
 
       if (transactionHistory.event == TransactionEvent.recognition) {
-        return "You have been recognized with ${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}.";
+        return "You have been recognized with <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}</b>.";
       }
     }
 
     if (transactionHistory.type == TransactionType.lose) {
       if (transactionHistory.event == TransactionEvent.recognition) {
-        return "You recognized ${transactionHistory.sink!.map((item) => item.name).join(", ")} with ${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}.";
+        return "You recognized <b>${transactionHistory.sink!.map((item) => item.name).join(", ")}</b> with <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}</b>.";
       }
       if (transactionHistory.event == TransactionEvent.redeem_benefit) {
-        return "You redeemed ${transactionHistory.description} by ${formatNumber(transactionHistory.amount)}.";
+        return "You redeemed <b>${transactionHistory.description}</b> with <b>${formatNumber(transactionHistory.amount)}</b>.";
       }
     }
 
@@ -107,12 +108,14 @@ class ListTransactions extends StatelessWidget {
                     ),
                     ...groupedTransaction[index]['transactions'].map((item) {
                       return ListTile(
+                        titleTextStyle: TextStyle(
+                            fontSize: theme.textTheme.bodyMedium!.fontSize,
+                            color: theme.colorScheme.onSurface),
                         leading: item.type == TransactionType.gain
                             ? const Icon(Icons.arrow_forward)
                             : const Icon(Icons.arrow_back),
-                        title: Text(
+                        title: HtmlWidget(
                           generateMessage(item),
-                          style: theme.textTheme.bodyMedium,
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +126,7 @@ class ListTransactions extends StatelessWidget {
                             ),
                             Text(
                               DateFormat('HH:mm:ss').format(
-                                DateTime.parse(item.createdAt),
+                                DateTime.parse(item.createdAt).toLocal(),
                               ),
                               style: theme.textTheme.bodySmall,
                             ),

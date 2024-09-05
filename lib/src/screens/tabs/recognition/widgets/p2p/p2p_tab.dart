@@ -3,19 +3,41 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_screen.dart';
-import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_screen.dart';
-import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_screen.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/mock_data/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/home/widgets/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition-values/recognition_values.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
+
+final recognitionValueColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.orange,
+  Colors.purple,
+  Colors.pink,
+  Colors.teal,
+  Colors.amber,
+  Colors.deepPurple,
+  Colors.indigo,
+  Colors.lightBlue,
+  Colors.lightGreen,
+  Colors.lime,
+  Colors.deepOrange,
+  Colors.cyan,
+  Colors.brown,
+  Colors.grey,
+  Colors.blueGrey,
+  Colors.yellow,
+];
 
 class P2pTab extends StatefulWidget {
   const P2pTab({super.key});
@@ -92,7 +114,7 @@ class _P2pTabState extends State<P2pTab> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const LoadingScreen();
+        return const LoadingDialog();
       },
     );
 
@@ -102,7 +124,9 @@ class _P2pTabState extends State<P2pTab> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const SuccessScreen();
+          return const SuccessDialog(
+            message: "Sended successfully",
+          );
         },
       );
       setState(() {
@@ -114,7 +138,7 @@ class _P2pTabState extends State<P2pTab> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const FailureScreen();
+          return const FailureDialog(message: 'Failed to send recognition.');
         },
       );
     }
@@ -201,8 +225,8 @@ class _P2pTabState extends State<P2pTab> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CustomScrollView(
-            shrinkWrap: true,
+          child: RefreshableWidget(
+            onRefresh: () async {},
             slivers: [
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(
@@ -240,33 +264,83 @@ class _P2pTabState extends State<P2pTab> {
                     ),
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               SliverToBoxAdapter(
-                  child: isLoading
-                      ? Skeletonizer(
-                          child: Row(
-                          children: [1, 2, 3, 4, 5].map((user) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Column(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 24,
+                child: isLoading
+                    ? Skeletonizer(
+                        child: Row(
+                        children: [1, 2, 3, 4, 5].map((user) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Column(
+                              children: [
+                                const CircleAvatar(
+                                  radius: 24,
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    children: splitText("Pham Van Thach", 6),
                                   ),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: splitText("Pham Van Thach", 6),
-                                    ),
-                                    textAlign: TextAlign.center,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ))
+                    : _searchedRecipient == null
+                        ? Row(
+                            children: employeeList
+                                .sublist(0, min(employeeList.length, 5))
+                                .map((user) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedRecipient = user;
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 24,
+                                        child: ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: user.picture,
+                                            fit: BoxFit.cover,
+                                            width: 48,
+                                            height: 48,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(), // Optional: Placeholder widget
+                                            errorWidget: (context, url,
+                                                    error) =>
+                                                const Icon(Icons
+                                                    .error), // Optional: Error widget
+                                          ),
+                                        ),
+                                      ),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: splitText(user.name, 6),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ))
-                      : _searchedRecipient == null
-                          ? Row(
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
                               children: employeeList
-                                  .sublist(0, min(employeeList.length, 5))
+                                  .where((user) =>
+                                      user.name.toLowerCase().contains(
+                                          _searchedRecipient.toLowerCase()) ||
+                                      user.email.toLowerCase().contains(
+                                          _searchedRecipient.toLowerCase()))
                                   .map((user) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -288,11 +362,10 @@ class _P2pTabState extends State<P2pTab> {
                                               width: 48,
                                               height: 48,
                                               placeholder: (context, url) =>
-                                                  const CircularProgressIndicator(), // Optional: Placeholder widget
-                                              errorWidget: (context, url,
-                                                      error) =>
-                                                  const Icon(Icons
-                                                      .error), // Optional: Error widget
+                                                  const CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
                                           ),
                                         ),
@@ -307,57 +380,9 @@ class _P2pTabState extends State<P2pTab> {
                                   ),
                                 );
                               }).toList(),
-                            )
-                          : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: employeeList
-                                    .where((user) =>
-                                        user.name.toLowerCase().contains(
-                                            _searchedRecipient.toLowerCase()) ||
-                                        user.email.toLowerCase().contains(
-                                            _searchedRecipient.toLowerCase()))
-                                    .map((user) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedRecipient = user;
-                                        });
-                                      },
-                                      child: Column(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 24,
-                                            child: ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: user.picture,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                                placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
-                                              ),
-                                            ),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              children: splitText(user.name, 6),
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            )),
+                            ),
+                          ),
+              ),
               SliverToBoxAdapter(
                   child: _selectedRecipient != null
                       ? const SizedBox(height: 8)
@@ -383,11 +408,11 @@ class _P2pTabState extends State<P2pTab> {
                                   fit: BoxFit.cover,
                                   width: 48,
                                   height: 48,
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(), // Optional: Placeholder widget
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons
-                                          .error), // Optional: Error widget
+                                      Image.asset(
+                                    "assets/images/default_avatar.png",
+                                    fit: BoxFit.cover,
+                                  ), // Optional: Error widget
                                 ),
                               ),
                             ),

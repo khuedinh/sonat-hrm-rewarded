@@ -22,6 +22,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<GetCurrentBalance>((UserEvent event, Emitter emit) async {
+      if (state.currentBalance != null) return;
+      emit(state.copyWith(isLoadingCurrentBalance: true));
+
+      final response = await BalanceApi.getCurrentBalance();
+
+      emit(state.copyWith(
+        currentBalance: CurrentBalance.fromJson(response),
+        isLoadingCurrentBalance: false,
+      ));
+    });
+
+    on<RefreshCurrentBalance>((UserEvent event, Emitter emit) async {
       emit(state.copyWith(isLoadingCurrentBalance: true));
 
       final response = await BalanceApi.getCurrentBalance();

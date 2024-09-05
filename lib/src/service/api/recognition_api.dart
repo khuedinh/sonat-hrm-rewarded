@@ -30,4 +30,8 @@ class RecognitionApi {
   static Future getGroupMembers(String groupId) {
     return DioClient.instance.get("/groups/$groupId");
   }
+
+  static Future getLeaderboard() {
+    return DioClient.instance.get('$_path/leaderboard');
+  }
 }
