@@ -39,7 +39,6 @@ class LeaderboardItem extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: item.picture,
                 fit: BoxFit.cover,
-
                 errorWidget: (context, url, error) => Image.asset(
                   "assets/images/default_avatar.png",
                   fit: BoxFit.cover,
@@ -51,14 +50,14 @@ class LeaderboardItem extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           item.name,
-          style: theme.textTheme.titleMedium!.copyWith(
+          style: theme.textTheme.titleSmall!.copyWith(
             color: theme.colorScheme.onSurface,
           ),
         ),
         const Spacer(),
         Text(
           "${item.totalReceived} recognitions",
-          style: theme.textTheme.titleMedium!.copyWith(
+          style: theme.textTheme.bodySmall!.copyWith(
             color: theme.colorScheme.onSurface,
           ),
         )

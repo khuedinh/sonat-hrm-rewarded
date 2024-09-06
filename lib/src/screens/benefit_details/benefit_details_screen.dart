@@ -88,7 +88,7 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
       Navigator.of(context).pop();
       showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (context) {
           return const SuccessDialog(
             message: "Redeem successfully",
           );

@@ -31,7 +31,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
     });
   }
 
-  void _handleApplyFilter() {
+  void _handleApplyFilters() {
     context.read<BenefitsBloc>().add(ChangeFilter(
           priceRange: _priceRange,
           sortPrice: _sortPrice,
@@ -196,7 +196,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                   Expanded(
                     child: FilledButton(
                       onPressed: () {
-                        _handleApplyFilter();
+                        _handleApplyFilters();
                       },
                       child: const Text("Apply"),
                     ),

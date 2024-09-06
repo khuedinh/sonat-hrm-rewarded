@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 enum TransactionType { gain, lose }
 
 // ignore: constant_identifier_names
@@ -75,16 +77,22 @@ class TransactionHistoryData {
         updatedAt = json['updatedAt'],
         deletedAt = json['deletedAt'],
         currency = CurrencyType.values.byName(json['currency']),
-        amount = json['amount'],
-        endingBalance = json['endingBalance'],
+        amount = json['amount'] is String
+            ? int.tryParse(json['amount']) ?? 0
+            : json['amount'],
+        endingBalance = json['endingBalance'] is String
+            ? int.tryParse(json['endingBalance']) ?? 0
+            : json['endingBalance'],
         type = TransactionType.values.byName(json['type']),
         event = TransactionEvent.values.byName(json['event']),
         description = json['description'],
-        source =
-            json['source'] != null ? Source.fromJson(json['source']) : null,
-        sink = json['sink'] != null
-            ? List<Sink>.from(json['sink'].map((v) => Sink.fromJson(v)))
-            : null,
+        source = json['source'] is String
+            ? Source.fromJson(jsonDecode(json['source']) ?? {})
+            : Source.fromJson(json['source'] ?? {}),
+        sink = json['sink'] is String
+            ? List<Sink>.from(
+                (jsonDecode(json['sink']) ?? []).map((v) => Sink.fromJson(v)))
+            : List<Sink>.from(json['sink'].map((v) => Sink.fromJson(v))),
         employeeEmail = json['employeeEmail'],
         fromEmail = json['fromEmail'],
         toEmail = json['toEmail'];

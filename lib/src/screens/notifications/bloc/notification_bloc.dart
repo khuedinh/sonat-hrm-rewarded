@@ -100,7 +100,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
     on<ReceiveNotiEvent>((event, emit) async {
       final unreadCountRes = await NotificationApi.getUnreadCount();
-      TransactionHistoryData data = event.data as TransactionHistoryData;
+      TransactionHistoryData data = TransactionHistoryData.fromJson(event.data);
       NotificationData newNoti = NotificationData(
         createdAt: data.createdAt,
         deletedAt: data.deletedAt,
@@ -111,7 +111,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         updatedAt: data.updatedAt,
       );
 
-      final itemList = state.notiList..add(newNoti);
+      final itemList = [...state.notiList];
+      itemList.add(newNoti);
 
       emit(state.copyWith(
         unreadCount: unreadCountRes.count,

@@ -6,6 +6,8 @@ import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/utils/date_time.dart';
+import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class ReceivedHistoryTab extends StatelessWidget {
   const ReceivedHistoryTab(
@@ -25,7 +27,8 @@ class ReceivedHistoryTab extends StatelessWidget {
           itemBuilder: (context, index) {
             return const ListTile(
               titleAlignment: ListTileTitleAlignment.center,
-              leading: Bone.circle(size: 50),
+              leading: Bone.circle(size: 42),
+              subtitle: Bone.text(words: 2),
               title: Bone.text(words: 3),
               trailing: Bone.text(words: 1),
             );
@@ -45,27 +48,27 @@ class ReceivedHistoryTab extends StatelessWidget {
                     height: 300,
                     child: NoData(message: "No recognition history")),
               )
-            : ListView.builder(
+            : SliverList.builder(
                 itemCount: receiveHistory.length,
                 itemBuilder: (context, index) {
                   final recognition = receiveHistory[index];
                   return ListTile(
                     titleAlignment: ListTileTitleAlignment.center,
                     leading: SizedBox(
-                      width: 50,
-                      height: 50,
+                      width: 42,
+                      height: 42,
                       child: CircleAvatar(
                         radius: 24,
                         child: ClipOval(
                           child: CachedNetworkImage(
                             imageUrl: recognition.employee.picture,
                             fit: BoxFit.cover,
-                            width: 48,
-                            height: 48,
                             placeholder: (context, url) =>
                                 const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            errorWidget: (context, url, error) => Image.asset(
+                              "assets/images/default_avatar.png",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -77,16 +80,17 @@ class ReceivedHistoryTab extends StatelessWidget {
                       ),
                       textAlign: TextAlign.start,
                     ),
-                    trailing: Text(
-                      recognition.amount > 0
-                          ? '+${recognition.amount.toString()}'
-                          : recognition.amount.toString(),
-                      style: TextStyle(
-                        color:
-                            recognition.amount > 0 ? Colors.green : Colors.red,
+                    subtitle: Text(
+                      formatDate(
+                        DateTime.parse(recognition.createdOn ?? ""),
                       ),
                     ),
-                    onTap: () {},
+                    trailing: Text(
+                      '+${formatNumber(recognition.amount)}',
+                      style: const TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
                   );
                 },
               )

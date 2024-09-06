@@ -27,7 +27,7 @@ class _NotificationItemState extends State<NotificationItem> {
       }
 
       if (transactionHistory.event == TransactionEvent.recognition) {
-        return "You have been recognized with ${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}.";
+        return "You have been recognized by ${transactionHistory.source!.name} with ${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}.";
       }
     }
 
@@ -67,31 +67,39 @@ class _NotificationItemState extends State<NotificationItem> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(generateMessage(widget.data.transactionHistory!),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onSurface.withOpacity(0.87),
-                  )),
-              const SizedBox(
-                height: 5,
+              Text(
+                generateMessage(widget.data.transactionHistory!),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface.withOpacity(0.87),
+                ),
               ),
-              Text(widget.data.transactionHistory?.description ?? "",
+              const SizedBox(
+                height: 4,
+              ),
+              if (widget.data.transactionHistory?.description.trim() != null &&
+                  widget.data.transactionHistory!.description.trim().isNotEmpty)
+                Text(
+                  widget.data.transactionHistory!.description,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                   style: TextStyle(
                     fontSize: 14,
                     color: colorScheme.onSurface.withOpacity(0.45),
-                  )),
+                  ),
+                ),
               const SizedBox(
-                height: 5,
+                height: 4,
               ),
-              Text(formattedDate,
-                  style: TextStyle(
-                    color: colorScheme.onSurface.withOpacity(0.6),
-                  )),
+              Text(
+                formattedDate,
+                style: TextStyle(
+                  color: colorScheme.onSurface.withOpacity(0.6),
+                ),
+              ),
             ],
           ),
         ),

@@ -2,13 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
-
-enum SortByFilter { latest, earliest }
-
-enum TimeFilter { allTime, last7Days, last30Days, last60Days }
-
-enum TypeFilter { all, p2p, team, eCard, award }
 
 class TeamFilters extends StatefulWidget {
   final List<Group> groups;
@@ -27,9 +22,9 @@ class TeamFilters extends StatefulWidget {
 }
 
 class _TeamFiltersState extends State<TeamFilters> {
-  SortByFilter? _sortByFilter;
-  TimeFilter? _timeFilter;
-  TypeFilter? _typeFilter;
+  SortBy? _sortByFilter;
+  TimeRange? _timeFilter;
+  RecognitionType? _typeFilter;
   double _sliderValue = 50;
   int _selectedChipValue = 50;
   String _selectedRecognitionValue = 'Core values';
@@ -126,8 +121,10 @@ class _TeamFiltersState extends State<TeamFilters> {
     final theme = Theme.of(context);
 
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: CustomScrollView(shrinkWrap: true, slivers: [
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: CustomScrollView(
+        shrinkWrap: true,
+        slivers: [
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverToBoxAdapter(
             child: TextField(
@@ -295,7 +292,10 @@ class _TeamFiltersState extends State<TeamFilters> {
                                     placeholder: (context, url) =>
                                         const CircularProgressIndicator(),
                                     errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                                        Image.asset(
+                                      "assets/images/default_avatar.png",
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -322,6 +322,8 @@ class _TeamFiltersState extends State<TeamFilters> {
               : const SliverToBoxAdapter(
                   child: SizedBox(),
                 ),
-        ]));
+        ],
+      ),
+    );
   }
 }

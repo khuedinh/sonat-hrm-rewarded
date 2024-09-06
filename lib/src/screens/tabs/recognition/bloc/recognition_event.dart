@@ -8,16 +8,20 @@ class FetchRecognitionHistory extends RecognitionEvent {
 }
 
 class FilterRecognitionHistory extends RecognitionEvent {
-  final SortByFilter sortByFilter;
-  final TimeFilter timeFilter;
-  final TypeFilter typeFilter;
+  final RecognitionType? type;
+  final SortBy? sortBy;
+  final TimeRange? timeRange;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
   FilterRecognitionHistory({
-    required this.sortByFilter,
-    required this.timeFilter,
-    required this.typeFilter,
+    this.type,
+    this.sortBy,
+    this.timeRange,
+    this.startDate,
+    this.endDate,
   });
 
   @override
-  List<Object?> get props => [sortByFilter, timeFilter, typeFilter];
+  List<Object?> get props => [sortBy, timeRange, type, startDate, endDate];
 }

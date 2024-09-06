@@ -1,11 +1,5 @@
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 
-enum SortByFilter { latest, earliest }
-
-enum TimeFilter { last7Days, last30Days, last60Days, allTime }
-
-enum TypeFilter { p2p, team, eCard }
-
 class DetailRecognitions {
   final String id;
   final Employee employee;
@@ -26,7 +20,7 @@ class DetailRecognitions {
 class Recognition {
   final String id;
   final String? content;
-  //final DateTime createdAt;
+  final String? createdOn;
   final int amount;
   final String? recognitionValueId;
   final String? message;
@@ -39,6 +33,7 @@ class Recognition {
   const Recognition({
     required this.id,
     required this.content,
+    required this.createdOn,
     required this.amount,
     required this.type,
     this.recognitionValueId,
@@ -53,6 +48,7 @@ class Recognition {
     return Recognition(
       id: json['id'],
       amount: json['amount'],
+      createdOn: json['createdOn'],
       recognitionValueId: json['recognitionValueId'],
       message: json['message'] as String?,
       imageUrl: json['imageUrl'] as String?,
@@ -94,16 +90,19 @@ class RecognitionHistory {
 class RecognitionValueChildren {
   final String id;
   final String name;
+  final String? iconUrl;
 
   const RecognitionValueChildren({
     required this.id,
     required this.name,
+    this.iconUrl,
   });
 
   factory RecognitionValueChildren.fromJson(Map<String, dynamic> json) {
     return RecognitionValueChildren(
       id: json['id'],
       name: json['name'],
+      iconUrl: json["iconUrl"],
     );
   }
 }

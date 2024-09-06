@@ -80,7 +80,6 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: CachedNetworkImage(
                               imageUrl: userInfo?.picture ?? "",
                               fit: BoxFit.cover,
-
                               errorWidget: (context, url, error) => Image.asset(
                                 "assets/images/default_avatar.png",
                                 fit: BoxFit.cover,

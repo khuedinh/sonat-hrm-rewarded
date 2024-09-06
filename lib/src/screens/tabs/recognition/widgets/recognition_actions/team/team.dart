@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/recognition_values.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/select_recognition_value.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/team/team_filters.dart';
-import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
@@ -55,7 +55,6 @@ class _TeamState extends State<Team> {
   bool isLoadingGroups = true;
   List<Employee> employeeList = [];
   List<int> points = [100, 200, 300, 500];
-  int balance = 0;
   List<Group> groups = [];
   List<MemberGroup> _selectedRecipients = [];
 
@@ -63,7 +62,6 @@ class _TeamState extends State<Team> {
   void initState() {
     super.initState();
     fetchEmployees();
-    fetchBalance();
     fetchGroups();
   }
 
@@ -80,15 +78,6 @@ class _TeamState extends State<Team> {
         return RecognitionValue.fromJson(item as Map<String, dynamic>);
       }).toList();
       isLoading = false;
-    });
-  }
-
-  Future<void> fetchBalance() async {
-    final balanceResponse = await BalanceApi.getCurrentBalance();
-    setState(() {
-      balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
-          .currentPoint;
-      isLoadingBalance = false;
     });
   }
 
@@ -155,13 +144,14 @@ class _TeamState extends State<Team> {
         builder: (BuildContext context) {
           return Dialog(
             child: TeamFilters(
-                groups: groups,
-                selectedRecipients: _selectedRecipients,
-                onSelectedRecipientChanged: (selectedRecipients) {
-                  setState(() {
-                    _selectedRecipients = selectedRecipients;
-                  });
-                }),
+              groups: groups,
+              selectedRecipients: _selectedRecipients,
+              onSelectedRecipientChanged: (selectedRecipients) {
+                setState(() {
+                  _selectedRecipients = selectedRecipients;
+                });
+              },
+            ),
           );
         },
       );
@@ -204,10 +194,11 @@ class _TeamState extends State<Team> {
             slivers: [
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(
-                  child: ScreenTitle(
-                title: "Recipients",
-                color: theme.colorScheme.onSurface,
-              )),
+                child: ScreenTitle(
+                  title: "Recipients",
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               SliverToBoxAdapter(
                   child: Row(
@@ -215,12 +206,7 @@ class _TeamState extends State<Team> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
-                      onTap: () {
-                        // setState(() {
-                        //   // _selectedRecipient = user;
-                        // });
-                        handleOpenFilter();
-                      },
+                      onTap: handleOpenFilter,
                       child: Column(
                         children: [
                           const CircleAvatar(
@@ -259,7 +245,10 @@ class _TeamState extends State<Team> {
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                      Image.asset(
+                                    "assets/images/default_avatar.png",
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
@@ -328,13 +317,22 @@ class _TeamState extends State<Team> {
                         const Text("Points balanced: ",
                             style: TextStyle(fontSize: 16)),
                         const SizedBox(width: 8),
-                        isLoadingBalance
-                            ? const Skeletonizer(child: Bone.text(words: 1))
-                            : DisplayAmount(
-                                amount: formatNumber(balance),
-                                icon: Icons.currency_bitcoin_rounded,
-                                suffix: "Points",
-                              ),
+                        BlocBuilder<UserBloc, UserState>(
+                            builder: (context, state) {
+                          final isLoading = state.isLoadingCurrentBalance;
+                          final currentBalance = state.currentBalance;
+
+                          if (isLoading) {
+                            return const Skeletonizer(child: Bone.text());
+                          }
+
+                          return DisplayAmount(
+                            amount:
+                                formatNumber(currentBalance?.currentPoint ?? 0),
+                            icon: Icons.currency_bitcoin_rounded,
+                            suffix: "Points",
+                          );
+                        }),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -396,16 +394,16 @@ class _TeamState extends State<Team> {
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              RecognitionValueWidget(
-                  isLoading: isLoading,
-                  recognitionValueList: recognitionValueList,
-                  selectedRecognitionValue: _selectedRecognitionValue,
-                  onRecognitionValueChanged: (value) {
-                    setState(() {
-                      _selectedRecognitionValue = value;
-                    });
-                  },
-                  recognitionValueColors: recognitionValueColors),
+              SelectRecognitionValue(
+                isLoading: isLoading,
+                listRecognitionValues: recognitionValueList,
+                selectedRecognitionValue: _selectedRecognitionValue,
+                onRecognitionValueChanged: (value) {
+                  setState(() {
+                    _selectedRecognitionValue = value;
+                  });
+                },
+              ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
             ],
           ),

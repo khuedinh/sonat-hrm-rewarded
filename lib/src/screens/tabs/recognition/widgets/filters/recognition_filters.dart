@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/utils/date_time.dart';
 
 class RecognitionFilters extends StatefulWidget {
-  final SortByFilter? initialSortByFilter;
-  final TimeFilter? initialTimeFilter;
-  final TypeFilter? initialTypeFilter;
+  final SortBy? initSortBy;
+  final TimeRange? initTimeRange;
+  final RecognitionType? initType;
+  final DateTime? initStartDate;
+  final DateTime? initEndDate;
 
   const RecognitionFilters({
     super.key,
-    this.initialSortByFilter,
-    this.initialTimeFilter,
-    this.initialTypeFilter,
+    this.initSortBy,
+    this.initTimeRange,
+    this.initType,
+    this.initEndDate,
+    this.initStartDate,
   });
 
   @override
@@ -19,48 +24,82 @@ class RecognitionFilters extends StatefulWidget {
 }
 
 class _RecognitionFiltersState extends State<RecognitionFilters> {
-  SortByFilter? _sortByFilter;
-  TimeFilter? _timeFilter;
-  TypeFilter? _typeFilter;
+  SortBy? _sortBy;
+  TimeRange? _timeRange;
+  RecognitionType? _type;
   DateTime? _startDate;
   DateTime? _endDate;
 
-  Future<DateTime?> _handleSelectDateRange() async {
+  void _handleSelectDateRange() async {
     final now = DateTime.now();
-    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final firstDate = DateTime(now.year, 1, 1);
 
     final selectedDate = await showDateRangePicker(
       context: context,
+      initialDateRange: DateTimeRange(
+        start: _startDate ?? firstDate,
+        end: _endDate ?? now,
+      ),
       firstDate: firstDate,
       lastDate: now,
     );
 
     if (selectedDate == null) return null;
 
+    final diff = selectedDate.end.difference(
+      selectedDate.start,
+    );
+
+    final diffEndDate = DateTime.now().difference(
+      selectedDate.end,
+    );
+
     setState(() {
       _startDate = selectedDate.start;
       _endDate = selectedDate.end;
+
+      if (diffEndDate.inDays == 1) {
+        switch (diff.inDays + 1) {
+          case 7:
+            _timeRange = TimeRange.last7Days;
+            break;
+          case 30:
+            _timeRange = TimeRange.last30Days;
+            break;
+          case 60:
+            _timeRange = TimeRange.last60Days;
+        }
+      }
     });
   }
 
   void _handleResetFilters() {
     setState(() {
-      _timeFilter = null;
-      _sortByFilter = null;
-      _typeFilter = null;
+      _timeRange = null;
+      _sortBy = null;
+      _type = null;
+      _startDate = null;
+      _endDate = null;
     });
   }
 
   void _handleApplyFilters() {
+    context.read<RecognitionBloc>().add(FilterRecognitionHistory(
+          type: _type,
+          sortBy: _sortBy,
+          timeRange: _timeRange,
+          startDate: _startDate,
+          endDate: _endDate,
+        ));
     Navigator.of(context).pop();
   }
 
   @override
   void initState() {
     super.initState();
-    _sortByFilter = widget.initialSortByFilter;
-    _timeFilter = widget.initialTimeFilter;
-    _typeFilter = widget.initialTypeFilter;
+    _sortBy = widget.initSortBy;
+    _timeRange = widget.initTimeRange;
+    _type = widget.initType;
   }
 
   @override
@@ -107,16 +146,16 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
-                    children: TypeFilter.values.map((item) {
+                    children: RecognitionType.values.map((item) {
                       String label = "P2P";
                       switch (item) {
-                        case TypeFilter.p2p:
+                        case RecognitionType.peer_to_peer:
                           label = "P2P";
                           break;
-                        case TypeFilter.team:
+                        case RecognitionType.team:
                           label = "Team";
                           break;
-                        case TypeFilter.eCard:
+                        case RecognitionType.e_card:
                           label = "E-Card";
                           break;
                       }
@@ -126,13 +165,13 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
-                                _typeFilter = item;
+                                _type = item;
                                 return;
                               }
-                              _typeFilter = null;
+                              _type = null;
                             });
                           },
-                          selected: _typeFilter == item);
+                          selected: _type == item);
                     }).toList(),
                   ),
                 ],
@@ -148,21 +187,22 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
-                    children: SortByFilter.values.map((item) {
+                    children: SortBy.values.map((item) {
                       final label =
-                          item == SortByFilter.latest ? "Latest" : "Earliest";
+                          item == SortBy.latest ? "Latest" : "Earliest";
                       return FilterChip(
-                          label: Text(label),
-                          onSelected: (bool selected) {
-                            setState(() {
-                              if (selected) {
-                                _sortByFilter = item;
-                                return;
-                              }
-                              _sortByFilter = null;
-                            });
-                          },
-                          selected: _sortByFilter == item);
+                        label: Text(label),
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _sortBy = item;
+                              return;
+                            }
+                            _sortBy = null;
+                          });
+                        },
+                        selected: _sortBy == item,
+                      );
                     }).toList(),
                   ),
                 ],
@@ -190,19 +230,16 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
-                    children: TimeFilter.values.map((item) {
+                    children: TimeRange.values.map((item) {
                       String label = "P2P";
                       switch (item) {
-                        case TimeFilter.allTime:
+                        case TimeRange.last7Days:
                           label = "Last 7 days";
                           break;
-                        case TimeFilter.last7Days:
-                          label = "Last 7 days";
-                          break;
-                        case TimeFilter.last30Days:
+                        case TimeRange.last30Days:
                           label = "Last 30 days";
                           break;
-                        case TimeFilter.last60Days:
+                        case TimeRange.last60Days:
                           label = "Last 60 days";
                           break;
                       }
@@ -212,13 +249,34 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
-                                _timeFilter = item;
+                                _timeRange = item;
+                                _endDate = DateTime.now()
+                                    .subtract(const Duration(days: 1));
+                                switch (item) {
+                                  case TimeRange.last7Days:
+                                    _startDate = DateTime.now().subtract(
+                                      const Duration(days: 7),
+                                    );
+
+                                    break;
+                                  case TimeRange.last30Days:
+                                    _startDate = DateTime.now().subtract(
+                                      const Duration(days: 30),
+                                    );
+
+                                    break;
+                                  case TimeRange.last60Days:
+                                    _startDate = DateTime.now().subtract(
+                                      const Duration(days: 60),
+                                    );
+                                    break;
+                                }
                                 return;
                               }
-                              _timeFilter = null;
+                              _timeRange = null;
                             });
                           },
-                          selected: _timeFilter == item);
+                          selected: _timeRange == item);
                     }).toList(),
                   ),
                 ],
@@ -247,7 +305,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                   Expanded(
                     child: FilledButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        _handleApplyFilters();
                       },
                       child: const Text("Apply"),
                     ),
