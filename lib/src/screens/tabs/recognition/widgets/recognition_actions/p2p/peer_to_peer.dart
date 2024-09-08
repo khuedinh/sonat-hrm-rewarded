@@ -1,16 +1,16 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_dialog.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_dialog.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
-import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/p2p/employee_item.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/p2p/list_employees.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/p2p/select_point.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/employee_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/list_employees.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/select_point.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/select_recognition_value.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 
@@ -24,33 +24,10 @@ class PeerToPeer extends StatefulWidget {
 class _PeerToPeerState extends State<PeerToPeer> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
-  List<Employee> _listEmployees = [];
-  List<RecognitionValue> _listRecognitionValues = [];
-  bool _isLoading = true;
+
   Employee? _selectedRecipient;
   double _pointValue = 200;
   String? _selectedRecognitionValue;
-
-  void _handleChangePointValue(double value) {
-    setState(() {
-      _pointValue = value;
-    });
-  }
-
-  Future<void> _fetchEmployees() async {
-    final response = await RecognitionApi.getEmployees();
-    final recognitionValueResponse =
-        await RecognitionApi.getRecognitionValues();
-    setState(() {
-      _listEmployees = (response as List)
-          .map((item) => Employee.fromJson(item as Map<String, dynamic>))
-          .toList();
-      _listRecognitionValues = (recognitionValueResponse as List).map((item) {
-        return RecognitionValue.fromJson(item as Map<String, dynamic>);
-      }).toList();
-      _isLoading = false;
-    });
-  }
 
   Future<void> _sendRecognition() async {
     final data = {
@@ -102,12 +79,6 @@ class _PeerToPeerState extends State<PeerToPeer> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _fetchEmployees();
-  }
-
-  @override
   void dispose() {
     super.dispose();
     _messageController.dispose();
@@ -116,19 +87,6 @@ class _PeerToPeerState extends State<PeerToPeer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    final listSearchedEmployees = _listEmployees
-        .where(
-          (element) =>
-              element.name
-                  .toLowerCase()
-                  .contains(_searchController.text.toLowerCase()) ||
-              element.email
-                  .toLowerCase()
-                  .contains(_searchController.text.toLowerCase()),
-        )
-        .sorted((a, b) => compareAsciiUpperCase(a.name, b.name))
-        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -166,7 +124,11 @@ class _PeerToPeerState extends State<PeerToPeer> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: CustomScrollView(
+        child: RefreshableWidget(
+          onRefresh: () async {
+            context.read<RecognitionBloc>().add(FetchListRecipients());
+            context.read<RecognitionBloc>().add(FetchListRecognitionValues());
+          },
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
@@ -174,6 +136,10 @@ class _PeerToPeerState extends State<PeerToPeer> {
                 controller: _searchController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   hintText: 'Enter email or name',
                   prefixIcon: Icon(Icons.search, size: 28),
                   border: OutlineInputBorder(
@@ -193,14 +159,31 @@ class _PeerToPeerState extends State<PeerToPeer> {
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
-            ListEmployees(
-                isLoading: _isLoading,
-                listEmployees: listSearchedEmployees,
-                onSelectEmployee: (employee) {
-                  setState(() {
-                    _selectedRecipient = employee;
-                  });
-                }),
+            BlocBuilder<RecognitionBloc, RecognitionState>(
+              builder: (context, state) {
+                final isLoading = state.isLoadingListEmployees;
+                final listFilteredEmployees = state.listEmployees
+                    .where(
+                      (element) =>
+                          element.name
+                              .toLowerCase()
+                              .contains(_searchController.text.toLowerCase()) ||
+                          element.email
+                              .toLowerCase()
+                              .contains(_searchController.text.toLowerCase()),
+                    )
+                    .toList();
+
+                return ListEmployees(
+                    isLoading: isLoading,
+                    listEmployees: listFilteredEmployees,
+                    onSelectEmployee: (employee) {
+                      setState(() {
+                        _selectedRecipient = employee;
+                      });
+                    });
+              },
+            ),
             if (_selectedRecipient != null)
               SliverToBoxAdapter(
                 child: ScreenTitle(
@@ -228,20 +211,30 @@ class _PeerToPeerState extends State<PeerToPeer> {
                     isLoading: isCurrentLoadingBalance,
                     balance: currentBalance?.currentPoint ?? 0,
                     value: _pointValue,
-                    onChangePoint: _handleChangePointValue,
+                    onChangePoint: (double value) {
+                      setState(() {
+                        _pointValue = value;
+                      });
+                    },
                   ),
                 );
               },
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            SelectRecognitionValue(
-              isLoading: _isLoading,
-              listRecognitionValues: _listRecognitionValues,
-              selectedRecognitionValue: _selectedRecognitionValue,
-              onRecognitionValueChanged: (value) {
-                setState(() {
-                  _selectedRecognitionValue = value;
-                });
+            BlocBuilder<RecognitionBloc, RecognitionState>(
+              builder: (context, state) {
+                final isLoading = state.isLoadingRecognitionValues;
+                final listRecognitionValues = state.listRecognitionValues;
+                return SelectRecognitionValue(
+                  isLoading: isLoading,
+                  listRecognitionValues: listRecognitionValues,
+                  selectedRecognitionValue: _selectedRecognitionValue,
+                  onRecognitionValueChanged: (value) {
+                    setState(() {
+                      _selectedRecognitionValue = value;
+                    });
+                  },
+                );
               },
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 12)),

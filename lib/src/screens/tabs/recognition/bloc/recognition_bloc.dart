@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
 import 'package:sonat_hrm_rewarded/src/utils/date_time.dart';
@@ -87,6 +88,66 @@ class RecognitionBloc extends Bloc<RecognitionEvent, RecognitionState> {
         startDate: event.startDate,
         endDate: event.endDate,
       ));
+    });
+
+    on<FetchListRecipients>((event, emit) async {
+      emit(state.copyWith(isLoadingListEmployees: true));
+
+      final response = await RecognitionApi.getEmployees();
+
+      if (response is List) {
+        emit(
+          state.copyWith(
+            isLoadingListEmployees: false,
+            listEmployees: response
+                .map((item) => Employee.fromJson(item as Map<String, dynamic>))
+                .toList(),
+          ),
+        );
+        return;
+      }
+
+      emit(state.copyWith(isLoadingListEmployees: false));
+    });
+
+    on<FetchListRecognitionValues>((event, emit) async {
+      emit(state.copyWith(isLoadingRecognitionValues: true));
+
+      final response = await RecognitionApi.getRecognitionValues();
+
+      if (response is List) {
+        emit(
+          state.copyWith(
+            isLoadingRecognitionValues: false,
+            listRecognitionValues: response.map((item) {
+              return RecognitionValue.fromJson(item as Map<String, dynamic>);
+            }).toList(),
+          ),
+        );
+        return;
+      }
+
+      emit(state.copyWith(isLoadingRecognitionValues: false));
+    });
+
+    on<FetchListGroups>((event, emit) async {
+      emit(state.copyWith(isLoadingListGroups: true));
+
+      final response = await RecognitionApi.getGroups();
+
+      if (response is List) {
+        emit(
+          state.copyWith(
+            isLoadingListGroups: false,
+            listGroups: response.map((item) {
+              return Group.fromJson(item as Map<String, dynamic>);
+            }).toList(),
+          ),
+        );
+        return;
+      }
+
+      emit(state.copyWith(isLoadingListGroups: false));
     });
   }
 }

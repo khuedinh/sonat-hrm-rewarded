@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/p2p/employee_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/team/group_item.dart';
 
-class ListEmployees extends StatelessWidget {
-  const ListEmployees({
+class ListGroups extends StatelessWidget {
+  const ListGroups({
     super.key,
     required this.isLoading,
-    required this.listEmployees,
-    required this.onSelectEmployee,
+    required this.listGroups,
+    required this.selectedGroup,
+    required this.onSelectGroup,
   });
 
-  final List<Employee> listEmployees;
   final bool isLoading;
-  final void Function(Employee) onSelectEmployee;
+  final List<Group> listGroups;
+  final String? selectedGroup;
+  final void Function(Group) onSelectGroup;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (isLoading) {
       return SliverToBoxAdapter(
         child: SizedBox(
@@ -51,26 +55,36 @@ class ListEmployees extends StatelessWidget {
       );
     }
 
+    if (listGroups.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Text(
+          'No groups found.',
+          style: theme.textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 90,
         child: ListView.separated(
           padding: const EdgeInsets.only(bottom: 4),
           scrollDirection: Axis.horizontal,
-          itemCount: listEmployees.length,
+          itemCount: listGroups.length,
           separatorBuilder: (BuildContext context, int index) {
             return const SizedBox(width: 4);
           },
           itemBuilder: (context, index) {
-            final user = listEmployees[index];
+            final group = listGroups[index];
 
             return GestureDetector(
               onTap: () {
-                onSelectEmployee(user);
+                onSelectGroup(group);
               },
-              child: EmployeeItem(
-                imageUrl: user.picture,
-                name: user.name,
+              child: GroupItem(
+                isSelected: group.id == selectedGroup,
+                name: group.name,
                 wrapName: true,
               ),
             );

@@ -138,8 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: const Color.fromARGB(255, 255, 154, 59),
                             icon: Icons.card_giftcard,
                             title: "Active benefits",
-                            value:
-                                userInfo?.userRecognition.totalRecognition ?? 0,
+                            value: userInfo?.activeBenefit ?? 0,
                             isLoading: isLoadingUserInfo,
                           ),
                         ),

@@ -53,6 +53,7 @@ class SelectRecognitionValue extends StatelessWidget {
             fontSize: 16,
             color: theme.colorScheme.onSurface,
           ),
+          const SizedBox(height: 4),
           isLoading
               ? Skeletonizer(
                   child: Column(
@@ -98,6 +99,7 @@ class SelectRecognitionValue extends StatelessWidget {
                               color: recognitionValueColors[
                                   i % recognitionValueColors.length],
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                           ...listRecognitionValues[i]

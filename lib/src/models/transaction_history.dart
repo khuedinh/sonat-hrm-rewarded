@@ -90,9 +90,10 @@ class TransactionHistoryData {
             ? Source.fromJson(jsonDecode(json['source']) ?? {})
             : Source.fromJson(json['source'] ?? {}),
         sink = json['sink'] is String
-            ? List<Sink>.from(
-                (jsonDecode(json['sink']) ?? []).map((v) => Sink.fromJson(v)))
-            : List<Sink>.from(json['sink'].map((v) => Sink.fromJson(v))),
+            ? List<Sink>.from((jsonDecode(json['sink']) ?? [])
+                .map((v) => Sink.fromJson(v ?? {})))
+            : List<Sink>.from(
+                (json['sink'] ?? []).map((v) => Sink.fromJson(v ?? {}))),
         employeeEmail = json['employeeEmail'],
         fromEmail = json['fromEmail'],
         toEmail = json['toEmail'];

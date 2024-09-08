@@ -30,6 +30,14 @@ class RecognitionApi {
     return DioClient.instance.get("/groups");
   }
 
+  static Future createGroup(Map<String, dynamic> data) {
+    return DioClient.instance.post("/groups", data: data);
+  }
+
+  static Future updateGroup(String groupId, Map<String, dynamic> data) {
+    return DioClient.instance.put("/groups", data: data);
+  }
+
   static Future getGroupMembers(String groupId) {
     return DioClient.instance.get("/groups/$groupId");
   }

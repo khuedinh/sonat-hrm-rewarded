@@ -3,6 +3,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/activity_indicator/activity_indicator.dart';
 import 'package:sonat_hrm_rewarded/src/models/transaction_history.dart';
+import 'package:sonat_hrm_rewarded/src/utils/generate_message_history.dart';
 import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class ListTransactions extends StatelessWidget {
@@ -41,33 +42,6 @@ class ListTransactions extends StatelessWidget {
     });
 
     return result;
-  }
-
-  String generateMessage(TransactionHistoryData transactionHistory) {
-    if (transactionHistory.type == TransactionType.gain) {
-      if (transactionHistory.event == TransactionEvent.update) {
-        return "Admin updated your ${transactionHistory.currency.toString().split('.').last} balance.";
-      }
-
-      if (transactionHistory.event == TransactionEvent.allocate) {
-        return "You have been allocated <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}</b>.";
-      }
-
-      if (transactionHistory.event == TransactionEvent.recognition) {
-        return "You have been recognized with <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}</b>.";
-      }
-    }
-
-    if (transactionHistory.type == TransactionType.lose) {
-      if (transactionHistory.event == TransactionEvent.recognition) {
-        return "You recognized <b>${transactionHistory.sink!.map((item) => item.name).join(", ")}</b> with <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency.toString().split('.').last}</b>.";
-      }
-      if (transactionHistory.event == TransactionEvent.redeem_benefit) {
-        return "You redeemed <b>${transactionHistory.description}</b> with <b>${formatNumber(transactionHistory.amount)}</b>.";
-      }
-    }
-
-    return "";
   }
 
   @override

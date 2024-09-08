@@ -63,8 +63,6 @@ class ReceivedHistoryTab extends StatelessWidget {
                           child: CachedNetworkImage(
                             imageUrl: recognition.employee.picture,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
                             errorWidget: (context, url, error) => Image.asset(
                               "assets/images/default_avatar.png",
                               fit: BoxFit.cover,
@@ -75,15 +73,12 @@ class ReceivedHistoryTab extends StatelessWidget {
                     ),
                     title: Text(
                       recognition.employee.name,
-                      style: theme.textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: theme.textTheme.titleSmall,
                       textAlign: TextAlign.start,
                     ),
                     subtitle: Text(
-                      formatDate(
-                        DateTime.parse(recognition.createdOn ?? ""),
-                      ),
+                      formatDate(DateTime.parse(recognition.createdOn ?? "")),
+                      style: theme.textTheme.bodySmall,
                     ),
                     trailing: Text(
                       '+${formatNumber(recognition.amount)}',

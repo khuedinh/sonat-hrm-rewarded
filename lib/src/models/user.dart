@@ -7,6 +7,7 @@ class UserInfo {
   Position position;
   Balance balance;
   UserRecognition userRecognition;
+  int activeBenefit;
 
   UserInfo({
     required this.id,
@@ -17,6 +18,7 @@ class UserInfo {
     required this.position,
     required this.balance,
     required this.userRecognition,
+    required this.activeBenefit,
   });
 
   UserInfo.fromJson(Map<String, dynamic> json)
@@ -27,7 +29,8 @@ class UserInfo {
         positionId = json['positionId'],
         position = Position.fromJson(json['position']),
         balance = Balance.fromJson(json['balance']),
-        userRecognition = UserRecognition.fromJson(json['userRecognition']);
+        userRecognition = UserRecognition.fromJson(json['userRecognition']),
+        activeBenefit = json['activeBenefit'] ?? 0;
 }
 
 class Position {

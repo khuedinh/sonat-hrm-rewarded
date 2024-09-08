@@ -25,6 +25,8 @@ class EmployeeItem extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               fit: BoxFit.cover,
+              width: 42,
+              height: 42,
               errorWidget: (context, url, error) => Image.asset(
                 "assets/images/default_avatar.png",
                 fit: BoxFit.cover,

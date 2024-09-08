@@ -35,6 +35,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<RecognitionBloc>(context).add(FetchListRecipients());
+    BlocProvider.of<RecognitionBloc>(context).add(FetchListRecognitionValues());
+    BlocProvider.of<RecognitionBloc>(context).add(FetchListGroups());
+  }
+
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 

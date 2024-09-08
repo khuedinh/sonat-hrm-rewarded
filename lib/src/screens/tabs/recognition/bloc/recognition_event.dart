@@ -25,3 +25,18 @@ class FilterRecognitionHistory extends RecognitionEvent {
   @override
   List<Object?> get props => [sortBy, timeRange, type, startDate, endDate];
 }
+
+class FetchListRecipients extends RecognitionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class FetchListRecognitionValues extends RecognitionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class FetchListGroups extends RecognitionEvent {
+  @override
+  List<Object?> get props => [];
+}

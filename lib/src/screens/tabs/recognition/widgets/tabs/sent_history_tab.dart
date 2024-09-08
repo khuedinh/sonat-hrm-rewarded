@@ -67,8 +67,6 @@ class SentHistoryTab extends StatelessWidget {
                                     .detailRecognitions![0].employee.picture
                                 : "",
                             fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
                             errorWidget: (context, url, error) => Image.asset(
                               "assets/images/default_avatar.png",
                               fit: BoxFit.cover,
@@ -79,14 +77,14 @@ class SentHistoryTab extends StatelessWidget {
                     ),
                     title: Text(
                       recognition.detailRecognitions![0].employee.name,
-                      style: theme.textTheme.titleSmall!,
+                      style: theme.textTheme.titleSmall,
                       textAlign: TextAlign.start,
                     ),
                     subtitle: Text(
                       formatDate(
                         DateTime.parse(recognition.createdOn ?? ""),
                       ),
-                      style: theme.textTheme.bodySmall!.copyWith(),
+                      style: theme.textTheme.bodySmall,
                     ),
                     trailing: Text(
                       '-${formatNumber(recognition.amount)}',
