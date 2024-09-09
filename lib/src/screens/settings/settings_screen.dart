@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/screens/settings/widgets/block_picker.dart';
 import 'package:sonat_hrm_rewarded/src/service/firebase/cloud_message.dart';
 import 'package:sonat_hrm_rewarded/src/theme/bloc/theme_bloc.dart';
@@ -62,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Dark Mode',
+                      AppLocalizations.of(context)!.dark_mode,
                       style: TextStyle(color: colorScheme.onSurface),
                     ),
                     Switch(
@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   height: 20,
                 ),
                 Text(
-                  "Theme Color",
+                  AppLocalizations.of(context)!.theme_color,
                   style: TextStyle(
                     color: colorScheme.onSurface,
                   ),
@@ -92,28 +92,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onColorChanged: changeColor,
                   colorHistory: colorHistory,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text('Copy FCM Token'),
-                    IconButton(
-                      onPressed: _fCMToken != null
-                          ? () =>
-                              Clipboard.setData(ClipboardData(text: _fCMToken!))
-                                  .then((value) {
-                                ScaffoldMessenger.of(context)
-                                  ..hideCurrentSnackBar()
-                                  ..showSnackBar(const SnackBar(
-                                    content:
-                                        Text('Copied FCM token to clipboard'),
-                                  ));
-                              })
-                          : null,
-                      icon: const Icon(Icons.copy_outlined),
-                    )
-                  ],
-                )
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     const Text('Copy FCM Token'),
+                //     IconButton(
+                //       onPressed: _fCMToken != null
+                //           ? () =>
+                //               Clipboard.setData(ClipboardData(text: _fCMToken!))
+                //                   .then((value) {
+                //                 ScaffoldMessenger.of(context)
+                //                   ..hideCurrentSnackBar()
+                //                   ..showSnackBar(const SnackBar(
+                //                     content:
+                //                         Text('Copied FCM token to clipboard'),
+                //                   ));
+                //               })
+                //           : null,
+                //       icon: const Icon(Icons.copy_outlined),
+                //     )
+                //   ],
+                // )
               ],
             ),
           ),

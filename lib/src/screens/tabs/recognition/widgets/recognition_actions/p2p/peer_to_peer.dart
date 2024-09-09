@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_dialog.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_dialog.dart';
@@ -57,8 +58,8 @@ class _PeerToPeerState extends State<PeerToPeer> {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            return const SuccessDialog(
-              message: "Sended successfully",
+            return SuccessDialog(
+              message: AppLocalizations.of(context)!.sent_successfully,
             );
           },
         );
@@ -69,8 +70,8 @@ class _PeerToPeerState extends State<PeerToPeer> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const FailureDialog(
-              message: 'Failed to send recognition.',
+            return FailureDialog(
+              message: AppLocalizations.of(context)!.failed_to_send,
             );
           },
         );
@@ -92,7 +93,8 @@ class _PeerToPeerState extends State<PeerToPeer> {
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
-        title: const ScreenTitle(title: "P2P recognition"),
+        title:
+            ScreenTitle(title: AppLocalizations.of(context)!.p2p_recognition),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -114,7 +116,7 @@ class _PeerToPeerState extends State<PeerToPeer> {
             _sendRecognition();
           },
           child: Text(
-            'Send now',
+            AppLocalizations.of(context)!.send_now,
             style: TextStyle(
               color: theme.colorScheme.onPrimary,
               fontSize: 16,
@@ -135,14 +137,14 @@ class _PeerToPeerState extends State<PeerToPeer> {
               child: TextField(
                 controller: _searchController,
                 keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  hintText: 'Enter email or name',
-                  prefixIcon: Icon(Icons.search, size: 28),
-                  border: OutlineInputBorder(
+                  hintText: AppLocalizations.of(context)!.enter_email_or_name,
+                  prefixIcon: const Icon(Icons.search, size: 28),
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
                     ),
@@ -153,7 +155,7 @@ class _PeerToPeerState extends State<PeerToPeer> {
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
               child: ScreenTitle(
-                title: "List recipients",
+                title: AppLocalizations.of(context)!.list_recipients,
                 fontSize: 16,
                 color: theme.colorScheme.onSurface,
               ),
@@ -187,7 +189,7 @@ class _PeerToPeerState extends State<PeerToPeer> {
             if (_selectedRecipient != null)
               SliverToBoxAdapter(
                 child: ScreenTitle(
-                  title: "Selected recipient",
+                  title: AppLocalizations.of(context)!.selected_recipients,
                   fontSize: 16,
                   color: theme.colorScheme.onSurface,
                 ),
@@ -240,7 +242,7 @@ class _PeerToPeerState extends State<PeerToPeer> {
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
             SliverToBoxAdapter(
               child: ScreenTitle(
-                title: 'Recognition message',
+                title: AppLocalizations.of(context)!.recognition_message,
                 fontSize: 16,
                 color: theme.colorScheme.onSurface,
               ),
@@ -252,13 +254,13 @@ class _PeerToPeerState extends State<PeerToPeer> {
                 keyboardType: TextInputType.multiline,
                 minLines: 3,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                  hintText: 'Type message',
-                  contentPadding: EdgeInsets.symmetric(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.type_message,
+                  contentPadding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
                     ),

@@ -45,8 +45,9 @@ class ReceivedHistoryTab extends StatelessWidget {
         receiveHistory.isEmpty
             ? const SliverToBoxAdapter(
                 child: SizedBox(
-                    height: 300,
-                    child: NoData(message: "No recognition history")),
+                  height: 300,
+                  child: NoData(message: "No recognition history"),
+                ),
               )
             : SliverList.builder(
                 itemCount: receiveHistory.length,

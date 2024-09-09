@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
@@ -14,8 +15,6 @@ import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.handleOpenRecognitionScreen});
-
-  static const screenTitle = 'Home';
 
   final void Function() handleOpenRecognitionScreen;
 
@@ -64,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             expandedHeight: kToolbarHeight + 36,
             backgroundColor: theme.colorScheme.primary,
-            title: const ScreenTitle(title: HomeScreen.screenTitle),
+            title: ScreenTitle(title: AppLocalizations.of(context)!.home),
             actions: [
               BlocBuilder<NotificationBloc, NotificationState>(
                 builder: (context, state) {
@@ -125,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 textColor:
                                     _isScrolledDown ? Colors.white : null,
                                 icon: Icons.attach_money_rounded,
-                                suffix: "Points",
+                                suffix: AppLocalizations.of(context)!.points,
                                 spacing: 4,
                                 iconSize: 12,
                               ),
@@ -137,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 textColor:
                                     _isScrolledDown ? Colors.white : null,
                                 icon: Icons.currency_bitcoin_rounded,
-                                suffix: "Coins",
+                                suffix: AppLocalizations.of(context)!.coins,
                                 spacing: 4,
                                 iconSize: 12,
                               ),
@@ -159,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen>
                                     ),
                                     icon: const Icon(
                                         Icons.present_to_all_rounded),
-                                    label: const Text("Recognize"),
+                                    label: Text(
+                                      AppLocalizations.of(context)!.recognize,
+                                    ),
                                   ),
                                 ),
                             ],
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen>
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             sliver: SliverToBoxAdapter(
               child: ScreenTitle(
-                title: "Leaderboard",
+                title: AppLocalizations.of(context)!.leaderboard,
                 color: theme.colorScheme.onSurface,
                 fontSize: 18,
               ),

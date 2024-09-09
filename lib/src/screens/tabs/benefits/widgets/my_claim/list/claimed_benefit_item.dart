@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_details/benefit_details_screen.dart';
@@ -104,7 +105,8 @@ class ClaimedBenefitItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Claimed at: ${claimedBenefit.formattedCreatedAt}"),
+                Text(
+                    "${AppLocalizations.of(context)!.claimed_at}: ${claimedBenefit.formattedCreatedAt}"),
                 SizedBox(
                   height: 28,
                   child: OutlinedButton(
@@ -124,7 +126,9 @@ class ClaimedBenefitItem extends StatelessWidget {
                         color: theme.colorScheme.primary,
                       ),
                     ),
-                    child: Text(isArchived ? "Restore" : 'Show code'),
+                    child: Text(isArchived
+                        ? AppLocalizations.of(context)!.restore
+                        : AppLocalizations.of(context)!.show_code),
                   ),
                 )
               ],

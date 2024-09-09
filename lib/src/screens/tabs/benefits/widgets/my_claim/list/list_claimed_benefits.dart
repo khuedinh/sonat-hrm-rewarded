@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
@@ -25,10 +26,10 @@ class _ListClaimedBenefitsState extends State<ListClaimedBenefits> {
   ) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text("Archieved successfully!"),
+        content: Text(AppLocalizations.of(context)!.archive_successfully),
         duration: const Duration(seconds: 3),
         action: SnackBarAction(
-          label: "Undo",
+          label: AppLocalizations.of(context)!.undo,
           onPressed: () {
             context.read<BenefitsBloc>().add(
                   RestoreClaimedBenefit(
@@ -113,7 +114,7 @@ class _ListClaimedBenefitsState extends State<ListClaimedBenefits> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Archive benefit?",
+                            AppLocalizations.of(context)!.archive_benefit,
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               color: theme.colorScheme.onError,

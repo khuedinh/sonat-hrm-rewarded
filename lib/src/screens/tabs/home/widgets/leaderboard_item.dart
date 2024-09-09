@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/models/leaderboard.dart';
 
 class LeaderboardItem extends StatelessWidget {
@@ -56,7 +57,7 @@ class LeaderboardItem extends StatelessWidget {
         ),
         const Spacer(),
         Text(
-          "${item.totalReceived} recognitions",
+          "${item.totalReceived} ${AppLocalizations.of(context)!.recognitions}",
           style: theme.textTheme.bodySmall!.copyWith(
             color: theme.colorScheme.onSurface,
           ),

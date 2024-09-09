@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/screens/benefit_archived_box/benefit_archived_box_screen.dart';
@@ -36,7 +37,7 @@ class _MyClaimTabState extends State<MyClaimTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Ready-to-use benefits",
+                  AppLocalizations.of(context)!.ready_to_use_benefits,
                   style: theme.textTheme.titleMedium!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
@@ -54,7 +55,7 @@ class _MyClaimTabState extends State<MyClaimTab> {
                         EdgeInsets.all(8),
                       ),
                     ),
-                    label: const Text("Archived box"),
+                    label: Text(AppLocalizations.of(context)!.archive_box),
                     icon: const Icon(Icons.archive_rounded),
                   );
                 })

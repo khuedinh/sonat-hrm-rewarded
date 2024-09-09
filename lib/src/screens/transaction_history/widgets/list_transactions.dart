@@ -95,7 +95,7 @@ class ListTransactions extends StatelessWidget {
                                 color: Colors.red,
                               ),
                         title: HtmlWidget(
-                          generateMessage(item),
+                          generateMessage(item, context),
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

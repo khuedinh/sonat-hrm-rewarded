@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/utils/date_time.dart';
 
@@ -116,7 +117,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Filters",
+                AppLocalizations.of(context)!.filters,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleLarge!.copyWith(
                   fontWeight: FontWeight.bold,
@@ -125,7 +126,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
               TextButton.icon(
                 onPressed: _handleResetFilters,
                 style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                label: const Text("Reset"),
+                label: Text(AppLocalizations.of(context)!.reset),
                 icon: const Icon(
                   Icons.restore_rounded,
                 ),
@@ -140,7 +141,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Type",
+                    AppLocalizations.of(context)!.type,
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
@@ -181,15 +182,16 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Sort by",
+                    AppLocalizations.of(context)!.sort_by,
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     children: SortBy.values.map((item) {
-                      final label =
-                          item == SortBy.latest ? "Latest" : "Earliest";
+                      final label = item == SortBy.latest
+                          ? AppLocalizations.of(context)!.latest
+                          : AppLocalizations.of(context)!.earliest;
                       return FilterChip(
                         label: Text(label),
                         onSelected: (bool selected) {
@@ -216,7 +218,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Time",
+                        AppLocalizations.of(context)!.time,
                         style: theme.textTheme.titleMedium,
                       ),
                       TextButton.icon(
@@ -224,23 +226,24 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                           icon: const Icon(Icons.calendar_month_rounded),
                           label: Text(_startDate != null && _endDate != null
                               ? "${formatDate(_startDate!, format: "dd/MM/yyyy")} - ${formatDate(_endDate!, format: "dd/MM/yyyy")}"
-                              : "Select date range"))
+                              : AppLocalizations.of(context)!
+                                  .select_date_range))
                     ],
                   ),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     children: TimeRange.values.map((item) {
-                      String label = "P2P";
+                      String label = AppLocalizations.of(context)!.last_7_days;
                       switch (item) {
                         case TimeRange.last7Days:
-                          label = "Last 7 days";
+                          label = AppLocalizations.of(context)!.last_7_days;
                           break;
                         case TimeRange.last30Days:
-                          label = "Last 30 days";
+                          label = AppLocalizations.of(context)!.last_30_days;
                           break;
                         case TimeRange.last60Days:
-                          label = "Last 60 days";
+                          label = AppLocalizations.of(context)!.last_60_days;
                           break;
                       }
 
@@ -298,7 +301,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                           color: theme.colorScheme.primaryContainer,
                         ),
                       ),
-                      child: const Text("Discard"),
+                      child: Text(AppLocalizations.of(context)!.discard),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -307,7 +310,7 @@ class _RecognitionFiltersState extends State<RecognitionFilters> {
                       onPressed: () {
                         _handleApplyFilters();
                       },
-                      child: const Text("Apply"),
+                      child: Text(AppLocalizations.of(context)!.apply),
                     ),
                   ),
                   const SizedBox(width: 8),

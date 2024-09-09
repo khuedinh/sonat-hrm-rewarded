@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/confirm_dialog.dart';
@@ -120,7 +121,8 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
-        title: const ScreenTitle(title: "Benefit details"),
+        title:
+            ScreenTitle(title: AppLocalizations.of(context)!.benefit_details),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -136,7 +138,7 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
               child: FilledButton(
                 onPressed: _handleRedeemBenefit,
                 child: Text(
-                  'Redeem now',
+                  AppLocalizations.of(context)!.redeem_now,
                   style: TextStyle(
                     color: theme.colorScheme.onPrimary,
                     fontSize: 16,
@@ -250,7 +252,10 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                                                         .colorScheme.primary,
                                                   ),
                                                 ),
-                                                child: const Text('Show code'),
+                                                child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .show_code,
+                                                ),
                                               ),
                                             )
                                         ],
@@ -273,7 +278,9 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                                             ),
                                             icon:
                                                 Icons.currency_bitcoin_rounded,
-                                            suffix: "coins",
+                                            suffix:
+                                                AppLocalizations.of(context)!
+                                                    .coins,
                                           ),
                                     _isLoading
                                         ? const Skeletonizer(
@@ -283,7 +290,7 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
                                             ),
                                           )
                                         : Text(
-                                            "Stock: ${_benefitDetails!.inStock}"),
+                                            "${AppLocalizations.of(context)!.stock}: ${_benefitDetails!.inStock}"),
                                   ],
                                 )
                               ],

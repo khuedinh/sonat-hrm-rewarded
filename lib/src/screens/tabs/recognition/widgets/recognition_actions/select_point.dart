@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
@@ -28,7 +29,7 @@ class SelectPoint extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ScreenTitle(
-          title: "Recognition points",
+          title: AppLocalizations.of(context)!.recognition_points,
           fontSize: 16,
           color: theme.colorScheme.onSurface,
         ),
@@ -36,9 +37,7 @@ class SelectPoint extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text(
-              "Points balanced: ",
-            ),
+            Text(AppLocalizations.of(context)!.points_balance),
             const SizedBox(width: 8),
             isLoading
                 ? const Skeletonizer(child: Bone.text(words: 1))
@@ -47,7 +46,7 @@ class SelectPoint extends StatelessWidget {
                     icon: Icons.currency_bitcoin_rounded,
                     iconSize: 14,
                     fontSize: 14,
-                    suffix: "Points",
+                    suffix: AppLocalizations.of(context)!.points,
                   ),
           ],
         ),
@@ -56,7 +55,7 @@ class SelectPoint extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "${value.toInt().toString()} Points",
+              "${value.toInt().toString()} ${AppLocalizations.of(context)!.points}",
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(height: 4),

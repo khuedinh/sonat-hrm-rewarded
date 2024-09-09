@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/amount_card/amount_card.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/filters/recognition_filters.dart';
@@ -10,8 +11,6 @@ import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/tabs/sen
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});
-
-  static const screenTitle = "Recognition";
 
   @override
   State<RecognitionScreen> createState() => _RecognitionScreenState();
@@ -121,7 +120,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         isLoading: isLoading,
                         icon: Icons.output_rounded,
                         iconColor: Colors.red,
-                        title: "Total Sent",
+                        title: AppLocalizations.of(context)!.total_sent,
                         amount: sentHistory.fold(
                           0,
                           (previousValue, element) =>
@@ -135,7 +134,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                         isLoading: isLoading,
                         icon: Icons.input_rounded,
                         iconColor: Colors.green,
-                        title: "Total Receive",
+                        title: AppLocalizations.of(context)!.total_received,
                         amount: receiveHistory.fold(
                           0,
                           (previousValue, element) =>
@@ -151,9 +150,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  "History",
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.history,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
                   ),
@@ -180,9 +179,9 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
             TabBar(
               indicatorColor: theme.colorScheme.primary,
               labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-              tabs: const [
-                Tab(text: "Sent"),
-                Tab(text: "Received"),
+              tabs: [
+                Tab(text: AppLocalizations.of(context)!.sent),
+                Tab(text: AppLocalizations.of(context)!.received),
               ],
             ),
             const SizedBox(height: 8.0),

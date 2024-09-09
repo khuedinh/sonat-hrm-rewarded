@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
@@ -32,10 +33,10 @@ class _TabsScreenState extends State<TabsScreen> {
     ThemeData theme = Theme.of(context);
 
     final String screenTitle = [
-      HomeScreen.screenTitle,
-      RecognitionScreen.screenTitle,
-      BenefitsScreen.screenTitle,
-      AccountScreen.screenTitle,
+      AppLocalizations.of(context)!.home,
+      AppLocalizations.of(context)!.recognition,
+      AppLocalizations.of(context)!.benefits,
+      AppLocalizations.of(context)!.account,
     ][currentPageIndex];
 
     final hasCustomAppBar = [0, 2].contains(currentPageIndex);
@@ -72,26 +73,26 @@ class _TabsScreenState extends State<TabsScreen> {
         },
         indicatorColor: theme.colorScheme.primary,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            selectedIcon: const Icon(Icons.home),
+            icon: const Icon(Icons.home_outlined),
+            label: AppLocalizations.of(context)!.home,
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.workspace_premium),
-            icon: Icon(Icons.workspace_premium_outlined),
-            label: 'Recognition',
+            selectedIcon: const Icon(Icons.workspace_premium),
+            icon: const Icon(Icons.workspace_premium_outlined),
+            label: AppLocalizations.of(context)!.recognition,
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.card_giftcard),
-            icon: Icon(Icons.card_giftcard_outlined),
-            label: 'Benefits',
+            selectedIcon: const Icon(Icons.card_giftcard),
+            icon: const Icon(Icons.card_giftcard_outlined),
+            label: AppLocalizations.of(context)!.benefits,
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.person),
-            icon: Icon(Icons.person_outline),
-            label: 'Account',
+            selectedIcon: const Icon(Icons.person),
+            icon: const Icon(Icons.person_outline),
+            label: AppLocalizations.of(context)!.account,
           ),
         ],
       ),

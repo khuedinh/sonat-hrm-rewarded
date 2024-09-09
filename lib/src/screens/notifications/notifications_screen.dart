@@ -86,9 +86,10 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(
-                                    child:
-                                        Text("You don't have any notification"),
-                                  )
+                                    child: Text(
+                                      "You don't have any notification",
+                                    ),
+                                  ),
                                 ],
                               )
                             : RefreshableWidget(

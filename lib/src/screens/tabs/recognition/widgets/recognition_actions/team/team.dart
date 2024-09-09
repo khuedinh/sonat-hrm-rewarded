@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_dialog.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_dialog.dart';
@@ -122,8 +123,8 @@ class _TeamState extends State<Team> {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            return const SuccessDialog(
-              message: "Sended successfully",
+            return SuccessDialog(
+              message: AppLocalizations.of(context)!.sent_successfully,
             );
           },
         );
@@ -134,8 +135,8 @@ class _TeamState extends State<Team> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const FailureDialog(
-              message: 'Failed to send recognition.',
+            return FailureDialog(
+              message: AppLocalizations.of(context)!.failed_to_send,
             );
           },
         );
@@ -151,7 +152,8 @@ class _TeamState extends State<Team> {
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
-        title: const ScreenTitle(title: "Team recognition"),
+        title:
+            ScreenTitle(title: AppLocalizations.of(context)!.team_recogntion),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -169,7 +171,7 @@ class _TeamState extends State<Team> {
             _sendRecognition();
           },
           child: Text(
-            'Send now',
+            AppLocalizations.of(context)!.send_now,
             style: TextStyle(
               color: theme.colorScheme.onPrimary,
               fontSize: 16,
@@ -189,7 +191,7 @@ class _TeamState extends State<Team> {
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
               child: ScreenTitle(
-                title: "Groups",
+                title: AppLocalizations.of(context)!.groups,
                 fontSize: 16,
                 color: theme.colorScheme.onSurface,
               ),
@@ -218,7 +220,7 @@ class _TeamState extends State<Team> {
             ),
             SliverToBoxAdapter(
               child: ScreenTitle(
-                title: "Selected recipients",
+                title: AppLocalizations.of(context)!.selected_recipients,
                 fontSize: 16,
                 color: theme.colorScheme.onSurface,
               ),
@@ -234,7 +236,7 @@ class _TeamState extends State<Team> {
             SliverToBoxAdapter(
               child: Row(
                 children: [
-                  const Text("Save this team's recipient preset"),
+                  Text(AppLocalizations.of(context)!.save_as_preset),
                   Transform.scale(
                     scale: 0.75,
                     child: Switch(
@@ -256,13 +258,13 @@ class _TeamState extends State<Team> {
                   child: TextField(
                     controller: _groupNameController,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 4,
                       ),
-                      hintText: "Enter group name",
-                      border: OutlineInputBorder(
+                      hintText: AppLocalizations.of(context)!.enter_group_name,
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/no_data/no_data.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
@@ -73,7 +74,7 @@ class _BenefitArchivedBoxScreenState extends State<BenefitArchivedBoxScreen> {
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
-        title: const ScreenTitle(title: "Achieved box"),
+        title: ScreenTitle(title: AppLocalizations.of(context)!.archive_box),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
