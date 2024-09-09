@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/employee_item.dart';
@@ -47,7 +48,7 @@ class ListEmployees extends StatelessWidget {
                     child: SizedBox(
                       width: 78,
                       child: Text(
-                        "Add more recipients",
+                        AppLocalizations.of(context)!.add_more_recipients,
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         softWrap: true,
@@ -111,7 +112,7 @@ class ListEmployees extends StatelessWidget {
                     child: SizedBox(
                       width: 78,
                       child: Text(
-                        "Add more recipients",
+                        AppLocalizations.of(context)!.add_more_recipients,
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         softWrap: true,

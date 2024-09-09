@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/widgets/list/list_benefits_grid.dart';
@@ -48,14 +49,15 @@ class _GiftsTabState extends State<GiftsTab>
                 return SliverToBoxAdapter(
                   child: TextField(
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      hintText: 'What are you looking for?',
-                      contentPadding: EdgeInsets.symmetric(
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!
+                          .what_are_you_looking_for,
+                      contentPadding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 4,
                       ),
-                      prefixIcon: Icon(Icons.search, size: 28),
-                      border: OutlineInputBorder(
+                      prefixIcon: const Icon(Icons.search, size: 28),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
                         ),

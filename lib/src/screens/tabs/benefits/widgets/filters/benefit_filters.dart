@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sonat_hrm_rewarded/src/screens/tabs/benefits/bloc/benefits_bloc.dart';
 
 class BenefitFilters extends StatefulWidget {
@@ -62,7 +63,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Filters",
+                AppLocalizations.of(context)!.filters,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleLarge!.copyWith(
                   fontWeight: FontWeight.bold,
@@ -71,7 +72,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
               TextButton.icon(
                 onPressed: _handleResetFilters,
                 style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                label: const Text("Reset"),
+                label: Text(AppLocalizations.of(context)!.reset),
                 icon: const Icon(
                   Icons.restore_rounded,
                 ),
@@ -86,7 +87,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Price range (${_priceRange!.start.toInt().toString()} - ${_priceRange!.end.toInt().toString()})",
+                    "${AppLocalizations.of(context)!.price_range} (${_priceRange!.start.toInt().toString()} - ${_priceRange!.end.toInt().toString()})",
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
@@ -117,7 +118,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Price",
+                    AppLocalizations.of(context)!.price,
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
@@ -125,8 +126,8 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                     spacing: 8,
                     children: SortPrice.values.map((item) {
                       final label = item == SortPrice.descending
-                          ? "Descending"
-                          : "Ascending";
+                          ? AppLocalizations.of(context)!.descending
+                          : AppLocalizations.of(context)!.ascending;
                       return FilterChip(
                           label: Text(label),
                           onSelected: (bool selected) {
@@ -148,14 +149,16 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Name",
+                    AppLocalizations.of(context)!.name,
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     children: SortName.values.map((item) {
-                      final label = item == SortName.aToZ ? "A to Z" : "Z to A";
+                      final label = item == SortName.aToZ
+                          ? AppLocalizations.of(context)!.a_to_z
+                          : AppLocalizations.of(context)!.z_to_a;
                       return FilterChip(
                           label: Text(label),
                           onSelected: (bool selected) {
@@ -189,7 +192,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                           color: theme.colorScheme.primary,
                         ),
                       ),
-                      child: const Text("Discard"),
+                      child: Text(AppLocalizations.of(context)!.discard),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -198,7 +201,7 @@ class _BenefitFiltersState extends State<BenefitFilters> {
                       onPressed: () {
                         _handleApplyFilters();
                       },
-                      child: const Text("Apply"),
+                      child: Text(AppLocalizations.of(context)!.apply),
                     ),
                   ),
                   const SizedBox(width: 8),

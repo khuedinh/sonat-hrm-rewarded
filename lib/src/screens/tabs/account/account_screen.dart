@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/app/bloc/app_bloc.dart';
@@ -12,8 +13,6 @@ import 'package:sonat_hrm_rewarded/src/screens/transaction_history/transaction_h
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
-
-  static const screenTitle = "Account";
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -33,19 +32,19 @@ class _AccountScreenState extends State<AccountScreen> {
     ThemeData theme = Theme.of(context);
     final List<Map<String, dynamic>> menuList = [
       {
-        "title": "Transaction history",
+        "title": AppLocalizations.of(context)!.transaction_history,
         "icon": Icons.history_rounded,
         "onTab": (BuildContext context) =>
             context.push(TransactionHistoryScreen.routeName),
       },
       {
-        "title": "Settings",
+        "title": AppLocalizations.of(context)!.settings,
         "icon": Icons.settings,
         "onTab": (BuildContext context) =>
             context.push(SettingsScreen.routeName),
       },
       {
-        "title": "Logout",
+        "title": AppLocalizations.of(context)!.logout,
         "icon": Icons.logout,
         "onTab": (BuildContext context) {
           handleSignOut();
@@ -126,7 +125,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: OverviewCard(
                             color: Colors.green,
                             icon: Icons.workspace_premium,
-                            title: "Received recognitions",
+                            title: AppLocalizations.of(context)!
+                                .received_recognitions,
                             value:
                                 userInfo?.userRecognition.totalRecognition ?? 0,
                             isLoading: isLoadingUserInfo,
@@ -137,7 +137,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: OverviewCard(
                             color: const Color.fromARGB(255, 255, 154, 59),
                             icon: Icons.card_giftcard,
-                            title: "Active benefits",
+                            title:
+                                AppLocalizations.of(context)!.active_benefits,
                             value: userInfo?.activeBenefit ?? 0,
                             isLoading: isLoadingUserInfo,
                           ),

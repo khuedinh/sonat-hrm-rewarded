@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
@@ -49,7 +50,7 @@ class SelectRecognitionValue extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScreenTitle(
-            title: 'Recognition value',
+            title: AppLocalizations.of(context)!.recognition_value,
             fontSize: 16,
             color: theme.colorScheme.onSurface,
           ),

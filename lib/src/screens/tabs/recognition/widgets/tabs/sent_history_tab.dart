@@ -45,8 +45,9 @@ class SentHistoryTab extends StatelessWidget {
         sentHistory.isEmpty
             ? const SliverToBoxAdapter(
                 child: SizedBox(
-                    height: 300,
-                    child: NoData(message: "No recognition history")),
+                  height: 300,
+                  child: NoData(message: "No recognition history"),
+                ),
               )
             : SliverList.builder(
                 itemCount: (sentHistory).length,
@@ -76,7 +77,9 @@ class SentHistoryTab extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      recognition.detailRecognitions![0].employee.name,
+                      recognition.detailRecognitions!
+                          .map((item) => item.employee.name)
+                          .join(", "),
                       style: theme.textTheme.titleSmall,
                       textAlign: TextAlign.start,
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
 import 'package:sonat_hrm_rewarded/src/models/benefit.dart';
@@ -69,14 +70,14 @@ class BenefitItem extends StatelessWidget {
                                 icon: Icons.currency_bitcoin_rounded,
                                 iconSize: 8,
                                 fontSize: 11,
-                                suffix: "coins",
+                                suffix: AppLocalizations.of(context)!.coins,
                                 spacing: 4,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 textAlign: TextAlign.end,
-                                "Stock: ${benefit.inStock}",
+                                "${AppLocalizations.of(context)!.stock}: ${benefit.inStock}",
                                 style: theme.textTheme.bodySmall!
                                     .copyWith(fontSize: 11),
                               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
@@ -12,8 +13,6 @@ import 'package:sonat_hrm_rewarded/src/utils/number.dart';
 
 class BenefitsScreen extends StatefulWidget {
   const BenefitsScreen({super.key});
-
-  static const screenTitle = 'Benefits';
 
   @override
   State<BenefitsScreen> createState() => _BenefitScreenState();
@@ -67,7 +66,9 @@ class _BenefitScreenState extends State<BenefitsScreen>
           foregroundColor: theme.colorScheme.onPrimary,
           title: Row(
             children: [
-              const ScreenTitle(title: "Current balance"),
+              ScreenTitle(
+                title: AppLocalizations.of(context)!.current_balance,
+              ),
               const SizedBox(width: 16),
               BlocBuilder<UserBloc, UserState>(
                 builder: (context, state) {
@@ -83,7 +84,7 @@ class _BenefitScreenState extends State<BenefitsScreen>
                   return DisplayAmount(
                     amount: formatNumber(currentCoin),
                     icon: Icons.currency_bitcoin_rounded,
-                    suffix: "Coins",
+                    suffix: AppLocalizations.of(context)!.coins,
                     isBold: true,
                     textColor: theme.colorScheme.onPrimary,
                   );
@@ -131,9 +132,9 @@ class _BenefitScreenState extends State<BenefitsScreen>
                 controller: _tabController,
                 indicatorColor: theme.colorScheme.primary,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-                tabs: const [
-                  Tab(text: "Gifts"),
-                  Tab(text: "My claim"),
+                tabs: [
+                  Tab(text: AppLocalizations.of(context)!.gifts),
+                  Tab(text: AppLocalizations.of(context)!.my_claim),
                 ],
               ),
             ),

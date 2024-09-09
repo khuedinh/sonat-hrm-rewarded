@@ -41,7 +41,7 @@ class _NotificationItemState extends State<NotificationItem> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               HtmlWidget(
-                generateMessage(widget.data.transactionHistory!),
+                generateMessage(widget.data.transactionHistory!, context),
               ),
               const SizedBox(
                 height: 4,

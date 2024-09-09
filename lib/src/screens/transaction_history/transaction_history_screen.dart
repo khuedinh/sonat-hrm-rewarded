@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/models/user.dart';
@@ -30,7 +32,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           centerTitle: true,
           backgroundColor: theme.colorScheme.primary,
           foregroundColor: theme.colorScheme.onPrimary,
-          title: const ScreenTitle(title: "Transaction history"),
+          title: ScreenTitle(
+            title: AppLocalizations.of(context)!.transaction_history,
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
@@ -42,7 +46,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ScreenTitle(
-                title: "Available balance",
+                title: AppLocalizations.of(context)!.available_balance,
                 color: theme.colorScheme.onSurface,
                 fontSize: 18,
               ),
@@ -55,17 +59,19 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                     children: [
                       Expanded(
                         child: BalanceCard(
-                          title: "Points",
+                          title: AppLocalizations.of(context)!
+                              .points
+                              .capitalizeFirst!,
                           value: userInfo?.balance.currentPoint ?? 0,
-                          // rateChange: 18.212348,
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: BalanceCard(
-                          title: "Coins",
+                          title: AppLocalizations.of(context)!
+                              .coins
+                              .capitalizeFirst!,
                           value: userInfo?.balance.currentCoin ?? 0,
-                          // rateChange: -24.11231232,
                         ),
                       ),
                     ],
@@ -74,7 +80,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               ),
               const SizedBox(height: 18),
               ScreenTitle(
-                title: "Transaction history",
+                title: AppLocalizations.of(context)!.transaction_history,
                 color: theme.colorScheme.onSurface,
                 fontSize: 18,
               ),
@@ -89,9 +95,17 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                               ChangeTabEvent(tab: value),
                             );
                       },
-                      tabs: const [
-                        Tab(text: "Points"),
-                        Tab(text: "Coins"),
+                      tabs: [
+                        Tab(
+                          text: AppLocalizations.of(context)!
+                              .points
+                              .capitalizeFirst!,
+                        ),
+                        Tab(
+                          text: AppLocalizations.of(context)!
+                              .coins
+                              .capitalizeFirst!,
+                        ),
                       ],
                     ),
                   );
