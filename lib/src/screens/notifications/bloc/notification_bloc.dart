@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:deepcopy/deepcopy.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logger/logger.dart';
@@ -79,7 +78,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     });
 
     on<ReadNotiEvent>((event, emit) async {
-      final itemList = state.notiList.deepcopy() as List<NotificationData>;
+      final itemList = [...state.notiList];
       final index =
           itemList.indexWhere((element) => element.id == event.notiId);
       if (index < 0) return;
@@ -100,7 +99,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
     on<ReceiveNotiEvent>((event, emit) async {
       final unreadCountRes = await NotificationApi.getUnreadCount();
-      TransactionHistoryData data = event.data as TransactionHistoryData;
+      TransactionHistoryData data = TransactionHistoryData.fromJson(event.data);
       NotificationData newNoti = NotificationData(
         createdAt: data.createdAt,
         deletedAt: data.deletedAt,
@@ -111,7 +110,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         updatedAt: data.updatedAt,
       );
 
-      final itemList = state.notiList..add(newNoti);
+      final itemList = [...state.notiList];
+      itemList.add(newNoti);
 
       emit(state.copyWith(
         unreadCount: unreadCountRes.count,

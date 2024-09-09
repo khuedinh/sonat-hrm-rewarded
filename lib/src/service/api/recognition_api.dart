@@ -1,10 +1,13 @@
+import 'package:sonat_hrm_rewarded/src/service/api/api_utils.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/dio_interceptor.dart';
 
 class RecognitionApi {
   static const String _path = "/recognitions";
 
-  static Future getHistory() {
-    return DioClient.instance.get('$_path/history');
+  static Future getHistory(queryParams) {
+    final formatQueryParams = ApiUtils.processQueryParams(queryParams);
+    return DioClient.instance
+        .get('$_path/history', queryParameters: formatQueryParams);
   }
 
   static Future getEmployees() {
@@ -25,6 +28,14 @@ class RecognitionApi {
 
   static Future getGroups() {
     return DioClient.instance.get("/groups");
+  }
+
+  static Future createGroup(Map<String, dynamic> data) {
+    return DioClient.instance.post("/groups", data: data);
+  }
+
+  static Future updateGroup(String groupId, Map<String, dynamic> data) {
+    return DioClient.instance.put("/groups", data: data);
   }
 
   static Future getGroupMembers(String groupId) {

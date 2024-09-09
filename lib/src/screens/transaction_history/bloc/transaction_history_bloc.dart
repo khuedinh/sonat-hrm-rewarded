@@ -1,3 +1,4 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/models/transaction_history.dart';
@@ -51,7 +52,8 @@ class TransactionHistoryBloc
       };
 
       final response = await TransactionHistoryApi.getTransactionHistory(
-          queryParams: queryParams);
+        queryParams: queryParams,
+      );
       final responseData = TransactionHistoryResponse.fromJson(response);
 
       emit(state.copyWith(
@@ -61,7 +63,7 @@ class TransactionHistoryBloc
             ...state.listPointTransactions,
             ...responseData.data
           ]));
-    });
+    }, transformer: droppable());
 
     on<RefreshTransactionHistoryPointEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true, pagePoint: 1));
@@ -122,7 +124,8 @@ class TransactionHistoryBloc
       };
 
       final response = await TransactionHistoryApi.getTransactionHistory(
-          queryParams: queryParams);
+        queryParams: queryParams,
+      );
       final responseData = TransactionHistoryResponse.fromJson(response);
 
       emit(state.copyWith(
@@ -132,7 +135,7 @@ class TransactionHistoryBloc
             ...state.listCoinTransactions,
             ...responseData.data
           ]));
-    });
+    }, transformer: droppable());
 
     on<RefreshTransactionHistoryCoinEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true, pagePoint: 1));

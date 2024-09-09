@@ -10,7 +10,7 @@ class TransactionHistoryState extends Equatable {
     this.hasReachedMaxCoin = false,
     this.pagePoint = 1,
     this.pageCoin = 1,
-    this.pageSize = 10,
+    this.pageSize = 20,
   });
 
   final int tab;

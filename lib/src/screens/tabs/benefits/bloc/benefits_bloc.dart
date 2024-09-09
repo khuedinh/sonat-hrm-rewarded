@@ -149,24 +149,33 @@ class BenefitsBloc extends Bloc<BenefitsEvent, BenefitsState> {
       transformer: restartable(),
     );
 
-    on<ChangeFilter>((ChangeFilter event, Emitter emit) async {
-      emit(state.copyWith(
-        isLoadingBenefits: true,
-        page: 1,
-        sortPrice: event.sortPrice,
-        sortName: event.sortName,
-        priceRange: event.priceRange,
-      ));
+    on<ChangeFilter>(
+      (ChangeFilter event, Emitter emit) async {
+        emit(state.copyWith(
+          isLoadingBenefits: true,
+          page: 1,
+          sortPrice: event.sortPrice,
+          sortName: event.sortName,
+          priceRange: event.priceRange,
+        ));
 
-      final benefitResponse = await fetchBenefits(state, null);
+        await Future.delayed(const Duration(milliseconds: 300));
+        if (emit.isDone) return;
 
-      emit(state.copyWith(
-        listBenefits: benefitResponse?.data ?? [],
-        isLoadingBenefits: false,
-        hasReachedMaxBenefits:
-            benefitResponse?.page == benefitResponse?.totalPages,
-      ));
-    });
+        final benefitResponse = await fetchBenefits(state, null);
+
+        emit(state.copyWith(
+          listBenefits: benefitResponse?.data ?? [],
+          isLoadingBenefits: false,
+          hasReachedMaxBenefits:
+              benefitResponse?.page == benefitResponse?.totalPages,
+          sortPrice: event.sortPrice,
+          sortName: event.sortName,
+          priceRange: event.priceRange,
+        ));
+      },
+      transformer: restartable(),
+    );
 
     on<ArchiveClaimedBenefit>((
       ArchiveClaimedBenefit event,

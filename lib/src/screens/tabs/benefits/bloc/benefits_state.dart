@@ -77,9 +77,9 @@ class BenefitsState extends Equatable {
       textSearch: textSearch ?? this.textSearch,
       page: page ?? this.page,
       pageSize: pageSize ?? this.pageSize,
-      sortPrice: sortPrice ?? this.sortPrice,
-      sortName: sortName ?? this.sortName,
-      priceRange: priceRange ?? this.priceRange,
+      sortPrice: sortPrice,
+      sortName: sortName,
+      priceRange: priceRange,
     );
   }
 

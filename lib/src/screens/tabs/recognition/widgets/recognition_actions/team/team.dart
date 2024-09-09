@@ -1,38 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sonat_hrm_rewarded/src/common/widgets/display_amount/display_amount.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/failure_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/loading_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/api_call_status_indicator/success_dialog.dart';
+import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/models/employee.dart';
-import 'package:sonat_hrm_rewarded/src/models/recognition.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/recognition_values.dart';
-import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/team/team_filters.dart';
-import 'package:sonat_hrm_rewarded/src/service/api/balance_api.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/bloc/recognition_bloc.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/list_employees.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/select_point.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/select_recognition_value.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/team/list_group.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/recognition/widgets/recognition_actions/team/select_more_recipient.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/recognition_api.dart';
-import 'package:sonat_hrm_rewarded/src/utils/number.dart';
-
-final recognitionValueColors = [
-  Colors.blue,
-  Colors.green,
-  Colors.red,
-  Colors.orange,
-  Colors.purple,
-  Colors.pink,
-  Colors.teal,
-  Colors.amber,
-  Colors.deepPurple,
-  Colors.indigo,
-  Colors.lightBlue,
-  Colors.lightGreen,
-  Colors.lime,
-  Colors.deepOrange,
-  Colors.cyan,
-  Colors.brown,
-  Colors.grey,
-  Colors.blueGrey,
-  Colors.yellow,
-];
 
 class Team extends StatefulWidget {
   const Team({super.key});
@@ -42,373 +23,291 @@ class Team extends StatefulWidget {
 }
 
 class _TeamState extends State<Team> {
-  double _sliderValue = 200;
-  int _selectedChipValue = 200;
-  dynamic _selectedRecognitionValue = 'Core values';
-  //dynamic _selectedRecipient;
-  //dynamic _searchedRecipient;
-  dynamic _isSavePresets = false;
-  dynamic _isAllocateCustom = false;
-  List<RecognitionValue> recognitionValueList = [];
-  bool isLoading = true;
-  bool isLoadingBalance = true;
-  bool isLoadingGroups = true;
-  List<Employee> employeeList = [];
-  List<int> points = [100, 200, 300, 500];
-  int balance = 0;
-  List<Group> groups = [];
-  List<MemberGroup> _selectedRecipients = [];
+  final TextEditingController _groupNameController = TextEditingController();
+  final List<Employee> _selectedRecipients = [];
+  String? _selectedRecognitionValue;
+  String? _selectedGroup;
+  double _pointValue = 200;
+  bool _isSavePresets = false;
+  bool _isLoadingGroupDetails = false;
 
-  @override
-  void initState() {
-    super.initState();
-    fetchEmployees();
-    fetchBalance();
-    fetchGroups();
-  }
-
-  Future<void> fetchEmployees() async {
-    final employeeResponse = await RecognitionApi.getEmployees();
-    final recognitionValueResponse =
-        await RecognitionApi.getRecognitionValues();
-
+  Future<void> _selectGroup(Group group) async {
     setState(() {
-      employeeList = (employeeResponse as List).map((item) {
-        return Employee.fromJson(item as Map<String, dynamic>);
-      }).toList();
-      recognitionValueList = (recognitionValueResponse as List).map((item) {
-        return RecognitionValue.fromJson(item as Map<String, dynamic>);
-      }).toList();
-      isLoading = false;
+      _isLoadingGroupDetails = true;
+      _selectedGroup = group.id;
     });
+    final response = await RecognitionApi.getGroupMembers(group.id);
+    final groupDetails =
+        GroupDetails.fromJson(response as Map<String, dynamic>);
+    final members =
+        groupDetails.memberGroups.map((item) => item.employee).toList();
+
+    if (mounted) {
+      setState(() {
+        _selectedRecipients.clear();
+        _selectedRecipients.addAll(members);
+        _isLoadingGroupDetails = false;
+      });
+    }
   }
 
-  Future<void> fetchBalance() async {
-    final balanceResponse = await BalanceApi.getCurrentBalance();
-    setState(() {
-      balance = CurrentBalance.fromJson(balanceResponse as Map<String, dynamic>)
-          .currentPoint;
-      isLoadingBalance = false;
-    });
+  void _handleAddMoreRecipients() async {
+    final selectedRecipient = await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return BlocBuilder<RecognitionBloc, RecognitionState>(
+          builder: (context, state) {
+            final isLoading = state.isLoadingListEmployees;
+            final listEmployees = state.listEmployees;
+
+            return SelectMoreRecipient(
+              isLoading: isLoading,
+              listEmployees: listEmployees,
+              initSelectedRecipients: _selectedRecipients,
+            );
+          },
+        );
+      },
+    );
+
+    if (selectedRecipient != null) {
+      setState(() {
+        _selectedRecipients.clear();
+        _selectedRecipients.addAll(selectedRecipient);
+      });
+    }
   }
 
-  Future<void> fetchGroups() async {
-    final groupsResponse = await RecognitionApi.getGroups();
-    setState(() {
-      groups = (groupsResponse as List).map((item) {
-        return Group.fromJson(item as Map<String, dynamic>);
-      }).toList();
-      isLoadingGroups = false;
-    });
-  }
+  Future<void> _sendRecognition() async {
+    final data = {
+      "recognitionValueId": _selectedRecognitionValue,
+      "detailRecognitions": _selectedRecipients.map((employee) {
+        return {
+          "recipientEmail": employee.email,
+          "point": _pointValue,
+        };
+      }).toList(),
+      "message": "",
+      "type": "team",
+    };
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const LoadingDialog();
+      },
+    );
 
-  final TextEditingController _textFieldController = TextEditingController();
+    try {
+      await RecognitionApi.sendRecognition(data);
 
-  @override
-  void dispose() {
-    _textFieldController.dispose();
-    super.dispose();
+      if (_isSavePresets) {
+        final presetData = {
+          "emails": _selectedRecipients.map((item) => item.email).toList(),
+          "name": _groupNameController.text,
+          "id": _selectedGroup,
+        };
+
+        if (_selectedGroup != null) {
+          await RecognitionApi.updateGroup(_selectedGroup!, presetData);
+        } else {
+          await RecognitionApi.createGroup(presetData);
+        }
+      }
+
+      if (mounted) {
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return const SuccessDialog(
+              message: "Sended successfully",
+            );
+          },
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const FailureDialog(
+              message: 'Failed to send recognition.',
+            );
+          },
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    List<TextSpan> splitText(String text, int maxLength) {
-      List<String> words = text.split(' ');
-      List<TextSpan> spans = [];
-      StringBuffer currentLine = StringBuffer();
-      int currentLineCount = 0;
-
-      for (String word in words) {
-        if (currentLine.length + word.length + 1 > maxLength) {
-          spans.add(TextSpan(text: '$currentLine\n'));
-          currentLine.clear();
-          currentLineCount++;
-          if (currentLineCount >= 2) break;
-        }
-        if (currentLine.isNotEmpty) {
-          currentLine.write(' ');
-        }
-        currentLine.write(word);
-      }
-
-      if (currentLine.isNotEmpty) {
-        spans.add(TextSpan(text: currentLine.toString()));
-      }
-
-      if (currentLineCount >= 2) {
-        String truncatedText = spans[1].text!.trim();
-        if (truncatedText.length > maxLength - 3) {
-          truncatedText = '${truncatedText.substring(0, maxLength - 3)}...';
-        } else {
-          truncatedText += '...';
-        }
-        spans[1] = TextSpan(text: truncatedText);
-      }
-
-      return spans;
-    }
-
-    void handleOpenFilter() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: TeamFilters(
-                groups: groups,
-                selectedRecipients: _selectedRecipients,
-                onSelectedRecipientChanged: (selectedRecipients) {
-                  setState(() {
-                    _selectedRecipients = selectedRecipients;
-                  });
-                }),
-          );
-        },
-      );
-    }
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: theme.colorScheme.primary,
-          foregroundColor: theme.colorScheme.onPrimary,
-          title: const ScreenTitle(title: "Team recognition"),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.primary,
+        foregroundColor: theme.colorScheme.onPrimary,
+        title: const ScreenTitle(title: "Team recognition"),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-        bottomNavigationBar: BottomAppBar(
-          elevation: 2,
-          color: theme.colorScheme.surface,
-          child: SizedBox(
-            height: 64,
-            child: FilledButton(
-              onPressed: () {},
-              child: Text(
-                'Send now',
-                style: TextStyle(
-                  color: theme.colorScheme.onPrimary,
-                  fontSize: 16,
-                ),
-              ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 2,
+        height: 64,
+        color: theme.colorScheme.surface,
+        child: FilledButton(
+          onPressed: () {
+            _sendRecognition();
+          },
+          child: Text(
+            'Send now',
+            style: TextStyle(
+              color: theme.colorScheme.onPrimary,
+              fontSize: 16,
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CustomScrollView(
-            shrinkWrap: true,
-            slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(
-                  child: ScreenTitle(
-                title: "Recipients",
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: RefreshableWidget(
+          onRefresh: () async {
+            context.read<RecognitionBloc>().add(FetchListRecipients());
+            context.read<RecognitionBloc>().add(FetchListRecognitionValues());
+            context.read<RecognitionBloc>().add(FetchListGroups());
+          },
+          slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverToBoxAdapter(
+              child: ScreenTitle(
+                title: "Groups",
+                fontSize: 16,
                 color: theme.colorScheme.onSurface,
-              )),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              SliverToBoxAdapter(
-                  child: Row(
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            BlocBuilder<RecognitionBloc, RecognitionState>(
+              builder: (context, state) {
+                final isLoading = state.isLoadingListGroups;
+                final listGroups = state.listGroups;
+                return ListGroups(
+                  isLoading: isLoading,
+                  listGroups: listGroups,
+                  selectedGroup: _selectedGroup,
+                  onSelectGroup: (group) async {
+                    if (_selectedGroup == group.id) {
+                      setState(() {
+                        _selectedGroup = null;
+                        _selectedRecipients.clear();
+                      });
+                      return;
+                    }
+                    await _selectGroup(group);
+                  },
+                );
+              },
+            ),
+            SliverToBoxAdapter(
+              child: ScreenTitle(
+                title: "Selected recipients",
+                fontSize: 16,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            ListEmployees(
+              isShowAddMore: true,
+              isLoading: _isLoadingGroupDetails,
+              listEmployees: _selectedRecipients,
+              onSelectEmployee: (employee) {},
+              onAddMoreRecipients: _handleAddMoreRecipients,
+            ),
+            SliverToBoxAdapter(
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        // setState(() {
-                        //   // _selectedRecipient = user;
-                        // });
-                        handleOpenFilter();
+                  const Text("Save this team's recipient preset"),
+                  Transform.scale(
+                    scale: 0.75,
+                    child: Switch(
+                      value: _isSavePresets,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _isSavePresets = value;
+                        });
                       },
-                      child: Column(
-                        children: [
-                          const CircleAvatar(
-                            radius: 24,
-                            child: Icon(Icons.add),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              children: splitText("Add recipient", 9),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (_isSavePresets && _selectedGroup == null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: TextField(
+                    controller: _groupNameController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      hintText: "Enter group name",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
                       ),
                     ),
                   ),
-                  ..._selectedRecipients.map((user) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            // _selectedRecipient = user;
-                          });
-                        },
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              child: ClipOval(
-                                child: CachedNetworkImage(
-                                  imageUrl: user.employees.picture,
-                                  fit: BoxFit.cover,
-                                  width: 48,
-                                  height: 48,
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
-                              ),
-                            ),
-                            Text.rich(
-                              TextSpan(
-                                children: splitText(user.employees.name, 6),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  })
-                ],
-              )),
-              SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    const Text("Save this team's recipient preset"),
-                    Transform.scale(
-                      scale: 0.75,
-                      child: Switch(
-                        value: _isSavePresets,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isSavePresets = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
                 ),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ScreenTitle(
-                      title: 'Recognition Points',
-                      color: theme.colorScheme.onSurface,
-                    ),
-                    //const SizedBox(height: 8),
-                    Padding(
-                        padding: EdgeInsets.zero,
-                        child: Row(
-                          children: [
-                            const Text("Allocate custom for each team member"),
-                            Transform.scale(
-                              scale: 0.75,
-                              child: Switch(
-                                value: _isAllocateCustom,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    _isAllocateCustom = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        )),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text("Points balanced: ",
-                            style: TextStyle(fontSize: 16)),
-                        const SizedBox(width: 8),
-                        isLoadingBalance
-                            ? const Skeletonizer(child: Bone.text(words: 1))
-                            : DisplayAmount(
-                                amount: formatNumber(balance),
-                                icon: Icons.currency_bitcoin_rounded,
-                                suffix: "Points",
-                              ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${_sliderValue.toInt().toString()} Points",
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            trackHeight: 4,
-                            overlayShape: const RoundSliderOverlayShape(
-                              overlayRadius: 12,
-                            ),
-                          ),
-                          child: Slider(
-                            mouseCursor: WidgetStateMouseCursor.textable,
-                            value: _sliderValue,
-                            min: 5,
-                            max: 500,
-                            onChanged: (double value) {
-                              setState(() {
-                                _sliderValue = value;
-                                if (!points.contains(_sliderValue)) {
-                                  _selectedChipValue = -1;
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text("Use slider to select the amount"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: points.map((point) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: ChoiceChip(
-                                label: Text("${point}p"),
-                                selected: _selectedChipValue == point,
-                                onSelected: (bool selected) {
-                                  setState(() {
-                                    if (selected) {
-                                      _selectedChipValue = point;
-                                      _sliderValue = point.toDouble();
-                                    }
-                                  });
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ],
+            BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+              final isCurrentLoadingBalance = state.isLoadingCurrentBalance;
+              final currentBalance = state.currentBalance;
+              return SliverToBoxAdapter(
+                child: SelectPoint(
+                  isLoading: isCurrentLoadingBalance,
+                  balance: currentBalance?.currentPoint ?? 0,
+                  value: _pointValue,
+                  onChangePoint: (double value) {
+                    setState(() {
+                      _pointValue = value;
+                    });
+                  },
                 ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              RecognitionValueWidget(
+              );
+            }),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            BlocBuilder<RecognitionBloc, RecognitionState>(
+              builder: (context, state) {
+                final isLoading = state.isLoadingRecognitionValues;
+                final listRecognitionValues = state.listRecognitionValues;
+                return SelectRecognitionValue(
                   isLoading: isLoading,
-                  recognitionValueList: recognitionValueList,
+                  listRecognitionValues: listRecognitionValues,
                   selectedRecognitionValue: _selectedRecognitionValue,
                   onRecognitionValueChanged: (value) {
                     setState(() {
                       _selectedRecognitionValue = value;
                     });
                   },
-                  recognitionValueColors: recognitionValueColors),
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            ],
-          ),
-        ));
+                );
+              },
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          ],
+        ),
+      ),
+    );
   }
 }

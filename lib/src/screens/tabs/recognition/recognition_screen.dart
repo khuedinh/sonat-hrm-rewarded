@@ -18,27 +18,33 @@ class RecognitionScreen extends StatefulWidget {
 }
 
 class _RecognitionScreenState extends State<RecognitionScreen> {
+  void _handleOpenFilter() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      isScrollControlled: true,
+      enableDrag: false,
+      builder: (_) => RecognitionFilters(
+        initSortBy: context.read<RecognitionBloc>().state.sortBy,
+        initTimeRange: context.read<RecognitionBloc>().state.timeRange,
+        initType: context.read<RecognitionBloc>().state.type,
+        initStartDate: context.read<RecognitionBloc>().state.startDate,
+        initEndDate: context.read<RecognitionBloc>().state.endDate,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<RecognitionBloc>(context).add(FetchListRecipients());
+    BlocProvider.of<RecognitionBloc>(context).add(FetchListRecognitionValues());
+    BlocProvider.of<RecognitionBloc>(context).add(FetchListGroups());
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    void handleOpenFilter() {
-      showModalBottomSheet(
-        useSafeArea: true,
-        context: context,
-        isScrollControlled: true,
-        enableDrag: false,
-        builder: (context) => const RecognitionFilters(
-          initialSortByFilter: SortByFilter.latest,
-          initialTimeFilter: TimeFilter.last7Days,
-          initialTypeFilter: TypeFilter.all,
-        ),
-      );
-    }
 
     return DefaultTabController(
       initialIndex: 0,
@@ -152,10 +158,23 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                     fontSize: 20.0,
                   ),
                 ),
-                IconButton(
-                  onPressed: handleOpenFilter,
-                  icon: const Icon(Icons.filter_alt_outlined),
-                ),
+                BlocBuilder<RecognitionBloc, RecognitionState>(
+                    builder: (context, state) {
+                  int filterCount = 0;
+                  if (state.startDate != null && state.endDate != null) {
+                    filterCount++;
+                  }
+                  if (state.sortBy != null) filterCount++;
+                  if (state.type != null) filterCount++;
+                  return IconButton(
+                    icon: filterCount > 0
+                        ? Badge.count(
+                            count: filterCount,
+                            child: const Icon(Icons.filter_alt_rounded))
+                        : const Icon(Icons.filter_alt_outlined),
+                    onPressed: _handleOpenFilter,
+                  );
+                }),
               ],
             ),
             TabBar(
