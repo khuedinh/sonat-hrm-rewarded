@@ -58,23 +58,23 @@ class DioClient {
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
-    try {
-      final Response response = await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response.data;
-      }
-      throw "something went wrong";
-    } catch (e) {
-      debugPrint('$e');
+    // try {
+    final Response response = await _dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.data;
     }
+    // throw "something went wrong";
+    // } catch (e) {
+    //   debugPrint('$e');
+    // }
   }
 
   ///Put Method

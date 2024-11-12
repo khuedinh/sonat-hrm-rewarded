@@ -23,6 +23,7 @@ class RecognitionState extends Equatable {
     this.type,
     this.startDate,
     this.endDate,
+    this.searchEmployee = "",
   });
 
   final bool isLoadingRecognitionHistory;
@@ -39,6 +40,7 @@ class RecognitionState extends Equatable {
   final RecognitionType? type;
   final DateTime? startDate;
   final DateTime? endDate;
+  final String searchEmployee;
 
   RecognitionState copyWith({
     bool? isLoadingRecognitionHistory,
@@ -55,6 +57,7 @@ class RecognitionState extends Equatable {
     RecognitionType? type,
     DateTime? startDate,
     DateTime? endDate,
+    String? searchEmployee,
   }) {
     return RecognitionState(
       isLoadingRecognitionHistory:
@@ -75,6 +78,7 @@ class RecognitionState extends Equatable {
       type: type,
       startDate: startDate,
       endDate: endDate,
+      searchEmployee: searchEmployee ?? this.searchEmployee,
     );
   }
 
@@ -89,5 +93,6 @@ class RecognitionState extends Equatable {
         listEmployees,
         listRecognitionValues,
         listGroups,
+        searchEmployee,
       ];
 }
