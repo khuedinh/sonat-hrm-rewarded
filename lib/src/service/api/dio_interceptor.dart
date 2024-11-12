@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DioClient {
@@ -33,24 +32,17 @@ class DioClient {
       Options? options,
       CancelToken? cancelToken,
       ProgressCallback? onReceiveProgress}) async {
-    try {
-      final Response response = await _dio.get(
-        path,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress,
-      );
-      if (response.statusCode == 200) {
-        return response.data;
-      }
-      throw "something went wrong";
-    } on DioException catch (e) {
-      if (e.response != null) {
-        debugPrint(e.response?.data);
-        return e.response?.data;
-      }
+    final Response response = await _dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      onReceiveProgress: onReceiveProgress,
+    );
+    if (response.statusCode == 200) {
+      return response.data;
     }
+    throw "something went wrong";
   }
 
   ///Post Method
@@ -61,26 +53,19 @@ class DioClient {
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
-    try {
-      final Response response = await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response.data;
-      }
-      throw "something went wrong";
-    } on DioException catch (e) {
-      if (e.response != null) {
-        debugPrint(e.response?.data);
-        return e.response?.data;
-      }
+    final Response response = await _dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.data;
     }
+    throw "something went wrong";
   }
 
   ///Put Method
@@ -91,26 +76,19 @@ class DioClient {
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
-    try {
-      final Response response = await _dio.put(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      if (response.statusCode == 200) {
-        return response.data;
-      }
-      throw "something went wrong";
-    } on DioException catch (e) {
-      if (e.response != null) {
-        debugPrint(e.response?.data);
-        return e.response?.data;
-      }
+    final Response response = await _dio.put(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    if (response.statusCode == 200) {
+      return response.data;
     }
+    throw "something went wrong";
   }
 
   ///Patch Method
@@ -121,26 +99,19 @@ class DioClient {
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
-    try {
-      final Response response = await _dio.patch(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      if (response.statusCode == 200) {
-        return response.data;
-      }
-      throw "something went wrong";
-    } on DioException catch (e) {
-      if (e.response != null) {
-        debugPrint(e.response?.data);
-        return e.response?.data;
-      }
+    final Response response = await _dio.patch(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    if (response.statusCode == 200) {
+      return response.data;
     }
+    throw "something went wrong";
   }
 
   ///Delete Method
@@ -151,24 +122,17 @@ class DioClient {
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
-    try {
-      final Response response = await _dio.delete(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      if (response.statusCode == 204) {
-        return response.data;
-      }
-      throw "something went wrong";
-    } on DioException catch (e) {
-      if (e.response != null) {
-        debugPrint(e.response?.data);
-        return e.response?.data;
-      }
+    final Response response = await _dio.delete(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+    if (response.statusCode == 204) {
+      return response.data;
     }
+    throw "something went wrong";
   }
 }
 

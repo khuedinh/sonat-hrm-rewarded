@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -82,19 +83,33 @@ class _BenefitDetailsScreenState extends State<BenefitDetailsScreen> {
       );
     }
 
-    await BenefitApi.redeemBenefit(_benefitDetails!.id);
+    try {
+      await BenefitApi.redeemBenefit(_benefitDetails!.id);
 
-    if (mounted) {
-      context.read<UserBloc>().add(FetchCurrentBalance());
-      Navigator.of(context).pop();
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const SuccessDialog(
-            message: "Redeem successfully",
-          );
-        },
-      );
+      if (mounted) {
+        context.read<UserBloc>().add(FetchCurrentBalance());
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const SuccessDialog(
+              message: "Redeem successfully",
+            );
+          },
+        );
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SuccessDialog(
+              message: e.response?.data['message'] ?? 'Redeem failed',
+            );
+          },
+        );
+      }
     }
   }
 

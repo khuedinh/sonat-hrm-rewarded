@@ -149,5 +149,9 @@ class RecognitionBloc extends Bloc<RecognitionEvent, RecognitionState> {
 
       emit(state.copyWith(isLoadingListGroups: false));
     });
+
+    on<SearchEmployee>((event, emit) async {
+      emit(state.copyWith(searchEmployee: event.search));
+    });
   }
 }
