@@ -19,7 +19,7 @@ class SelectMoreRecipient extends StatefulWidget {
 }
 
 class _SelectMoreRecipientState extends State<SelectMoreRecipient> {
-  final TextEditingController _searchController = TextEditingController();
+  String _search = "";
   final List<Employee> _selectedRecipient = [];
 
   @override
@@ -35,7 +35,7 @@ class _SelectMoreRecipientState extends State<SelectMoreRecipient> {
     final filteredListEmployees = widget.listEmployees.where((employee) {
       final name = employee.name.toLowerCase();
       final email = employee.email.toLowerCase();
-      final search = _searchController.text.toLowerCase();
+      final search = _search.toLowerCase();
       return name.contains(search) || email.contains(search);
     }).toList();
 
@@ -46,7 +46,6 @@ class _SelectMoreRecipientState extends State<SelectMoreRecipient> {
         child: Column(
           children: [
             TextField(
-              controller: _searchController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 hintText: "Enter name or email",
@@ -61,6 +60,11 @@ class _SelectMoreRecipientState extends State<SelectMoreRecipient> {
                   ),
                 ),
               ),
+              onChanged: (value) => {
+                setState(() {
+                  _search = value;
+                })
+              },
             ),
             const SizedBox(height: 8),
             Expanded(

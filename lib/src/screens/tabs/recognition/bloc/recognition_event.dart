@@ -40,3 +40,12 @@ class FetchListGroups extends RecognitionEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SearchEmployee extends RecognitionEvent {
+  final String search;
+
+  SearchEmployee({required this.search});
+
+  @override
+  List<Object?> get props => [search];
+}

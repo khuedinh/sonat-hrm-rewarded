@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,7 +24,6 @@ class PeerToPeer extends StatefulWidget {
 }
 
 class _PeerToPeerState extends State<PeerToPeer> {
-  final TextEditingController _searchController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
 
   Employee? _selectedRecipient;
@@ -64,14 +64,16 @@ class _PeerToPeerState extends State<PeerToPeer> {
           },
         );
       }
-    } catch (e) {
+    } on DioException catch (e) {
       if (mounted) {
+        String errorMessage = e.response?.data['message'] ??
+            AppLocalizations.of(context)!.failed_to_send;
         Navigator.of(context).pop();
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return FailureDialog(
-              message: AppLocalizations.of(context)!.failed_to_send,
+              message: errorMessage,
             );
           },
         );
@@ -135,22 +137,25 @@ class _PeerToPeerState extends State<PeerToPeer> {
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
               child: TextField(
-                controller: _searchController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  hintText: AppLocalizations.of(context)!.enter_email_or_name,
-                  prefixIcon: const Icon(Icons.search, size: 28),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    hintText: AppLocalizations.of(context)!.enter_email_or_name,
+                    prefixIcon: const Icon(Icons.search, size: 28),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                  onChanged: (value) {
+                    context.read<RecognitionBloc>().add(
+                          SearchEmployee(search: value),
+                        );
+                  }),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
@@ -164,17 +169,18 @@ class _PeerToPeerState extends State<PeerToPeer> {
             BlocBuilder<RecognitionBloc, RecognitionState>(
               builder: (context, state) {
                 final isLoading = state.isLoadingListEmployees;
-                final listFilteredEmployees = state.listEmployees
-                    .where(
-                      (element) =>
-                          element.name
-                              .toLowerCase()
-                              .contains(_searchController.text.toLowerCase()) ||
-                          element.email
-                              .toLowerCase()
-                              .contains(_searchController.text.toLowerCase()),
-                    )
-                    .toList();
+                final searchEmployee = state.searchEmployee;
+                final listFilteredEmployees = state.listEmployees.where(
+                  (element) {
+                    if (searchEmployee.isEmpty) return true;
+                    return element.name
+                            .toLowerCase()
+                            .contains(searchEmployee.toLowerCase()) ||
+                        element.email
+                            .toLowerCase()
+                            .contains(searchEmployee.toLowerCase());
+                  },
+                ).toList();
 
                 return ListEmployees(
                     isLoading: isLoading,

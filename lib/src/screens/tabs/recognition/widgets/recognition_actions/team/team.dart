@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -129,14 +130,16 @@ class _TeamState extends State<Team> {
           },
         );
       }
-    } catch (e) {
+    } on DioException catch (e) {
       if (mounted) {
+        String errorMessage = e.response?.data['message'] ??
+            AppLocalizations.of(context)!.failed_to_send;
         Navigator.of(context).pop();
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return FailureDialog(
-              message: AppLocalizations.of(context)!.failed_to_send,
+              message: errorMessage,
             );
           },
         );

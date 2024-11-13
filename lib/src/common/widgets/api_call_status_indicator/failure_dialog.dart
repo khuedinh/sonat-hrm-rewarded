@@ -8,6 +8,8 @@ class FailureDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -17,14 +19,17 @@ class FailureDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const ScreenTitle(title: "Failure"),
+            ScreenTitle(
+              title: "Failure",
+              color: theme.colorScheme.onSurface,
+            ),
             const SizedBox(height: 20),
-            const Icon(Icons.error, color: Colors.red, size: 100),
+            const Icon(Icons.error, color: Colors.red, size: 64),
             const SizedBox(height: 20),
             Center(
               child: Text(
                 message,
-                style: const TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
             const SizedBox(height: 20),
