@@ -39,7 +39,7 @@ class RefreshableWidget extends StatelessWidget {
         CupertinoSliverRefreshControl(
           onRefresh: onRefresh,
           builder: buildRefreshIndicator,
-          refreshTriggerPullDistance: 150,
+          refreshTriggerPullDistance: 120,
         ),
         ...slivers
       ],

@@ -65,6 +65,9 @@ class _SelectMoreRecipientState extends State<SelectMoreRecipient> {
                   _search = value;
                 })
               },
+              onTapOutside: (event) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
             ),
             const SizedBox(height: 8),
             Expanded(

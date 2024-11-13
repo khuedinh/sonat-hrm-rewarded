@@ -273,6 +273,9 @@ class _TeamState extends State<Team> {
                         ),
                       ),
                     ),
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                   ),
                 ),
               ),

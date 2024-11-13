@@ -13,7 +13,7 @@ String generateMessage(
     }
 
     if (transactionHistory.event == TransactionEvent.allocate) {
-      return "${AppLocalizations.of(context)!.you_have_been_allocated} <b>${formatNumber(transactionHistory.amount)} ${AppLocalizations.of(context)!.points}</b>.";
+      return "${AppLocalizations.of(context)!.you_have_been_allocated} <b>${formatNumber(transactionHistory.amount)} ${transactionHistory.currency == CurrencyType.coins ? AppLocalizations.of(context)!.coins : AppLocalizations.of(context)!.points}</b>.";
     }
 
     if (transactionHistory.event == TransactionEvent.recognition) {

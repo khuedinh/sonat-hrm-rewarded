@@ -68,6 +68,9 @@ class _GiftsTabState extends State<GiftsTab>
                             ChangeTextSearch(text: value),
                           );
                     },
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                   ),
                 );
               },

@@ -110,13 +110,12 @@ class _PeerToPeerState extends State<PeerToPeer> {
         height: 64,
         color: theme.colorScheme.surface,
         child: FilledButton(
-          onPressed: () {
-            if (_selectedRecognitionValue == null ||
-                _selectedRecipient == null) {
-              return;
-            }
-            _sendRecognition();
-          },
+          onPressed:
+              (_selectedRecognitionValue == null || _selectedRecipient == null)
+                  ? null
+                  : () {
+                      _sendRecognition();
+                    },
           child: Text(
             AppLocalizations.of(context)!.send_now,
             style: TextStyle(
@@ -137,25 +136,29 @@ class _PeerToPeerState extends State<PeerToPeer> {
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
               child: TextField(
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    hintText: AppLocalizations.of(context)!.enter_email_or_name,
-                    prefixIcon: const Icon(Icons.search, size: 28),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  hintText: AppLocalizations.of(context)!.enter_email_or_name,
+                  prefixIcon: const Icon(Icons.search, size: 28),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
                     ),
                   ),
-                  onChanged: (value) {
-                    context.read<RecognitionBloc>().add(
-                          SearchEmployee(search: value),
-                        );
-                  }),
+                ),
+                onChanged: (value) {
+                  context.read<RecognitionBloc>().add(
+                        SearchEmployee(search: value),
+                      );
+                },
+                onTapOutside: (event) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+              ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
@@ -272,6 +275,9 @@ class _PeerToPeerState extends State<PeerToPeer> {
                     ),
                   ),
                 ),
+                onTapOutside: (event) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
