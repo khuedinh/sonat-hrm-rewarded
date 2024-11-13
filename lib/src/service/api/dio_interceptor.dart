@@ -45,8 +45,11 @@ class DioClient {
         return response.data;
       }
       throw "something went wrong";
-    } catch (e) {
-      debugPrint('$e');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        debugPrint(e.response?.data);
+        return e.response?.data;
+      }
     }
   }
 
@@ -72,8 +75,11 @@ class DioClient {
         return response.data;
       }
       throw "something went wrong";
-    } catch (e) {
-      debugPrint('$e');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        debugPrint(e.response?.data);
+        return e.response?.data;
+      }
     }
   }
 
@@ -99,8 +105,11 @@ class DioClient {
         return response.data;
       }
       throw "something went wrong";
-    } catch (e) {
-      debugPrint('$e');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        debugPrint(e.response?.data);
+        return e.response?.data;
+      }
     }
   }
 
@@ -126,8 +135,11 @@ class DioClient {
         return response.data;
       }
       throw "something went wrong";
-    } catch (e) {
-      debugPrint('$e');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        debugPrint(e.response?.data);
+        return e.response?.data;
+      }
     }
   }
 
@@ -151,8 +163,11 @@ class DioClient {
         return response.data;
       }
       throw "something went wrong";
-    } catch (e) {
-      debugPrint('$e');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        debugPrint(e.response?.data);
+        return e.response?.data;
+      }
     }
   }
 }
