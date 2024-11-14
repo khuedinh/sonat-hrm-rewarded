@@ -1,7 +1,7 @@
 class CurrentBalance {
   final String id;
-  final int currentPoint;
-  final int currentCoin;
+  int currentPoint;
+  int currentCoin;
   final String employeeEmail;
 
   CurrentBalance({

@@ -27,6 +27,14 @@ class _CoinTransactionsTabState extends State<CoinTransactionsTab>
     );
   }
 
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
@@ -45,12 +53,14 @@ class _CoinTransactionsTabState extends State<CoinTransactionsTab>
             state.listCoinTransactions;
         final isLoading = state.isLoading;
         final hasReachedMax = state.hasReachedMaxCoin;
+        print(hasReachedMax);
 
         if (isLoading) {
           return const ListSkeleton();
         }
 
         return RefreshableWidget(
+            controller: _scrollController,
             onRefresh: () async {
               BlocProvider.of<TransactionHistoryBloc>(context).add(
                 RefreshTransactionHistoryCoinEvent(),

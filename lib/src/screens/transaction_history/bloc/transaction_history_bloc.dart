@@ -16,6 +16,7 @@ class TransactionHistoryBloc
       ));
     });
 
+    //  point
     on<GetTransactionHistoryPointEvent>((event, emit) async {
       if (state.listPointTransactions.isNotEmpty) {
         return;
@@ -36,9 +37,10 @@ class TransactionHistoryBloc
 
       emit(
         state.copyWith(
-            isLoading: false,
-            hasReachedMaxPoint: responseData.page == responseData.totalPages,
-            listPointTransactions: responseData.data),
+          isLoading: false,
+          hasReachedMaxPoint: responseData.page == responseData.totalPages,
+          listPointTransactions: responseData.data,
+        ),
       );
     });
 
@@ -56,13 +58,14 @@ class TransactionHistoryBloc
       );
       final responseData = TransactionHistoryResponse.fromJson(response);
 
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           pagePoint: state.pagePoint + 1,
           hasReachedMaxPoint: responseData.page == responseData.totalPages,
-          listPointTransactions: [
-            ...state.listPointTransactions,
-            ...responseData.data
-          ]));
+          listPointTransactions: List.of(state.listPointTransactions)
+            ..addAll(responseData.data),
+        ),
+      );
     }, transformer: droppable());
 
     on<RefreshTransactionHistoryPointEvent>((event, emit) async {
@@ -88,6 +91,7 @@ class TransactionHistoryBloc
       );
     });
 
+    // coin
     on<GetTransactionHistoryCoinEvent>((event, emit) async {
       if (state.listCoinTransactions.isNotEmpty) {
         return;
@@ -108,14 +112,15 @@ class TransactionHistoryBloc
 
       emit(
         state.copyWith(
-            isLoading: false,
-            hasReachedMaxCoin: responseData.page == responseData.totalPages,
-            listCoinTransactions: responseData.data),
+          isLoading: false,
+          hasReachedMaxCoin: responseData.page == responseData.totalPages,
+          listCoinTransactions: responseData.data,
+        ),
       );
     });
 
     on<LoadMoreTransactionHistoryCoinEvent>((event, emit) async {
-      if (state.hasReachedMaxPoint) return;
+      if (state.hasReachedMaxCoin) return;
 
       final queryParams = {
         "page": state.pageCoin + 1,
@@ -128,17 +133,18 @@ class TransactionHistoryBloc
       );
       final responseData = TransactionHistoryResponse.fromJson(response);
 
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           pageCoin: state.pageCoin + 1,
           hasReachedMaxCoin: responseData.page == responseData.totalPages,
-          listCoinTransactions: [
-            ...state.listCoinTransactions,
-            ...responseData.data
-          ]));
+          listCoinTransactions: List.of(state.listCoinTransactions)
+            ..addAll(responseData.data),
+        ),
+      );
     }, transformer: droppable());
 
     on<RefreshTransactionHistoryCoinEvent>((event, emit) async {
-      emit(state.copyWith(isLoading: true, pagePoint: 1));
+      emit(state.copyWith(isLoading: true, pageCoin: 1));
 
       final queryParams = {
         "page": 1,

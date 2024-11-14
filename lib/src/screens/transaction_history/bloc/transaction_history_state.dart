@@ -37,7 +37,7 @@ class TransactionHistoryState extends Equatable {
       tab: tab ?? this.tab,
       isLoading: isLoading ?? this.isLoading,
       hasReachedMaxPoint: hasReachedMaxPoint ?? this.hasReachedMaxPoint,
-      hasReachedMaxCoin: hasReachedMaxPoint ?? this.hasReachedMaxCoin,
+      hasReachedMaxCoin: hasReachedMaxCoin ?? this.hasReachedMaxCoin,
       listPointTransactions:
           listPointTransactions ?? this.listPointTransactions,
       listCoinTransactions: listCoinTransactions ?? this.listCoinTransactions,

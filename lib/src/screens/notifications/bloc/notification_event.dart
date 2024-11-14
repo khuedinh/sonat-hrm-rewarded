@@ -36,8 +36,11 @@ class ReceiveNotiEvent extends NotificationEvent {
   final String body;
   final Map<String, dynamic> data;
 
-  const ReceiveNotiEvent(
-      {required this.title, required this.body, required this.data});
+  const ReceiveNotiEvent({
+    required this.title,
+    required this.body,
+    required this.data,
+  });
 
   @override
   List<Object> get props => [title, body, data];

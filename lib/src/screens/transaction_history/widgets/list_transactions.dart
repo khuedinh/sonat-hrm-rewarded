@@ -56,7 +56,10 @@ class ListTransactions extends StatelessWidget {
       itemBuilder: (context, index) {
         return index >= groupedTransaction.length
             ? const Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(
+                  top: 10,
+                  bottom: 8,
+                ),
                 child: Center(child: ActivityIndicator()),
               )
             : Padding(

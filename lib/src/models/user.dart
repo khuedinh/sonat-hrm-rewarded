@@ -1,3 +1,5 @@
+import 'package:sonat_hrm_rewarded/src/models/balance.dart';
+
 class UserInfo {
   String id;
   String email;
@@ -5,7 +7,7 @@ class UserInfo {
   String? picture;
   String? positionId;
   Position position;
-  Balance balance;
+  CurrentBalance balance;
   UserRecognition userRecognition;
   int activeBenefit;
 
@@ -28,7 +30,7 @@ class UserInfo {
         picture = json['picture'],
         positionId = json['positionId'],
         position = Position.fromJson(json['position']),
-        balance = Balance.fromJson(json['balance']),
+        balance = CurrentBalance.fromJson(json['balance']),
         userRecognition = UserRecognition.fromJson(json['userRecognition']),
         activeBenefit = json['activeBenefit'] ?? 0;
 }
@@ -55,26 +57,6 @@ class Team {
   Team.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'];
-}
-
-class Balance {
-  String id;
-  int currentPoint;
-  int currentCoin;
-  String employeeEmail;
-
-  Balance({
-    required this.id,
-    required this.currentPoint,
-    required this.currentCoin,
-    required this.employeeEmail,
-  });
-
-  Balance.fromJson(Map<String, dynamic> json)
-      : id = json['id'] ?? "",
-        currentPoint = json['currentPoint'] ?? 0,
-        currentCoin = json['currentCoin'] ?? 0,
-        employeeEmail = json['employeeEmail'] ?? "";
 }
 
 class UserRecognition {

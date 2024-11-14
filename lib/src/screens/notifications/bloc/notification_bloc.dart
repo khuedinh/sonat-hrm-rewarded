@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:logger/logger.dart';
 import 'package:sonat_hrm_rewarded/src/models/notification.dart';
 import 'package:sonat_hrm_rewarded/src/models/transaction_history.dart';
 import 'package:sonat_hrm_rewarded/src/service/api/notification_api.dart';
@@ -14,11 +13,9 @@ const String kNotificationKey = 'notification';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc() : super(const NotificationState()) {
-    final logger = Logger();
     FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
       if (message == null) return;
 
-      logger.d(message.data);
       add(ReceiveNotiEvent(
           title: message.notification?.title ?? "",
           body: message.notification?.body ?? "",

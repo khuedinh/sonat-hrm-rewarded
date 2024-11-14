@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:sonat_hrm_rewarded/src/common/blocs/user/user_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
-import 'package:sonat_hrm_rewarded/src/models/user.dart';
+import 'package:sonat_hrm_rewarded/src/models/balance.dart';
 import 'package:sonat_hrm_rewarded/src/screens/transaction_history/bloc/transaction_history_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/transaction_history/widgets/balance_card.dart';
 import 'package:sonat_hrm_rewarded/src/screens/transaction_history/widgets/tabs/coin_transactions_tab.dart';
@@ -53,7 +53,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               const SizedBox(height: 12),
               BlocBuilder<UserBloc, UserState>(
                 builder: (context, state) {
-                  final UserInfo? userInfo = state.userInfo;
+                  final CurrentBalance? currentBalance = state.currentBalance;
 
                   return Row(
                     children: [
@@ -62,7 +62,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                           title: AppLocalizations.of(context)!
                               .points
                               .capitalizeFirst!,
-                          value: userInfo?.balance.currentPoint ?? 0,
+                          value: currentBalance?.currentPoint ?? 0,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -71,7 +71,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                           title: AppLocalizations.of(context)!
                               .coins
                               .capitalizeFirst!,
-                          value: userInfo?.balance.currentCoin ?? 0,
+                          value: currentBalance?.currentCoin ?? 0,
                         ),
                       ),
                     ],

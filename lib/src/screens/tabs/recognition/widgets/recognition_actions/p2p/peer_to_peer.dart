@@ -53,6 +53,13 @@ class _PeerToPeerState extends State<PeerToPeer> {
     try {
       await RecognitionApi.sendRecognition(data);
       if (mounted) {
+        context.read<RecognitionBloc>().add(FetchRecognitionHistory());
+        setState(() {
+          _selectedRecipient = null;
+          _pointValue = 200;
+          _selectedRecognitionValue = null;
+          _messageController.clear();
+        });
         Navigator.of(context).pop();
         showDialog(
           context: context,

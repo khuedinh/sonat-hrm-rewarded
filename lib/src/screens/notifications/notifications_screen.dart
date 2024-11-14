@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/activity_indicator/activity_indicator.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/refreshable_widget/refreshable_widget.dart';
 import 'package:sonat_hrm_rewarded/src/common/widgets/screen_title/screen_title.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/bloc/notification_bloc.dart';
 import 'package:sonat_hrm_rewarded/src/screens/notifications/widgets/notification_item.dart';
+import 'package:sonat_hrm_rewarded/src/screens/tabs/tabs_screen.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -65,7 +65,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.pop();
+            if (Navigator.canPop(context)) {
+              Navigator.of(context).pop();
+            } else {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const TabsScreen()),
+              );
+            }
           },
         ),
       ),

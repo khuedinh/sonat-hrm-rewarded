@@ -16,3 +16,14 @@ class RefreshCurrentBalance extends UserEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UpdateUserAndCurrentBalance extends UserEvent {
+  final Map<String, dynamic> data;
+
+  UpdateUserAndCurrentBalance({
+    required this.data,
+  });
+
+  @override
+  List<Object?> get props => [];
+}

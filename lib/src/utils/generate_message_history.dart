@@ -26,7 +26,7 @@ String generateMessage(
       return "${AppLocalizations.of(context)!.you_recognized} <b>${transactionHistory.sink!.map((item) => item.name).join(", ")}</b> ${AppLocalizations.of(context)!.with_key} <b>${formatNumber(transactionHistory.amount)} ${AppLocalizations.of(context)!.points}</b>.";
     }
     if (transactionHistory.event == TransactionEvent.redeem_benefit) {
-      return "${AppLocalizations.of(context)!.you_redeemed} <b>${transactionHistory.description}</b> with <b>${formatNumber(transactionHistory.amount)} ${AppLocalizations.of(context)!.coins}</b>.";
+      return "${AppLocalizations.of(context)!.you_redeemed} <b>${transactionHistory.description}</b> ${AppLocalizations.of(context)!.with_key} <b>${formatNumber(transactionHistory.amount)} ${AppLocalizations.of(context)!.coins}</b>.";
     }
   }
 
